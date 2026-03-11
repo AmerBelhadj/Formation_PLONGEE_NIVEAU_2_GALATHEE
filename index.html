@@ -1,0 +1,3261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0077b6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Plongée N2">
+<link rel="manifest" href="manifest.json">
+<title>Révision Plongée N2 — Galathée Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --deep: #0a1628;
+  --ocean: #023e73;
+  --blue: #0077b6;
+  --cyan: #00b4d8;
+  --light: #90e0ef;
+  --surface: #caf0f8;
+  --green: #2d9e47;
+  --green-light: #a8e6b8;
+  --orange: #e07b00;
+  --orange-light: #ffd580;
+  --red: #c0392b;
+  --red-light: #f5b7b1;
+  --white: #f8faff;
+  --sand: #f4e4c1;
+  --panel: rgba(255,255,255,0.06);
+  --panel-border: rgba(0,180,216,0.2);
+  --r: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--deep);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ====== BUBBLE BACKGROUND ====== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at 20% 50%, rgba(0,119,182,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(0,180,216,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(2,62,115,0.3) 0%, transparent 50%),
+    linear-gradient(180deg, #0a1628 0%, #061020 100%);
+  z-index: -1;
+}
+
+/* ====== NAV (accordéon — voir CSS accordéon plus bas) ====== */
+
+/* ====== HERO ====== */
+.hero {
+  text-align: center;
+  padding: 48px 20px 32px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--ocean), var(--blue));
+  border: 1px solid var(--cyan);
+  border-radius: 30px;
+  padding: 6px 18px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 16px;
+}
+
+.hero h1 {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
+  letter-spacing: 2px;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--white) 30%, var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+}
+
+.hero p {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ====== SECTIONS ====== */
+.section {
+  display: none;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px 16px 80px;
+}
+.section.active { display: block; }
+
+.section-title {
+  font-family: 'Bangers', cursive;
+  font-size: 2rem;
+  letter-spacing: 1px;
+  color: var(--cyan);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ====== CARDS GRID ====== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* ====== BD CARD (bande dessinée) ====== */
+.bd-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.bd-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,180,216,0.2);
+}
+
+.bd-card-header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--panel-border);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.bd-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.bd-card-title {
+  font-family: 'Bangers', cursive;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+  color: var(--cyan);
+  line-height: 1.1;
+}
+
+.bd-card-obj {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.5);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+.bd-scene {
+  position: relative;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ====== SPEECH BUBBLES ====== */
+.bubble {
+  position: relative;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  font-weight: 600;
+}
+.bubble::before {
+  content: '';
+  position: absolute;
+  width: 0; height: 0;
+}
+
+.bubble-info {
+  background: rgba(0,119,182,0.25);
+  border: 1.5px solid var(--blue);
+  color: var(--surface);
+}
+
+.bubble-danger {
+  background: rgba(192,57,43,0.2);
+  border: 1.5px solid var(--red);
+  color: #ffccc8;
+}
+.bubble-danger::before {
+  content: '⚠️ ';
+}
+
+.bubble-ok {
+  background: rgba(45,158,71,0.2);
+  border: 1.5px solid var(--green);
+  color: var(--green-light);
+}
+.bubble-ok::before {
+  content: '✅ ';
+}
+
+.bubble-warn {
+  background: rgba(224,123,0,0.2);
+  border: 1.5px solid var(--orange);
+  color: var(--orange-light);
+}
+.bubble-warn::before {
+  content: '🔶 ';
+}
+
+.bubble-formula {
+  background: rgba(144,224,239,0.1);
+  border: 2px solid var(--cyan);
+  color: var(--white);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* ====== DIVER VISUAL ====== */
+.diver-scene {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(0,50,100,0.3);
+  border-radius: 10px;
+  font-size: 1.8rem;
+}
+.diver-text {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.7);
+  font-weight: 700;
+}
+
+/* ====== DEPTH DIAGRAM ====== */
+.depth-diagram {
+  background: linear-gradient(180deg, rgba(0,119,182,0.15) 0%, rgba(0,30,80,0.4) 100%);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.depth-level {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(255,255,255,0.1);
+}
+.depth-level:last-child { border-bottom: none; }
+
+.depth-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--cyan);
+  min-width: 50px;
+}
+
+.depth-bar {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+}
+.depth-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.8s ease;
+}
+
+.depth-desc {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 600;
+  min-width: 90px;
+  text-align: right;
+}
+
+/* ====== TABLE ====== */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  margin: 10px 0;
+}
+.info-table th {
+  background: rgba(0,180,216,0.2);
+  color: var(--cyan);
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid var(--panel-border);
+}
+.info-table td {
+  padding: 8px 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+  vertical-align: top;
+  line-height: 1.4;
+}
+.info-table tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+.tag-green { color: var(--green-light); font-weight: 800; }
+.tag-red { color: #ffccc8; font-weight: 800; }
+.tag-orange { color: var(--orange-light); font-weight: 800; }
+.tag-cyan { color: var(--cyan); font-weight: 800; }
+
+/* ====== RETENIR BOX ====== */
+.retenir-box {
+  background: linear-gradient(135deg, rgba(0,119,182,0.3), rgba(0,180,216,0.15));
+  border: 2px solid var(--cyan);
+  border-radius: var(--r);
+  padding: 20px;
+  margin-top: 24px;
+}
+.retenir-title {
+  font-family: 'Bangers', cursive;
+  font-size: 1.5rem;
+  color: var(--cyan);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.retenir-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.retenir-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.retenir-list li::before {
+  content: '▸';
+  color: var(--cyan);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ====== QUIZ ====== */
+.quiz-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.quiz-num {
+  font-family: 'Bangers', cursive;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+.quiz-q {
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 14px;
+  color: var(--white);
+}
+
+.quiz-sub {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  font-style: italic;
+  margin-bottom: 10px;
+}
+
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.quiz-opt {
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  color: var(--white);
+  font-family: 'Nunito', sans-serif;
+  line-height: 1.4;
+}
+.quiz-opt:hover:not(.answered) { background: rgba(0,180,216,0.1); border-color: var(--cyan); }
+.quiz-opt.correct { background: rgba(45,158,71,0.25) !important; border-color: var(--green) !important; color: var(--green-light) !important; }
+.quiz-opt.wrong { background: rgba(192,57,43,0.2) !important; border-color: var(--red) !important; color: #ffccc8 !important; }
+.quiz-opt.show-correct { background: rgba(45,158,71,0.15) !important; border-color: rgba(45,158,71,0.5) !important; }
+
+.quiz-reveal {
+  display: none;
+  background: rgba(0,30,60,0.5);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.8);
+}
+.quiz-reveal.visible { display: block; }
+.quiz-reveal strong { color: var(--cyan); }
+
+.quiz-open-answer {
+  background: rgba(0,30,60,0.5);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: rgba(255,255,255,0.8);
+}
+
+.btn-reveal {
+  background: rgba(0,180,216,0.15);
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+.btn-reveal:hover { background: rgba(0,180,216,0.3); }
+
+.quiz-score {
+  text-align: center;
+  padding: 24px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r);
+  margin-bottom: 20px;
+}
+.quiz-score-num {
+  font-family: 'Bangers', cursive;
+  font-size: 3rem;
+  color: var(--cyan);
+  letter-spacing: 2px;
+}
+
+/* ====== PREREQ BADGE ====== */
+.depth-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 3px;
+}
+.badge-20 { background: rgba(45,158,71,0.2); border: 1px solid var(--green); color: var(--green-light); }
+.badge-40 { background: rgba(0,119,182,0.2); border: 1px solid var(--blue); color: var(--light); }
+.badge-danger { background: rgba(192,57,43,0.2); border: 1px solid var(--red); color: #ffccc8; }
+
+/* ====== FULL WIDTH CARD ====== */
+.card-full {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.card-full-title {
+  font-family: 'Bangers', cursive;
+  font-size: 1.3rem;
+  color: var(--cyan);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ====== COLOR LEGEND ====== */
+.legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 8px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.legend-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ====== FORMULA BOX ====== */
+.formula-big {
+  text-align: center;
+  padding: 20px;
+  background: rgba(0,30,80,0.4);
+  border: 2px solid var(--cyan);
+  border-radius: 12px;
+  margin: 12px 0;
+}
+.formula-big .math {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.6rem;
+  color: var(--white);
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 6px;
+}
+.formula-big .math-sub {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
+  font-weight: 600;
+}
+
+/* ====== PRESSURE TABLE ====== */
+.pressure-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 80px;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed rgba(255,255,255,0.07);
+}
+.pressure-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--cyan);
+}
+.pressure-bar-wrap {
+  position: relative;
+  height: 24px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.pressure-bar-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--deep);
+}
+.pressure-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  text-align: right;
+  color: rgba(255,255,255,0.6);
+}
+
+/* ====== SCROLLBAR ====== */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,180,216,0.3); border-radius: 2px; }
+
+/* ====== MOBILE ====== */
+@media (max-width: 500px) {
+  .cards-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2.5rem; }
+}
+
+/* ====== ANIMATION ====== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.bd-card, .quiz-card, .card-full {
+
+/* ====== ACCORDION NAV ====== */
+.nav-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  height: 52px;
+  cursor: pointer;
+  user-select: none;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.nav-logo {
+  font-family: 'Bangers', cursive;
+  font-size: 1.4rem;
+  color: var(--cyan);
+  letter-spacing: 1px;
+  flex: 1;
+}
+.nav-menu-label {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.35);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.nav-arrow {
+  color: var(--cyan);
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+.nav-body.open .nav-arrow, .nav-arrow.open { transform: rotate(180deg); }
+
+.nav-body {
+  height: 0;
+  overflow: hidden;
+  border-top: 1px solid transparent;
+}
+.nav-body.open {
+  height: auto;
+  overflow: visible;
+  border-top-color: rgba(0,180,216,0.15);
+}
+
+.nav-body-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 8px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-group { display: flex; flex-direction: column; gap: 5px; }
+.nav-group-label {
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.28);
+  text-transform: uppercase;
+  padding: 2px 4px;
+}
+.nav-group-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.nav-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.65);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.73rem;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.nav-btn:hover {
+  background: rgba(0,180,216,0.15);
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+.nav-btn.active {
+  background: var(--blue);
+  border-color: var(--cyan);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(0,119,182,0.4);
+}
+
+/* ====== EXAM SELECTOR ====== */
+.exam-selector {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.exam-tab {
+  flex: 1;
+  min-width: 120px;
+  padding: 14px 10px;
+  border-radius: var(--r);
+  background: var(--panel);
+  border: 2px solid rgba(255,255,255,0.08);
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.25s;
+  font-family: 'Nunito', sans-serif;
+}
+.exam-tab:hover { border-color: var(--cyan); background: rgba(0,180,216,0.08); }
+.exam-tab.active { border-color: var(--cyan); background: rgba(0,119,182,0.2); }
+.exam-tab-num {
+  font-family: 'Bangers', cursive;
+  font-size: 1.5rem;
+  color: var(--cyan);
+  letter-spacing: 1px;
+  display: block;
+}
+.exam-tab-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  margin-top: 2px;
+  display: block;
+}
+.exam-tab-score {
+  font-family: 'Bangers', cursive;
+  font-size: 1rem;
+  color: var(--green);
+  margin-top: 4px;
+  display: block;
+  min-height: 1.2em;
+}
+
+.exam-panel { display: none; }
+.exam-panel.active { display: block; }
+
+.exam-score-bar {
+  text-align: center;
+  padding: 20px;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r);
+  margin-bottom: 20px;
+}
+.exam-score-big {
+  font-family: 'Bangers', cursive;
+  font-size: 3.2rem;
+  color: var(--cyan);
+  letter-spacing: 3px;
+}
+.exam-score-label {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.45);
+  margin-top: 4px;
+}
+.exam-progress {
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+.exam-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue), var(--cyan));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+.exam-source {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+}
+.exam-source.galathee { background: rgba(0,180,216,0.15); color: var(--cyan); border: 1px solid var(--cyan); }
+.exam-source.jury { background: rgba(224,123,0,0.15); color: var(--orange-light); border: 1px solid var(--orange); }
+.exam-source.complet { background: rgba(45,158,71,0.15); color: var(--green-light); border: 1px solid var(--green); }
+
+.exam-verdict {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  min-height: 1.4em;
+}
+
+</style>
+<script>
+// ====== ACCORDION NAV ======
+window.toggleNav = function toggleNav() {
+  var body = document.querySelector('.nav-body');
+  var arrow = document.querySelector('.nav-arrow');
+  if (!body) return;
+  if (body.style.display === 'block') {
+    body.style.display = 'none';
+    if (arrow) arrow.textContent = '▼';
+  } else {
+    body.style.display = 'block';
+    if (arrow) arrow.textContent = '▲';
+  }
+}
+
+// ====== NAVIGATION ======
+window.showSection = function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  var el = document.getElementById(id);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-section]').forEach(b => {
+    if (b.dataset.section === id) b.classList.add('active');
+  });
+  var navBody = document.querySelector('.nav-body');
+  if (navBody) { navBody.style.display = 'none'; }
+  var arrow = document.querySelector('.nav-arrow');
+  if (arrow) arrow.textContent = '▼';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ====== EXAM SWITCHER ======
+var currentExam = 1;
+window.switchExam = function switchExam(n) {
+  currentExam = n;
+  document.querySelectorAll('.exam-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.exam-tab').forEach(t => t.classList.remove('active'));
+  var ep = document.getElementById('exam' + n);
+  var et = document.getElementById('tab' + n);
+  if (ep) ep.classList.add('active');
+  if (et) et.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ====== QUIZ ANSWER (per exam) ======
+var examScores = { e1: {correct:0, total:0}, e2: {correct:0, total:0}, e3: {correct:0, total:0} };
+var answered = {};
+
+window.answerEx = function answerEx(btn, examId, qid, isCorrect) {
+  if (answered[qid]) return;
+  answered[qid] = true;
+
+  var card = document.getElementById(qid);
+  var allBtns = card.querySelectorAll('.quiz-opt');
+  allBtns.forEach(function(b) { b.classList.add('answered'); b.style.cursor = 'default'; });
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    examScores[examId].correct++;
+  } else {
+    btn.classList.add('wrong');
+    allBtns.forEach(function(b) {
+      if (b.dataset.correct === 'true') b.classList.add('show-correct');
+    });
+  }
+  examScores[examId].total++;
+
+  var reveal = document.getElementById(qid + '-reveal');
+  if (reveal) reveal.classList.add('visible');
+
+  updateExamScore(examId);
+}
+
+window.updateExamScore = function updateExamScore(examId) {
+  var s = examScores[examId];
+  var maxQ = examId === 'e3' ? 20 : 10;
+
+  var scoreEl = document.getElementById(examId + '-score');
+  var countEl = document.getElementById(examId + '-count');
+  var barEl = document.getElementById(examId + '-bar');
+  if (scoreEl) scoreEl.textContent = s.correct + ' / ' + s.total;
+  if (countEl) countEl.textContent = s.total;
+  if (barEl) barEl.style.width = Math.round((s.total / maxQ) * 100) + '%';
+
+  var verdictEl = document.getElementById(examId + '-verdict');
+  if (verdictEl && s.total >= maxQ) {
+    var finalPct = Math.round((s.correct / maxQ) * 100);
+    var verdict = '', color = '';
+    if (finalPct >= 90) { verdict = '🏆 Excellent ! Niveau N2 maîtrisé.'; color = '#2d9e47'; }
+    else if (finalPct >= 75) { verdict = '👍 Bon niveau — quelques révisions.'; color = '#00b4d8'; }
+    else if (finalPct >= 60) { verdict = '📖 Acceptable — révisions nécessaires.'; color = '#e07b00'; }
+    else { verdict = '⚠️ Insuffisant — à retravailler !'; color = '#ffccc8'; }
+    verdictEl.innerHTML = '<span style="color:' + color + '">' + verdict + ' (' + finalPct + '%)</span>';
+    var n = examId === 'e1' ? 1 : examId === 'e2' ? 2 : 3;
+    var tabScore = document.getElementById('tab' + n + '-score');
+    if (tabScore) tabScore.textContent = s.correct + '/' + maxQ + ' (' + finalPct + '%)';
+  }
+}
+
+// ====== EVENT DELEGATION ======
+document.addEventListener('DOMContentLoaded', function() {
+  var navBody = document.querySelector('.nav-body');
+  if (navBody) navBody.style.display = 'none';
+  // Nav toggle
+  document.addEventListener('click', function(e) {
+    var target = e.target;
+
+    // Walk up to find data attributes
+    var el = target;
+    while (el && el !== document) {
+      // Nav toggle
+      if (el.dataset && el.dataset.toggle === 'nav') {
+        toggleNav();
+        return;
+      }
+      // Section navigation (with optional exam switch)
+      if (el.dataset && el.dataset.section) {
+        showSection(el.dataset.section);
+        if (el.dataset.exam) switchExam(parseInt(el.dataset.exam));
+        return;
+      }
+      // Exam tab switch
+      if (el.dataset && el.dataset.switchExam) {
+        switchExam(parseInt(el.dataset.switchExam));
+        return;
+      }
+      // Quiz answer button
+      if (el.dataset && el.dataset.qid) {
+        var isCorrect = el.dataset.correct === 'true';
+        answerEx(el, el.dataset.examId, el.dataset.qid, isCorrect);
+        return;
+      }
+      el = el.parentElement;
+    }
+  });
+});
+
+// PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('sw.js').catch(function() {});
+  });
+}
+</script>
+</head>
+<body>
+
+<nav id="mainNav">
+  <div class="nav-header" onclick="toggleNav()">
+    <div class="nav-logo">🤿 Plongée N2</div>
+    <span class="nav-menu-label">MENU</span>
+    <span class="nav-arrow">▼</span>
+  </div>
+  <div class="nav-body">
+    <div class="nav-body-inner">
+
+      <div class="nav-group">
+        <div class="nav-group-label">🏠 Général</div>
+        <div class="nav-group-btns">
+          <button class="nav-btn active" onclick="showSection('home')">🏠 Accueil</button>
+          <button class="nav-btn" onclick="showSection('videos')" style="background:rgba(224,123,0,0.15);border-color:#e07b00;color:#ffb347;">🎬 Liens Vidéos</button>
+          <button class="nav-btn" onclick="showSection('photos')" style="background:rgba(45,158,71,0.15);border-color:#2d9e47;color:#90e0ef;">🖼️ Infographies</button>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">📚 Cours théoriques</div>
+        <div class="nav-group-btns">
+          <button class="nav-btn" onclick="showSection('reglementation')">📋 Réglementation</button>
+          <button class="nav-btn" onclick="showSection('barotraumatismes')">🫁 Barotraumatismes</button>
+          <button class="nav-btn" onclick="showSection('airflottabilite')">💨 Air & Flottabilité</button>
+          <button class="nav-btn" onclick="showSection('effetspression')">🧠 Effets de la pression</button>
+          <button class="nav-btn" onclick="showSection('risquesmilieu')">🌊 Risques du milieu</button>
+          <button class="nav-btn" onclick="showSection('tables')">📊 Tables & Ordinateurs</button>
+          <button class="nav-btn" onclick="showSection('materiel')">🥽 Matériel</button>
+          <button class="nav-btn" onclick="showSection('ecodurable')">🌿 Éco & Orientation</button>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">📝 Examens blancs</div>
+        <div class="nav-group-btns">
+          <button class="nav-btn" onclick="showSection('examens');switchExam(1)">📝 Examen 1 — Galathée</button>
+          <button class="nav-btn" onclick="showSection('examens');switchExam(2)">🏅 Examen 2 — Généré Par IA</button>
+          <button class="nav-btn" onclick="showSection('examens');switchExam(3)">🎯 Examen 3 — Généré Par IA</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</nav>
+
+<div id="home" class="section active">
+  <div class="hero">
+    <div class="hero-badge">🐙 Galathée Club Muret • FFESSM</div>
+    <h1>Révision Plongée N2</h1>
+    <p>Fiches synthétiques en bande dessinée pour mémoriser facilement toutes les notions clés du Niveau 2 FFESSM 2025-2026</p>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><span style="color:var(--green-light)">Vert = Sécurité / Bonne action</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div><span style="color:var(--orange-light)">Orange = Attention</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div><span style="color:#ffccc8">Rouge = Danger / Accident</span></div>
+  </div>
+
+  <div class="cards-grid">
+    <div class="bd-card" onclick="showSection('reglementation')">
+      <div class="bd-card-header">
+        <div class="bd-icon">📋</div>
+        <div>
+          <div class="bd-card-title">Réglementation & Prérogatives</div>
+          <div class="bd-card-obj">Objectif : Connaître les droits et devoirs du N2</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">Le plongeur N2 peut évoluer jusqu'à 20 m en autonomie et jusqu'à 40 m encadré par un Guide de Palanquée.</div>
+        <div class="depth-badge badge-20">🟢 Autonomie : 0–20 m</div>
+        <div class="depth-badge badge-40">🔵 Encadré : 0–40 m</div>
+      </div>
+    </div>
+
+    <div class="bd-card" onclick="showSection('barotraumatismes')">
+      <div class="bd-card-header">
+        <div class="bd-icon">🫁</div>
+        <div>
+          <div class="bd-card-title">Barotraumatismes</div>
+          <div class="bd-card-obj">Objectif : Comprendre la loi de Boyle-Mariotte et les risques</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-danger">La surpression pulmonaire est le barotraumatisme le plus grave. Elle survient à la remontée si la respiration est bloquée.</div>
+        <div class="bubble bubble-ok">Règle d'or : Ne JAMAIS bloquer sa respiration en plongée.</div>
+      </div>
+    </div>
+
+    <div class="bd-card" onclick="showSection('airflottabilite')">
+      <div class="bd-card-header">
+        <div class="bd-icon">💨</div>
+        <div>
+          <div class="bd-card-title">Air & Flottabilité</div>
+          <div class="bd-card-obj">Objectif : Maîtriser l'autonomie en air et la flottabilité</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">À 20m, le bloc se vide 3× plus vite qu'en surface. Signale la mi-pression à 100 bars !</div>
+        <div class="bubble bubble-ok">Archimède : Poids = Poussée → Flottabilité neutre = équilibre parfait.</div>
+      </div>
+    </div>
+
+    <div class="bd-card" onclick="showSection('effetspression')">
+      <div class="bd-card-header">
+        <div class="bd-icon">🧠</div>
+        <div>
+          <div class="bd-card-title">Effets de la pression</div>
+          <div class="bd-card-obj">Objectif : Comprendre narcose, ADD et FOP</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-warn">La narcose peut survenir dès 30 m. Signe "narcosé" et remonte !</div>
+        <div class="bubble bubble-danger">L'ADD peut apparaître jusqu'à 24h après la plongée.</div>
+      </div>
+    </div>
+
+    <div class="bd-card" onclick="showSection('risquesmilieu')">
+      <div class="bd-card-header">
+        <div class="bd-icon">🌊</div>
+        <div>
+          <div class="bd-card-title">Risques du milieu aquatique</div>
+          <div class="bd-card-obj">Objectif : Prévenir froid, essoufflement, panne d'air</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-warn">L'essoufflement crée un cercle vicieux : effort → CO₂ → stress → panique.</div>
+        <div class="bubble bubble-ok">Règle : Signaler, cesser l'effort, expirer profondément.</div>
+      </div>
+    </div>
+
+    <div class="bd-card" onclick="showSection('tables')">
+      <div class="bd-card-header">
+        <div class="bd-icon">📊</div>
+        <div>
+          <div class="bd-card-title">Tables & Ordinateurs</div>
+          <div class="bd-card-obj">Objectif : Planifier et gérer la désaturation</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">Tables MN90 : Profil "carré". Ordinateur : Adapté au profil réel en temps réel.</div>
+        <div class="bubble bubble-ok">Toujours faire un palier de sécurité 3 min entre 3 et 5 m.</div>
+      </div>
+    </div>
+
+    <div class="bd-card" onclick="showSection('materiel')">
+      <div class="bd-card-header">
+        <div class="bd-icon">🥽</div>
+        <div>
+          <div class="bd-card-title">Matériel de plongée</div>
+          <div class="bd-card-obj">Objectif : Connaître et entretenir son équipement</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">Le détendeur transforme la HP du bloc en pression ambiante via 1er et 2ème étage.</div>
+        <div class="bubble bubble-ok">Révision détendeur tous les 2 ans. Bloc : inspection 12 mois, requalif 2 ans.</div>
+      </div>
+    </div>
+
+    <div class="bd-card" onclick="showSection('ecodurable')">
+      <div class="bd-card-header">
+        <div class="bd-icon">🌿</div>
+        <div>
+          <div class="bd-card-title">Développement durable & Orientation</div>
+          <div class="bd-card-obj">Objectif : Plonger de façon responsable et s'orienter</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-ok">DORIS & BioObs : identifier et géolocaliser les espèces marines observées.</div>
+        <div class="bubble bubble-info">Compas : Aller cap X → Retour cap X+180°. Toujours se retourner pour mémoriser le décor.</div>
+      </div>
+    </div>
+
+
+    <div class="bd-card" onclick="showSection('videos')">
+      <div class="bd-card-header">
+        <div class="bd-icon">🎬</div>
+        <div>
+          <div class="bd-card-title">Liens Vidéos</div>
+          <div class="bd-card-obj">Objectif : Réviser avec les vidéos de cours</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-warn">Accès avec mot de passe requis : <strong>Galathee2025</strong></div>
+        <div class="bubble bubble-info">Plateforme vidéo dédiée Galathée Club — tous les modules du cours N2.</div>
+      </div>
+    </div>
+
+    <div class="bd-card" onclick="showSection('photos')">
+      <div class="bd-card-header">
+        <div class="bd-icon">📸</div>
+        <div>
+          <div class="bd-card-title">Infographies de cours</div>
+          <div class="bd-card-obj">Objectif : Réviser avec des résumés visuels</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-warn">Accès avec mot de passe requis : <strong>Glathee2025</strong></div>
+        <div class="bubble bubble-info">Infographies visuelles résumant tous les modules du cours N2.</div>
+      </div>
+    </div>
+    <div class="bd-card" onclick="showSection('examens')">
+      <div class="bd-card-header">
+        <div class="bd-icon">📝</div>
+        <div>
+          <div class="bd-card-title">10 Examens Blancs</div>
+          <div class="bd-card-obj">Objectif : Tester ses connaissances avec correction</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">10 questions types d'examen avec réponses détaillées couvrant réglementation, physique, sécurité et biologie.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION : RÉGLEMENTATION & PRÉROGATIVES
+     ============================================================ -->
+<!-- SECTION VIDEOS -->
+<div id="videos" class="section">
+  <div class="section-title">🎬 Liens Vidéos — Révision N2</div>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Galathée Club Muret — Vidéos de cours exclusives</p>
+
+  <!-- ACCÈS VIDÉOS -->
+  <div class="card-full">
+    <div class="card-full-title">🎥 Plateforme vidéo — Révision Niveau 2</div>
+
+    <div class="bubble bubble-warn" style="margin-bottom:16px;">
+      Les vidéos de cours sont disponibles sur une plateforme dédiée. Un <strong>mot de passe est requis</strong> pour y accéder.
+    </div>
+
+    <!-- Mot de passe mis en avant -->
+    <div style="background:rgba(0,30,60,0.5);border:2px solid var(--cyan);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;">
+      <div style="font-size:0.72rem;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;">🔑 MOT DE PASSE D'ACCÈS</div>
+      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Galathee2025</div>
+      <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:8px;">À saisir sur le site lors de votre première visite</div>
+    </div>
+
+    <!-- Bouton accès -->
+    <div style="text-align:center;margin-bottom:20px;">
+      <a href="https://plongeerevisionniveau2.videastv.com/" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#e07b00,#ffb347);color:#0a1628;font-family:'Bangers',cursive;font-size:1.3rem;letter-spacing:1px;padding:16px 32px;border-radius:30px;text-decoration:none;box-shadow:0 4px 20px rgba(224,123,0,0.4);">
+        🎬 Accéder aux vidéos
+      </a>
+      <div style="margin-top:10px;font-size:0.7rem;color:rgba(255,255,255,0.3);">↗ S'ouvre dans un nouvel onglet</div>
+    </div>
+
+
+  </div>
+
+  <!-- INSTRUCTIONS -->
+  <div class="card-full">
+    <div class="card-full-title">📌 Comment accéder aux vidéos ?</div>
+    <table class="info-table">
+      <tr><th>Étape</th><th>Action</th></tr>
+      <tr>
+        <td class="tag-cyan">Étape 1</td>
+        <td>Cliquer sur le bouton <strong style="color:#ffb347;">🎬 Accéder aux vidéos</strong> ci-dessus</td>
+      </tr>
+      <tr>
+        <td class="tag-cyan">Étape 2</td>
+        <td>Saisir le mot de passe : <strong style="color:var(--cyan);font-family:'Space Mono',monospace;">Galathee2025</strong></td>
+      </tr>
+      <tr>
+        <td class="tag-cyan">Étape 3</td>
+        <td>Naviguer dans les vidéos de cours et réviser à votre rythme</td>
+      </tr>
+    </table>
+
+    <div class="bubble bubble-ok" style="margin-top:12px;">
+      🎓 Les vidéos couvrent l'ensemble du programme N2 : réglementation, physique, barotraumatismes, tables MN90, matériel et environnement.
+    </div>
+  </div>
+
+</div>
+
+
+<!-- SECTION PHOTOS -->
+<div id="photos" class="section">
+  <div class="section-title">🖼️ Infographies — Résumés visuels des cours</div>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Galathée Club Muret — Infographies de révision N2</p>
+
+  <!-- ACCÈS INFOGRAPHIES -->
+  <div class="card-full">
+    <div class="card-full-title">🖼️ Infographies de résumé des cours N2</div>
+
+    <div class="bubble bubble-info" style="margin-bottom:16px;">
+      Ces infographies résument visuellement les différents points du cours N2 : réglementation, physique, barotraumatismes, tables, matériel et environnement. Un support idéal pour réviser rapidement.
+    </div>
+
+    <!-- Mot de passe -->
+    <div style="background:rgba(0,30,60,0.5);border:2px solid var(--cyan);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;">
+      <div style="font-size:0.72rem;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;">🔑 MOT DE PASSE D'ACCÈS</div>
+      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Glathee2025</div>
+      <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:8px;">À saisir sur le site lors de votre première visite</div>
+    </div>
+
+    <!-- Bouton accès -->
+    <div style="text-align:center;margin-bottom:20px;">
+      <a href="https://plongee-sous-marine.fammies.com/index.html" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#2d9e47,#90e0ef);color:#0a1628;font-family:'Bangers',cursive;font-size:1.3rem;letter-spacing:1px;padding:16px 32px;border-radius:30px;text-decoration:none;box-shadow:0 4px 20px rgba(45,158,71,0.4);">
+        🖼️ Accéder aux infographies
+      </a>
+      <div style="margin-top:10px;font-size:0.7rem;color:rgba(255,255,255,0.3);">↗ S'ouvre dans un nouvel onglet</div>
+    </div>
+
+    <div class="bubble bubble-ok">
+      💡 Conseil : Consultez les infographies <strong>après avoir lu le cours</strong> correspondant pour ancrer les notions clés.
+    </div>
+  </div>
+
+  <!-- CONTENU DES INFOGRAPHIES -->
+  <div class="card-full">
+    <div class="card-full-title">📋 Comment accéder aux infographies ?</div>
+    <table class="info-table">
+      <tr><th>Étape</th><th>Action</th></tr>
+      <tr>
+        <td class="tag-cyan">Étape 1</td>
+        <td>Cliquer sur le bouton <strong style="color:#90e0ef;">🖼️ Accéder aux infographies</strong> ci-dessus</td>
+      </tr>
+      <tr>
+        <td class="tag-cyan">Étape 2</td>
+        <td>Saisir le mot de passe : <strong style="color:var(--cyan);font-family:'Space Mono',monospace;">Glathee2025</strong></td>
+      </tr>
+      <tr>
+        <td class="tag-cyan">Étape 3</td>
+        <td>Parcourir les infographies résumant chaque module du cours N2</td>
+      </tr>
+    </table>
+
+    <div class="retenir-box" style="margin-top:16px;">
+      <div class="retenir-title">🖼️ Thèmes couverts par les infographies</div>
+      <ul class="retenir-list">
+        <li>Réglementation & Prérogatives N2 (PA-20, PE-40, CACI, DP…)</li>
+        <li>Physique de la plongée (Boyle-Mariotte, Dalton, Archimède…)</li>
+        <li>Barotraumatismes (oreilles, poumons, sinus, masque…)</li>
+        <li>Effets de la pression (narcose, ADD, FOP, pressions partielles…)</li>
+        <li>Tables MN90 et ordinateurs de plongée</li>
+        <li>Matériel (bloc, détendeur, combinaison, gilet…)</li>
+        <li>Environnement & orientation sous-marine</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+<div id="reglementation" class="section">
+  <div class="section-title">📋 Réglementation & Prérogatives N2</div>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Prérogatives N2 2025-2026</p>
+
+  <!-- CONDITIONS D'ACCÈS -->
+  <div class="card-full">
+    <div class="card-full-title">🎓 Conditions d'accès au N2</div>
+    <div class="bubble bubble-info" style="margin-bottom:10px;">
+      Pour s'inscrire en formation N2, le candidat doit réunir les conditions suivantes :
+    </div>
+    <table class="info-table">
+      <tr>
+        <th>Condition</th>
+        <th>Détail</th>
+      </tr>
+      <tr>
+        <td class="tag-cyan">Licence FFESSM</td>
+        <td>En cours de validité</td>
+      </tr>
+      <tr>
+        <td class="tag-cyan">Niveau 1 FFESSM</td>
+        <td>Titulaire + 4 plongées attestées en milieu naturel</td>
+      </tr>
+      <tr>
+        <td class="tag-cyan">CACI</td>
+        <td>Certificat médical de non-contre-indication à la plongée, daté de moins d'un an, délivré par tout médecin</td>
+      </tr>
+      <tr>
+        <td class="tag-orange">Âge minimum — PE40</td>
+        <td>14 ans à la date d'entrée en formation et de délivrance</td>
+      </tr>
+      <tr>
+        <td class="tag-orange">Âge minimum — PA20</td>
+        <td>15 ans à la date d'entrée en formation et de délivrance</td>
+      </tr>
+      <tr>
+        <td class="tag-orange">Âge minimum — Niveau 2</td>
+        <td>15 ans à la date d'entrée en formation et de délivrance du brevet</td>
+      </tr>
+      <tr>
+        <td class="tag-red">Autonomie</td>
+        <td>Les prérogatives d'évolution en autonomie ne s'exercent qu'à partir de 16 ans</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- PRÉROGATIVES -->
+  <div class="card-full">
+    <div class="card-full-title">🤿 Prérogatives du Plongeur N2</div>
+    <div class="bubble bubble-info" style="margin-bottom:12px;">
+      Le plongeur Niveau 2 est à la fois un <strong>PA-20</strong> (Plongeur Autonome jusqu'à 20 m) et un <strong>PE-40</strong> (Plongeur Encadré jusqu'à 40 m).
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div style="background:rgba(45,158,71,0.15);border:1.5px solid var(--green);border-radius:10px;padding:14px;">
+        <div style="font-family:'Bangers',cursive;font-size:1.1rem;color:var(--green-light);margin-bottom:8px;">🟢 EN AUTONOMIE — jusqu'à 20 m</div>
+        <ul style="font-size:0.8rem;line-height:1.6;list-style:none;color:var(--green-light);">
+          <li>✔ Sans Guide de Palanquée (GP)</li>
+          <li>✔ Palanquée de 3 plongeurs maximum</li>
+          <li>✔ Plongeurs ayant le même niveau minimum</li>
+          <li>✔ Présence d'un Directeur de Plongée (DP) sur site</li>
+          <li>✔ Responsable de sa sécurité et de ses coéquipiers</li>
+          <li>⚠ Uniquement à partir de 16 ans</li>
+        </ul>
+      </div>
+      <div style="background:rgba(0,119,182,0.15);border:1.5px solid var(--blue);border-radius:10px;padding:14px;">
+        <div style="font-family:'Bangers',cursive;font-size:1.1rem;color:var(--light);margin-bottom:8px;">🔵 ENCADRÉ — jusqu'à 40 m</div>
+        <ul style="font-size:0.8rem;line-height:1.6;list-style:none;color:var(--light);">
+          <li>✔ Encadré par un Guide de Palanquée (GP)</li>
+          <li>✔ Palanquée de 4 plongeurs maximum (+ GP + 1 N4)</li>
+          <li>✔ Niveau 4 (P4), Guide de Palanquée ou E3</li>
+          <li>✔ À partir de 15 ans</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bubble bubble-ok">
+      Le N2 a accès au brevet d'initiateur (E1) : il peut enseigner la plongée au sein d'un club, du débutant au plongeur N2, dans l'espace 0–6 mètres, en milieu artificiel comme en milieu naturel (sauf avis contraire du Président du club).
+    </div>
+  </div>
+
+  <!-- SCHEMA PROFONDEUR -->
+  <div class="card-full">
+    <div class="card-full-title">📊 Schéma des prérogatives par profondeur</div>
+    <div class="depth-diagram">
+      <div style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.4);margin-bottom:12px;letter-spacing:1px;">🌊 SURFACE → FOND</div>
+      <div class="pressure-row">
+        <div class="pressure-label">0–20 m</div>
+        <div class="pressure-bar-wrap">
+          <div class="pressure-bar-fill" style="width:50%;background:linear-gradient(90deg,var(--green),#27ae60);">Autonomie</div>
+        </div>
+        <div class="pressure-val" style="color:var(--green-light)">PA-20</div>
+      </div>
+      <div class="pressure-row">
+        <div class="pressure-label">0–40 m</div>
+        <div class="pressure-bar-wrap">
+          <div class="pressure-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));">Encadré GP</div>
+        </div>
+        <div class="pressure-val" style="color:var(--light)">PE-40</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PALANQUÉE -->
+  <div class="cards-grid">
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">👥</div>
+        <div>
+          <div class="bd-card-title">Définition d'une Palanquée</div>
+          <div class="bd-card-obj">Objectif : Comprendre la notion de groupe de plongée</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">
+          Une palanquée, c'est un groupe de plongeurs qui partagent :<br>
+          • Le même <strong>trajet</strong><br>
+          • La même <strong>durée</strong><br>
+          • La même <strong>profondeur maximale</strong>
+        </div>
+        <div class="bubble bubble-warn">
+          Une <strong>équipe</strong> est une palanquée réduite à 2 plongeurs.
+        </div>
+        <div class="diver-scene">
+          <span>🤿🤿🤿</span>
+          <div class="diver-text">Palanquée N2 en autonomie<br>3 plongeurs maximum</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MATÉRIEL OBLIGATOIRE -->
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">🧳</div>
+        <div>
+          <div class="bd-card-title">Matériel Obligatoire en Autonomie</div>
+          <div class="bd-card-obj">Objectif : Connaître l'équipement réglementaire</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <table class="info-table">
+          <tr><th>Équipement</th><th>Rôle</th></tr>
+          <tr><td class="tag-cyan">🟡 Bouteille</td><td>Avec manomètre</td></tr>
+          <tr><td class="tag-cyan">🐙 Octopus</td><td>Détendeur de secours pour partage de gaz</td></tr>
+          <tr><td class="tag-cyan">🦺 Stab (SGS)</td><td>Système Gonflable de Sécurité : stabilisation + remontée</td></tr>
+          <tr><td class="tag-cyan">💻 Ordinateur</td><td>Ou montre + profondimètre + tables de plongée</td></tr>
+          <tr><td class="tag-cyan">🪂 Parachute</td><td>De palier — au moins 1 par palanquée</td></tr>
+        </table>
+        <div class="bubble bubble-ok">Tout équipement manquant = plongée impossible en autonomie.</div>
+      </div>
+    </div>
+
+    <!-- DOCUMENTS -->
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">📄</div>
+        <div>
+          <div class="bd-card-title">Documents Obligatoires & Conseillés</div>
+          <div class="bd-card-obj">Objectif : Savoir quels documents emporter</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-danger">OBLIGATOIRES : Carte de Niveau 2 (ou passeport de plongée) + CACI de moins d'un an</div>
+        <div class="bubble bubble-ok">CONSEILLÉS : Carnet de plongées + Licence fédérale FFESSM</div>
+        <div class="bubble bubble-info">Le CACI est délivré par tout médecin et est valable 1 an.</div>
+      </div>
+    </div>
+
+    <!-- MATÉRIEL CONSEILLÉ -->
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">🔧</div>
+        <div>
+          <div class="bd-card-title">Matériel Conseillé en Autonomie</div>
+          <div class="bd-card-obj">Objectif : Connaître les équipements recommandés</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">
+          • 🔪 Couteau ou coupe-fil (filet dérivant)<br>
+          • 💡 Lampe / phare sous-marin<br>
+          • 🧭 Compas (orientation sous l'eau)<br>
+          • 🪞 Miroir (signalisation en surface au soleil)<br>
+          • 📢 Avertisseur sonore (signalisation sans soleil)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CADRE FÉDÉRAL -->
+  <div class="card-full">
+    <div class="card-full-title">⚖️ Cadre Fédéral et Réglementaire</div>
+    <div class="cards-grid" style="margin-bottom:0">
+      <div>
+        <div class="bubble bubble-info" style="margin-bottom:10px;">
+          <strong>Code du Sport</strong> (arrêté 2012) régit la plongée à l'air ET aux mélanges en France. Il définit les conditions d'évolution, les brevets, les aptitudes et le matériel obligatoire.
+        </div>
+        <div class="bubble bubble-info">
+          <strong>La FFESSM</strong> est la fédération délégataire choisie par l'État. Elle organise des compétitions, délivre des diplômes, perçoit des subventions et promeut l'activité. Elle est membre fondateur de la <strong>CMAS</strong> (Confédération Mondiale des Activités Subaquatiques).
+        </div>
+      </div>
+      <div>
+        <div class="bubble bubble-info" style="margin-bottom:10px;">
+          <strong>Équivalences FFESSM / CMAS :</strong><br>
+          • N1 FFESSM = Plongeur CMAS 1★<br>
+          • N2 FFESSM = Plongeur CMAS 2★
+        </div>
+        <div class="bubble bubble-warn">
+          <strong>Licence Fédérale :</strong> Valable 15 mois (du 15/09 au 31/12 de l'année suivante). Inclut l'assurance RC (obligatoire) et l'assurance individuelle (optionnelle).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15 COMMISSIONS -->
+  <div class="card-full">
+    <div class="card-full-title">🏛️ Les 15 Commissions de la FFESSM</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+      <div>
+        <div style="font-size:0.75rem;font-weight:800;color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Culturelles</div>
+        <div class="bubble bubble-info" style="font-size:0.78rem;">• Archéologie<br>• Photo-Vidéo<br>• Biologie et Environnement</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;font-weight:800;color:var(--orange-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Sportives</div>
+        <div class="bubble bubble-info" style="font-size:0.78rem;">• Hockey Subaquatique<br>• Nage Avec Palmes<br>• Nage en Eaux Vives<br>• Pêche Sous-Marine<br>• Apnée<br>• Plongée Souterraine<br>• <strong>Technique ★</strong><br>• Tir sur Cible Subaquatique<br>• Plongée Sportive en Piscine</div>
+      </div>
+      <div>
+        <div style="font-size:0.75rem;font-weight:800;color:var(--green-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">De Service</div>
+        <div class="bubble bubble-info" style="font-size:0.78rem;">• Juridique<br>• Médicale & Prévention</div>
+      </div>
+    </div>
+    <div class="bubble bubble-warn" style="margin-top:10px;">La commission <strong>Technique</strong> est en charge de la plongée en scaphandre (plongée bouteille).</div>
+  </div>
+
+  <!-- RESPONSABILITÉ -->
+  <div class="card-full">
+    <div class="card-full-title">⚖️ Notions de Responsabilité</div>
+    <table class="info-table">
+      <tr>
+        <th>Type</th>
+        <th>Cause</th>
+        <th>Couverture</th>
+      </tr>
+      <tr>
+        <td class="tag-orange">Responsabilité Pénale</td>
+        <td>Infraction à la loi</td>
+        <td>Pas d'assurance — un contrat RC peut prévoir une protection juridique</td>
+      </tr>
+      <tr>
+        <td class="tag-red">Responsabilité Civile</td>
+        <td>Préjudice causé à un tiers</td>
+        <td>Assurance RC (dommages et intérêts) — <strong>OBLIGATOIRE</strong></td>
+      </tr>
+      <tr>
+        <td class="tag-cyan">Assurance Individuelle</td>
+        <td>Dommages corporels sans tiers responsable</td>
+        <td>Facultatif en loisir, mais <strong>recommandée</strong> (assistance + rapatriement)</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- FORMATION GALATHÉE -->
+  <div class="card-full">
+    <div class="card-full-title">🎓 La Formation au Club Galathée</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div>
+        <div style="font-size:0.8rem;font-weight:800;color:var(--cyan);margin-bottom:8px;">📚 THÉORIE</div>
+        <div class="bubble bubble-info" style="font-size:0.8rem;">
+          • 8 séances planifiées (salle ou visioconférence)<br>
+          • 1 examen blanc<br>
+          • 1 examen final (écrit + débriefing personnalisé)<br>
+          • Évaluation sur l'appli : appli-galathee.fr
+        </div>
+      </div>
+      <div>
+        <div style="font-size:0.8rem;font-weight:800;color:var(--cyan);margin-bottom:8px;">🌊 PRATIQUE</div>
+        <div class="bubble bubble-info" style="font-size:0.8rem;">
+          • Entraînements en piscine et fosse (5 participations en moyenne)<br>
+          • Validation en mer lors des sorties du club (à votre rythme)
+        </div>
+      </div>
+    </div>
+    <div class="bubble bubble-warn" style="margin-top:10px;">
+      L'ensemble des compétences doit être acquis dans un délai maximum de <strong>15 mois</strong> à compter de la 1ʳᵉ validation d'une compétence. Il faut démontrer une maîtrise dans différentes conditions, pas seulement réussir une fois.
+    </div>
+  </div>
+
+  <div class="retenir-box">
+    <div class="retenir-title">📌 À retenir — Réglementation & Prérogatives N2</div>
+    <ul class="retenir-list">
+      <li>Le N2 plonge en autonomie jusqu'à 20 m (PA-20) et encadré jusqu'à 40 m (PE-40)</li>
+      <li>L'autonomie n'est possible qu'à partir de 16 ans, en palanquée de 3 maximum, avec DP sur site</li>
+      <li>La palanquée encadrée comprend au maximum 4 N2 + 1 GP + 1 N4</li>
+      <li>Documents obligatoires : Carte N2 (ou passeport de plongée) + CACI de moins d'un an</li>
+      <li>Matériel obligatoire en autonomie : bouteille avec manomètre, octopus, stab, ordinateur (ou montre + profondimètre + tables), parachute de palier</li>
+      <li>La FFESSM est la fédération délégataire — N2 FFESSM = Plongeur CMAS 2★</li>
+      <li>La commission Technique gère la plongée en scaphandre au sein de la FFESSM</li>
+      <li>L'assurance RC est obligatoire, l'assurance individuelle est recommandée</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION : BAROTRAUMATISMES
+     ============================================================ -->
+<div id="barotraumatismes" class="section">
+  <div class="section-title">🫁 Les Barotraumatismes</div>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 2025-2026 — Les Barotraumatismes</p>
+
+  <!-- DÉFINITION -->
+  <div class="card-full">
+    <div class="card-full-title">📖 Définition</div>
+    <div class="bubble bubble-info">
+      <strong>Barotraumatisme :</strong> « Atteinte causée par une variation non compensée et plus ou moins brusque de la pression ambiante et du volume des gaz enfermés dans une cavité close ou semi-close de l'organisme. »
+      <br><span style="font-size:0.72rem;color:rgba(255,255,255,0.5);margin-top:4px;display:block;">(Source : académie-médecine.fr)</span>
+    </div>
+  </div>
+
+  <!-- LOI BOYLE-MARIOTTE -->
+  <div class="card-full">
+    <div class="card-full-title">⚗️ La Loi de Boyle-Mariotte</div>
+    <div class="bubble bubble-info" style="margin-bottom:12px;">
+      À <strong>température constante</strong>, le volume occupé par une quantité de gaz est <strong>inversement proportionnel à sa pression</strong>. Quand la pression augmente, le volume diminue — et inversement.
+    </div>
+    <div class="formula-big">
+      <span class="math">P × V = C (constante)</span>
+      <span class="math-sub">P1 × V1 = P2 × V2 = C</span>
+    </div>
+    <div style="margin-top:14px;">
+      <div style="font-size:0.8rem;font-weight:800;color:var(--cyan);margin-bottom:8px;">Exemple concret avec un ballon de 12 L :</div>
+      <div class="depth-diagram">
+        <div class="pressure-row">
+          <div class="pressure-label">Surface<br><span style="font-size:0.65rem;color:rgba(255,255,255,0.4)">1 bar</span></div>
+          <div class="pressure-bar-wrap">
+            <div class="pressure-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--green),#27ae60)">1 × 12 = 12</div>
+          </div>
+          <div class="pressure-val">12 L</div>
+        </div>
+        <div class="pressure-row">
+          <div class="pressure-label">10 m<br><span style="font-size:0.65rem;color:rgba(255,255,255,0.4)">2 bars</span></div>
+          <div class="pressure-bar-wrap">
+            <div class="pressure-bar-fill" style="width:50%;background:linear-gradient(90deg,var(--blue),var(--cyan))">2 × 6 = 12</div>
+          </div>
+          <div class="pressure-val">6 L</div>
+        </div>
+        <div class="pressure-row">
+          <div class="pressure-label">20 m<br><span style="font-size:0.65rem;color:rgba(255,255,255,0.4)">3 bars</span></div>
+          <div class="pressure-bar-wrap">
+            <div class="pressure-bar-fill" style="width:33%;background:linear-gradient(90deg,var(--orange),#f39c12)">3 × 4 = 12</div>
+          </div>
+          <div class="pressure-val">4 L</div>
+        </div>
+        <div class="pressure-row">
+          <div class="pressure-label">30 m<br><span style="font-size:0.65rem;color:rgba(255,255,255,0.4)">4 bars</span></div>
+          <div class="pressure-bar-wrap">
+            <div class="pressure-bar-fill" style="width:25%;background:linear-gradient(90deg,var(--red),#e74c3c)">4 × 3 = 12</div>
+          </div>
+          <div class="pressure-val">3 L</div>
+        </div>
+        <div class="pressure-row">
+          <div class="pressure-label">40 m<br><span style="font-size:0.65rem;color:rgba(255,255,255,0.4)">5 bars</span></div>
+          <div class="pressure-bar-wrap">
+            <div class="pressure-bar-fill" style="width:20%;background:var(--red)">5 × 2,4 = 12</div>
+          </div>
+          <div class="pressure-val">2,4 L</div>
+        </div>
+      </div>
+    </div>
+    <div class="bubble bubble-danger" style="margin-top:12px;">
+      Les variations de pression — et donc de volume — sont plus importantes à l'approche de la surface. Le risque maximum est entre 10 m et 0 m (variation × 2) !
+    </div>
+  </div>
+
+  <!-- DÉPRESSION ET SURPRESSION -->
+  <div class="cards-grid">
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">⬇️</div>
+        <div>
+          <div class="bd-card-title">Dépression — À la descente</div>
+          <div class="bd-card-obj">Objectif : Comprendre ce qui se passe lors de l'immersion</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="diver-scene">
+          <span>🤿⬇️</span>
+          <div class="diver-text">Descente : pression↑</div>
+        </div>
+        <div class="bubble bubble-warn">
+          Lors de la descente, la pression ambiante <strong>augmente</strong> → le volume d'air dans les cavités <strong>diminue</strong> → création d'une <strong>dépression</strong> dans la zone concernée.
+        </div>
+        <div class="bubble bubble-info">Si la cavité ne peut pas se comprimer librement, elle risque d'être endommagée.</div>
+      </div>
+    </div>
+
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">⬆️</div>
+        <div>
+          <div class="bd-card-title">Surpression — À la remontée</div>
+          <div class="bd-card-obj">Objectif : Comprendre ce qui se passe lors de la remontée</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="diver-scene">
+          <span>🤿⬆️</span>
+          <div class="diver-text">Remontée : pression↓</div>
+        </div>
+        <div class="bubble bubble-danger">
+          Lors de la remontée, la pression <strong>diminue</strong> → le volume d'air <strong>augmente</strong> → création d'une <strong>surpression</strong> dans la zone concernée.
+        </div>
+        <div class="bubble bubble-danger">Si le gaz ne peut pas s'échapper, il peut provoquer une déchirure ou une rupture de la cavité.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAVITÉS -->
+  <div class="card-full">
+    <div class="card-full-title">👁️ Les Cavités Contenant de l'Air chez le Plongeur</div>
+    <div class="bubble bubble-info" style="margin-bottom:12px;">
+      Les cavités compressibles (C) du corps contenant de l'air : les <strong>oreilles</strong> (oreille moyenne), les <strong>poumons</strong> (appareil respiratoire), les <strong>sinus</strong>, le <strong>masque</strong>, les <strong>dents</strong>, les <strong>intestins</strong>. Le reste du corps est incompressible (NC).
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <div class="depth-badge badge-danger">🦻 Oreilles (C)</div>
+      <div class="depth-badge badge-danger">🫁 Poumons (C)</div>
+      <div class="depth-badge badge-danger">👃 Sinus (C)</div>
+      <div class="depth-badge badge-danger">🥽 Masque (C)</div>
+      <div class="depth-badge badge-danger">🦷 Dents (C)</div>
+      <div class="depth-badge badge-danger">🫀 Intestins (C)</div>
+    </div>
+  </div>
+
+  <!-- BAROTRAUMAS DÉTAILLÉS -->
+  <div class="cards-grid">
+
+    <!-- OREILLES -->
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">🦻</div>
+        <div>
+          <div class="bd-card-title">Oreilles & Tympan</div>
+          <div class="bd-card-obj">Le barotraumatisme le plus fréquent</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">Le <strong>tympan</strong> sépare l'oreille externe de l'oreille moyenne, reliée au pharynx par la <strong>trompe d'Eustache</strong>. Si la trompe est fermée ou obstruée, le tympan est déformé.</div>
+        <div class="bubble bubble-warn">
+          <strong>À la descente :</strong> Dépression dans l'oreille moyenne. Équilibrer activement avec la méthode Valsalva (nez pincé, bouche fermée, souffler dans le nez — uniquement à la descente !).
+        </div>
+        <div class="bubble bubble-ok">
+          Conduite à tenir : remonter de quelques mètres, puis réessayer un équilibrage progressif.
+        </div>
+        <div class="bubble bubble-danger">
+          <strong>À la remontée :</strong> La trompe s'ouvre naturellement. En cas de bouchon, stopper la remontée et attendre. Manœuvre de Toynbee si besoin. <strong>JAMAIS de Valsalva à la remontée !</strong>
+        </div>
+        <div class="bubble bubble-warn">
+          <strong>Vertige alterno-barique :</strong> Un seul tympan s'équilibre → trouble de l'équilibre.
+        </div>
+        <div class="bubble bubble-ok">
+          <strong>Prévention :</strong> Ne jamais plonger enrhumé — attendre ses équipiers à la descente — savoir renoncer à une plongée si un équipier est enrhumé.
+        </div>
+      </div>
+    </div>
+
+    <!-- MÉTHODES D'ÉQUILIBRAGE -->
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">👂</div>
+        <div>
+          <div class="bd-card-title">Méthodes d'Équilibrage des Oreilles</div>
+          <div class="bd-card-obj">Objectif : Connaître les techniques de compensation</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <table class="info-table">
+          <tr><th>Méthode</th><th>Description</th><th>Sécurité</th></tr>
+          <tr>
+            <td class="tag-orange">Valsalva</td>
+            <td>Nez pincé, bouche fermée, souffler dans le nez</td>
+            <td style="color:#ffccc8">⭐ (risque si remontée)</td>
+          </tr>
+          <tr>
+            <td class="tag-cyan">Déglutition</td>
+            <td>Simple déglutition peut ouvrir les trompes</td>
+            <td style="color:var(--green-light)">⭐⭐⭐</td>
+          </tr>
+          <tr>
+            <td class="tag-cyan">Frenzel</td>
+            <td>Nez pincé, glotte fermée, langue sur le voile du palais, son « KE »</td>
+            <td style="color:var(--orange-light)">⭐⭐</td>
+          </tr>
+          <tr>
+            <td class="tag-cyan">BTV</td>
+            <td>Béance Tubulaire Volontaire — muscles ouverture trompe</td>
+            <td style="color:var(--green-light)">⭐⭐⭐</td>
+          </tr>
+          <tr>
+            <td class="tag-cyan">Lowry</td>
+            <td>Nez pincé, souffler doucement en déglutissant</td>
+            <td style="color:var(--green-light)">⭐⭐⭐</td>
+          </tr>
+          <tr>
+            <td class="tag-green">Toynbee</td>
+            <td>Nez pincé, bouche fermée, déglutir et aspirer (inverse Valsalva) — uniquement à la remontée si difficulté</td>
+            <td style="color:var(--orange-light)">⭐⭐</td>
+          </tr>
+        </table>
+        <div class="bubble bubble-danger">Ne JAMAIS faire de Valsalva à la remontée → risque de barotraumatisme de l'oreille interne + surpression pulmonaire + ADD.</div>
+      </div>
+    </div>
+
+    <!-- POUMONS -->
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">🫁</div>
+        <div>
+          <div class="bd-card-title">Surpression Pulmonaire</div>
+          <div class="bd-card-obj">Le barotraumatisme le plus grave — mais évitable</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">
+          Les alvéoles pulmonaires contiennent l'air à pression ambiante. À la remontée, la pression diminue et l'air se dilate. Si la respiration est bloquée, les alvéoles se distendent et libèrent de l'air dans les tissus et la circulation sanguine.
+        </div>
+        <div class="bubble bubble-danger">
+          <strong>Symptômes :</strong> Difficultés ventilatoires, crachats sanguins éventuels.
+        </div>
+        <div class="bubble bubble-ok">
+          <strong>Conduite à tenir :</strong> Détecter, maintenir la victime en surface — prévenir le Directeur de Plongée — tracter au bateau.
+        </div>
+        <div class="bubble bubble-ok">
+          <strong>Prévention :</strong><br>
+          ✔ Forcer l'expiration — ne JAMAIS bloquer la respiration à la remontée<br>
+          ✔ Ne pas remonter trop vite<br>
+          ✔ Vérifier la ventilation d'un syncopé avant de le remonter
+        </div>
+      </div>
+    </div>
+
+    <!-- SINUS -->
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">👃</div>
+        <div>
+          <div class="bd-card-title">Les Sinus</div>
+          <div class="bd-card-obj">Objectif : Identifier et prévenir le barotraumatisme des sinus</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">
+          Les sinus sont des cavités remplies d'air dans les os de la face (frontal, maxillaire). Ils communiquent avec les fosses nasales par de minces canaux. L'équilibre s'effectue naturellement à la descente et à la remontée.
+        </div>
+        <div class="bubble bubble-warn">
+          Si les canaux sont obstrués par des mucosités (rhume, sinusite), l'équilibre ne peut pas se faire.
+        </div>
+        <div class="bubble bubble-danger">
+          <strong>Symptômes :</strong> Vives douleurs au front (sinus frontaux) ou aux dents/gencives (sinus maxillaires).
+        </div>
+        <div class="bubble bubble-ok">
+          <strong>Conduite à tenir :</strong> Stopper ou annuler la plongée — remonter très lentement.<br>
+          <strong>Prévention :</strong> Ne pas plonger enrhumé ou en cas de sinusite. Décongestionnants à proscrire (effet temporaire uniquement !).
+        </div>
+      </div>
+    </div>
+
+    <!-- MASQUE -->
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">🥽</div>
+        <div>
+          <div class="bd-card-title">Le Masque</div>
+          <div class="bd-card-obj">Objectif : Prévenir le plaquage de masque à la descente</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">
+          En surface, le masque emprisonne un volume d'air. À la descente, la pression provoque la diminution de ce volume : la jupe du masque se plaque sur le visage (effet ventouse).
+        </div>
+        <div class="bubble bubble-warn">
+          <strong>Symptômes :</strong> Douleur au contact masque-visage, yeux injectés de sang, saignements de nez.
+        </div>
+        <div class="bubble bubble-ok">
+          <strong>Prévention :</strong><br>
+          ✔ Souffler par le nez à la descente pour maintenir un volume d'air constant dans le masque<br>
+          ✔ Éviter un masque trop petit ou trop souple<br>
+          ✔ Ne pas plonger avec des lunettes de piscine<br>
+          ✔ Ne pas trop serrer la sangle
+        </div>
+      </div>
+    </div>
+
+    <!-- DENTS -->
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">🦷</div>
+        <div>
+          <div class="bd-card-title">Les Dents</div>
+          <div class="bd-card-obj">Objectif : Comprendre le barotraumatisme dentaire</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">
+          Les dents et gencives peuvent être sensibles aux changements de température et de pression. Si une cavité dentaire contenant de l'air se crée (carie), elle peut être endommagée par les variations de pression.
+        </div>
+        <div class="bubble bubble-danger">
+          Dans des cas extrêmes, la douleur peut être très forte et entraîner une syncope.
+        </div>
+        <div class="bubble bubble-ok">
+          <strong>Conduite à tenir :</strong> Stopper ou annuler la plongée — remonter très lentement.<br>
+          <strong>Prévention :</strong> Consulter un dentiste régulièrement et lui mentionner l'activité de plongée.
+        </div>
+      </div>
+    </div>
+
+    <!-- ESTOMAC / INTESTINS -->
+    <div class="bd-card">
+      <div class="bd-card-header">
+        <div class="bd-icon">🫀</div>
+        <div>
+          <div class="bd-card-title">Estomac & Intestins</div>
+          <div class="bd-card-obj">Objectif : Éviter les douleurs digestives en plongée</div>
+        </div>
+      </div>
+      <div class="bd-scene">
+        <div class="bubble bubble-info">
+          En immersion, les gaz avalés (déglutition) ou les gaz de fermentation liés à la digestion peuvent s'accumuler dans l'estomac.
+        </div>
+        <div class="bubble bubble-warn">
+          Risque de douleurs d'estomac à la remontée si les gaz ne sont pas éliminés.
+        </div>
+        <div class="bubble bubble-ok">
+          <strong>Conduite à tenir :</strong> Remonter très lentement.<br>
+          <strong>Prévention :</strong><br>
+          ✔ Éviter la nourriture qui fermente avant la plongée<br>
+          ✔ Éviter les boissons gazeuses<br>
+          ✔ Évacuer les gaz de fermentation si besoin
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLEAU RÉCAPITULATIF -->
+  <div class="card-full">
+    <div class="card-full-title">📊 Tableau Récapitulatif des Barotraumatismes</div>
+    <table class="info-table">
+      <tr>
+        <th>Zone</th>
+        <th>Quand ?</th>
+        <th>Conduite à Tenir</th>
+        <th>Prévention</th>
+      </tr>
+      <tr>
+        <td class="tag-cyan">🦻 Oreilles</td>
+        <td>↓ Descente + ↑ Remontée</td>
+        <td>Équilibrer (Valsalva ↓ / Toynbee ↑) — Remonter lentement</td>
+        <td>Ne pas plonger enrhumé — Hygiène — Attendre ses équipiers</td>
+      </tr>
+      <tr>
+        <td class="tag-cyan">🥽 Yeux (masque)</td>
+        <td>↓ Descente</td>
+        <td>Souffler par le nez dans le masque</td>
+        <td>Ne pas trop serrer la sangle du masque</td>
+      </tr>
+      <tr>
+        <td class="tag-cyan">👃 Sinus</td>
+        <td>↓ Descente + ↑ Remontée</td>
+        <td>Annuler la plongée — Remonter lentement</td>
+        <td>Ne pas plonger enrhumé — pas de décongestionnant</td>
+      </tr>
+      <tr>
+        <td class="tag-cyan">🦷 Dents</td>
+        <td>↑ Remontée</td>
+        <td>Remonter lentement</td>
+        <td>Hygiène — Consulter son dentiste</td>
+      </tr>
+      <tr>
+        <td class="tag-cyan">🫀 Estomac/Intestins</td>
+        <td>↑ Remontée</td>
+        <td>Remonter lentement</td>
+        <td>Éviter nourriture fermentante et boissons gazeuses</td>
+      </tr>
+      <tr>
+        <td class="tag-red">🫁 Poumons</td>
+        <td>↑ Remontée</td>
+        <td><strong>Forcer l'expiration</strong> — Maintenir en surface — Prévenir le DP</td>
+        <td><strong>NE JAMAIS BLOQUER SA RESPIRATION</strong></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="retenir-box">
+    <div class="retenir-title">📌 À retenir — Barotraumatismes N2</div>
+    <ul class="retenir-list">
+      <li>Loi de Boyle-Mariotte : P × V = Constante. Plus on descend, plus le volume se comprime.</li>
+      <li>Les variations de volume sont maximales près de la surface (de 10 m à 0 m) : risque maximum !</li>
+      <li>Barotraumatisme le plus fréquent : les oreilles/tympan → équilibrer progressivement à la descente</li>
+      <li>Barotraumatisme le plus grave : la surpression pulmonaire → facile à éviter en ne bloquant jamais sa respiration</li>
+      <li>Ne JAMAIS faire de manœuvre de Valsalva à la remontée → risque gravissime</li>
+      <li>Ne jamais plonger enrhumé ou en cas de sinusite</li>
+      <li>Toujours attendre ses équipiers à la descente pour permettre l'équilibrage</li>
+      <li>Souffler par le nez dans le masque à la descente pour éviter l'effet ventouse</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION : EXAMENS BLANCS
+     ============================================================ -->
+
+<!-- ============================================================
+     SECTION : EXAMENS BLANCS — 3 EXAMENS SÉPARÉS
+     ============================================================ -->
+<div id="examens" class="section">
+  <div class="section-title">📝 Examens Blancs N2</div>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">3 examens issus des documents du Galathée Club et du Jury Fédéral FFESSM</p>
+
+  <!-- Sélecteur d'examens -->
+  <div class="exam-selector">
+    <div class="exam-tab active" onclick="switchExam(1)" id="tab1">
+      <span class="exam-tab-num">📝 1</span>
+      <span class="exam-tab-label">Galathée Club</span>
+      <span class="exam-tab-score" id="tab1-score"></span>
+    </div>
+    <div class="exam-tab" onclick="switchExam(2)" id="tab2">
+      <span class="exam-tab-num">🏅 2</span>
+      <span class="exam-tab-label">Généré par IA</span>
+      <span class="exam-tab-score" id="tab2-score"></span>
+    </div>
+    <div class="exam-tab" onclick="switchExam(3)" id="tab3">
+      <span class="exam-tab-num">🎯 3</span>
+      <span class="exam-tab-label">Généré par IA</span>
+      <span class="exam-tab-score" id="tab3-score"></span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       EXAMEN 1 — GALATHÉE CLUB
+       ═══════════════════════════════════════════ -->
+  <div class="exam-panel active" id="exam1">
+    <span class="exam-source galathee">📋 Source : Examen blanc — Galathée Club Muret</span>
+
+    <div class="exam-score-bar">
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-bottom:4px;">Score Examen 1</div>
+      <div class="exam-score-big" id="e1-score">0 / 0</div>
+      <div class="exam-score-label">Questions répondues : <span id="e1-count">0</span> / 10</div>
+      <div class="exam-progress"><div class="exam-progress-fill" id="e1-bar"></div></div>
+      <div class="exam-verdict" id="e1-verdict"></div>
+    </div>
+
+    <!-- E1-Q1 -->
+    <div class="quiz-card" id="e1q1">
+      <div class="quiz-num">EXAMEN 1 · Q1 • Réglementation</div>
+      <div class="quiz-q">Quel médecin peut délivrer le certificat médical (CACI) pour la plongée ? Vous le renouvelez le 1er avril 2025 : jusqu'à quelle date est-il valable ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q1',false)">a. Uniquement un médecin du sport — valable jusqu'au 1er avril 2026</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q1',true)">b. Tout médecin — valable jusqu'au 1er avril 2026 (1 an)</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q1',false)">c. Tout médecin — valable jusqu'au 31 décembre 2025</button>
+      </div>
+      <div class="quiz-reveal" id="e1q1-reveal">
+        <strong>✅ b. Tout médecin — valable 1 an à partir de la date de délivrance.</strong><br>
+        Le CACI peut être délivré par <strong>tout médecin</strong> (pas uniquement un spécialiste). Renouvelé le 1er avril 2025, il est valable jusqu'au <strong>1er avril 2026</strong>. Sans CACI valide, la plongée est interdite.
+      </div>
+    </div>
+
+    <!-- E1-Q2 -->
+    <div class="quiz-card" id="e1q2">
+      <div class="quiz-num">EXAMEN 1 · Q2 • Réglementation — Matériel obligatoire</div>
+      <div class="quiz-q">Vous plongez encadré par un GP à 30 m sur une épave. Vous réalisez que vous avez oublié votre ordinateur. Que faites-vous ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q2',false)">a. Vous ne dites rien et suivez scrupuleusement votre guide</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q2',true)">b. En l'absence d'ordinateur (ou montre + profondimètre + tables) à prêter, vous restez sur le bateau</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q2',false)">c. On vous prête un timer + profondimètre mais pas de tables : vous suivez quand même votre guide</button>
+      </div>
+      <div class="quiz-reveal" id="e1q2-reveal">
+        <strong>✅ b. Rester sur le bateau.</strong><br>
+        L'ordinateur OU (montre + profondimètre + tables) est du <strong>matériel obligatoire</strong>, même en plongée encadrée. Sans aucun de ces équipements, la plongée est impossible. La réponse c est fausse : sans tables, le timer seul ne suffit pas.
+      </div>
+    </div>
+
+    <!-- E1-Q3 -->
+    <div class="quiz-card" id="e1q3">
+      <div class="quiz-num">EXAMEN 1 · Q3 • Réglementation — Autonomie</div>
+      <div class="quiz-q">Un ami plongeur N3 vous propose de plonger ensemble à 15 m (vous êtes N2, 16 ans). Avez-vous le droit de plonger en autonomie avec lui à deux ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q3',true)">a. Oui, à condition d'avoir 16 ans, le matériel obligatoire et qu'un DP soit présent sur site</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q3',false)">b. Non, une palanquée autonome doit être composée d'au moins 3 plongeurs</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q3',false)">c. Oui, sans contrainte car votre ami est N3</button>
+      </div>
+      <div class="quiz-reveal" id="e1q3-reveal">
+        <strong>✅ a. Oui, conditions remplies.</strong><br>
+        Une palanquée à 2 (appelée "équipe") est autorisée. 15 m &lt; 20 m ✅ — 16 ans ✅ — DP sur site requis ✅ — même niveau minimum requis (N3 &gt; N2) ✅. Matériel individuel autonomie : bouteille + manomètre, octopus, stab, ordinateur/tables, parachute de palier.
+      </div>
+    </div>
+
+    <!-- E1-Q4 -->
+    <div class="quiz-card" id="e1q4">
+      <div class="quiz-num">EXAMEN 1 · Q4 • Réglementation — Âge</div>
+      <div class="quiz-q">Pouvez-vous plonger à 38 m en tant que N2 encadré par un GP si vous avez 14 ans ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q4',false)">a. Oui, 38 m est inférieur à la limite PE-40</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q4',true)">b. Non, l'âge minimum pour obtenir le N2 (PE-40) est 15 ans</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q4',false)">c. Oui, le GP peut décider d'emmener des mineurs à cette profondeur</button>
+      </div>
+      <div class="quiz-reveal" id="e1q4-reveal">
+        <strong>✅ b. Non — âge minimum 15 ans pour le N2.</strong><br>
+        À 14 ans, on ne peut pas être titulaire du brevet N2 (minimum 15 ans). Sans le brevet, on ne peut pas exercer les prérogatives PE-40. Le GP ne peut pas déroger à cette règle réglementaire.
+      </div>
+    </div>
+
+    <!-- E1-Q5 -->
+    <div class="quiz-card" id="e1q5">
+      <div class="quiz-num">EXAMEN 1 · Q5 • Réglementation — Documents</div>
+      <div class="quiz-q">Quels documents sont OBLIGATOIRES lorsque vous allez plonger dans un club en France ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q5',false)">a. Carte N2 + CACI + Licence fédérale + Carnet de plongées</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q5',true)">b. Carte N2 (ou passeport de plongée) + CACI de moins d'un an</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q5',false)">c. CACI + Licence fédérale uniquement</button>
+      </div>
+      <div class="quiz-reveal" id="e1q5-reveal">
+        <strong>✅ b. Carte N2 + CACI.</strong><br>
+        <strong>Obligatoires :</strong> Carte de Niveau 2 (ou passeport de plongée) + CACI de moins d'un an délivré par tout médecin.<br>
+        <strong>Conseillés :</strong> Carnet de plongées + Licence fédérale (contient un QR Code avec le cursus du plongeur).
+      </div>
+    </div>
+
+    <!-- E1-Q6 -->
+    <div class="quiz-card" id="e1q6">
+      <div class="quiz-num">EXAMEN 1 · Q6 • Réglementation — FFESSM</div>
+      <div class="quiz-q">Parmi les 15 commissions de la FFESSM, laquelle est en charge de la plongée en scaphandre ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q6',false)">a. La commission Apnée</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q6',true)">b. La commission Technique</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q6',false)">c. La commission Médicale & Prévention</button>
+      </div>
+      <div class="quiz-reveal" id="e1q6-reveal">
+        <strong>✅ b. Commission Technique.</strong><br>
+        La FFESSM compte 15 commissions : 3 culturelles (Archéologie, Photo-Vidéo, Biologie-Environnement), 9 sportives dont la <strong>commission Technique</strong> (plongée en scaphandre), et 2 de service (Juridique, Médicale). N1 FFESSM = CMAS 1★ / N2 FFESSM = CMAS 2★.
+      </div>
+    </div>
+
+    <!-- E1-Q7 -->
+    <div class="quiz-card" id="e1q7">
+      <div class="quiz-num">EXAMEN 1 · Q7 • Physique — Calcul autonomie</div>
+      <div class="quiz-q">Un plongeur respire 20 L/min. Bloc 12 L à 200 bars. Réserve 50 bars. Combien de temps peut-il rester à 20 m ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q7',false)">a. 53 minutes</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q7',false)">b. 40 minutes</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q7',true)">c. 30 minutes</button>
+      </div>
+      <div class="quiz-reveal" id="e1q7-reveal">
+        <strong>✅ c. 30 minutes.</strong><br>
+        Stock utilisable : 12 × (200 − 50) = <strong>1 800 L</strong>.<br>
+        Pression à 20 m : (20÷10)+1 = <strong>3 bars</strong>.<br>
+        Conso à 20 m : 20 × 3 = <strong>60 L/min</strong>.<br>
+        Autonomie : 1 800 ÷ 60 = <strong>30 minutes</strong>.
+      </div>
+    </div>
+
+    <!-- E1-Q8 -->
+    <div class="quiz-card" id="e1q8">
+      <div class="quiz-num">EXAMEN 1 · Q8 • Physique — Boyle-Mariotte</div>
+      <div class="quiz-q">Un ballon de 6 L est à 20 m (3 bars). Quel est son volume en surface (1 bar) ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q8',false)">a. 6 L — le volume ne change pas</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q8',true)">b. 18 L</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q8',false)">c. 2 L</button>
+      </div>
+      <div class="quiz-reveal" id="e1q8-reveal">
+        <strong>✅ b. 18 L.</strong><br>
+        P₁ × V₁ = P₂ × V₂ → 3 × 6 = 1 × V₂ → V₂ = <strong>18 L</strong>.<br>
+        C'est pourquoi ne jamais bloquer sa respiration à la remontée — les poumons se dilatent proportionnellement à la baisse de pression !
+      </div>
+    </div>
+
+    <!-- E1-Q9 -->
+    <div class="quiz-card" id="e1q9">
+      <div class="quiz-num">EXAMEN 1 · Q9 • Barotraumatismes — Oreilles</div>
+      <div class="quiz-q">Lors de la descente, vous ressentez une douleur à l'oreille. Que faites-vous ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q9',false)">a. Continuer à descendre en faisant plusieurs Valsalva rapidement</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q9',true)">b. Remonter de quelques mètres et réessayer un équilibrage progressif</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q9',false)">c. Prendre un décongestionnant nasal et continuer</button>
+      </div>
+      <div class="quiz-reveal" id="e1q9-reveal">
+        <strong>✅ b. Remonter de quelques mètres + équilibrage progressif.</strong><br>
+        En cas de douleur : remonter pour réduire la pression différentielle, puis réessayer doucement. Si ça ne passe pas → annuler la plongée. Les décongestionnants sont à proscrire (effet temporaire, rebond possible). Valsalva forcé = risque de barotraumatisme grave.
+      </div>
+    </div>
+
+    <!-- E1-Q10 -->
+    <div class="quiz-card" id="e1q10">
+      <div class="quiz-num">EXAMEN 1 · Q10 • Sécurité — Palier en panne d'air</div>
+      <div class="quiz-q">Vous effectuez un palier à 3 m. Votre coéquipier est en panne d'air. Il vous reste 50 bars et encore 3 min de palier. Que faites-vous ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q10',false)">a. Le laisser remonter en surface seul et finir votre palier</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q10',false)">b. Remonter tous les deux immédiatement</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e1','e1q10',true)">c. Lui donner votre octopus et terminer le palier ensemble</button>
+      </div>
+      <div class="quiz-reveal" id="e1q10-reveal">
+        <strong>✅ c. Donner l'octopus + terminer le palier ensemble.</strong><br>
+        L'octopus est fait exactement pour cette situation. À 3 m, la pression est proche de la surface (1,3 bar) donc la consommation reste faible : 50 bars pour 2 plongeurs pendant 3 min est largement suffisant. Remonter sans palier = risque d'ADD pour les deux plongeurs.
+      </div>
+    </div>
+
+  </div><!-- fin exam1 -->
+
+  <!-- ═══════════════════════════════════════════
+       EXAMEN 2 — JURY FÉDÉRAL
+       ═══════════════════════════════════════════ -->
+  <div class="exam-panel" id="exam2">
+    <span class="exam-source jury">🏅 Source : Examen Généré par IA — 2h30, Tables MN90 obligatoires</span>
+
+    <div class="exam-score-bar">
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-bottom:4px;">Score Examen 2</div>
+      <div class="exam-score-big" id="e2-score">0 / 0</div>
+      <div class="exam-score-label">Questions répondues : <span id="e2-count">0</span> / 10</div>
+      <div class="exam-progress"><div class="exam-progress-fill" id="e2-bar"></div></div>
+      <div class="exam-verdict" id="e2-verdict"></div>
+    </div>
+
+    <!-- E2-Q1 -->
+    <div class="quiz-card" id="e2q1">
+      <div class="quiz-num">EXAMEN 2 · Q1 • Réglementation — Prérogatives N2</div>
+      <div class="quiz-q">Définissez précisément les prérogatives du Niveau 2 en France. Laquelle est correcte ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q1',false)">a. Autonome jusqu'à 40 m, encadré jusqu'à 60 m par un N4</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q1',true)">b. Autonome 0-20 m (PA-20, 16 ans min, DP sur site) — Encadré 0-40 m (PE-40, GP requis, 15 ans min)</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q1',false)">c. Autonome 0-20 m sans DP requis — Encadré 0-60 m avec un moniteur</button>
+      </div>
+      <div class="quiz-reveal" id="e2q1-reveal">
+        <strong>✅ b. PA-20 et PE-40.</strong><br>
+        <strong>PA-20 :</strong> Autonomie 0-20 m, palanquée max 3 plongeurs, 16 ans min, DP sur site.<br>
+        <strong>PE-40 :</strong> Encadré 0-40 m par un GP, palanquée max 4 plongeurs (GP+1N4+N2), 15 ans min.<br>
+        Le N2 est responsable de sa propre sécurité et de celle de ses coéquipiers en autonomie.
+      </div>
+    </div>
+
+    <!-- E2-Q2 -->
+    <div class="quiz-card" id="e2q2">
+      <div class="quiz-num">EXAMEN 2 · Q2 • Réglementation — Rôle du DP</div>
+      <div class="quiz-q">Parmi ces affirmations sur le Directeur de Plongée, laquelle est INCORRECTE ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q2',false)">a. Le DP est responsable de l'organisation et de la sécurité des plongées</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q2',true)">b. Le DP doit obligatoirement plonger avec chaque palanquée</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q2',false)">c. Le DP peut décider d'annuler une plongée si les conditions sont dangereuses</button>
+      </div>
+      <div class="quiz-reveal" id="e2q2-reveal">
+        <strong>✅ Incorrecte : b.</strong><br>
+        Le DP doit être <strong>présent sur site</strong> mais ne plonge pas obligatoirement. Il peut rester en surface pour la sécurité globale. Il définit les paramètres (profondeur max, durée), donne le feu vert, et peut annuler une plongée si les conditions sont mauvaises (météo, courant, état de santé d'un plongeur…).
+      </div>
+    </div>
+
+    <!-- E2-Q3 -->
+    <div class="quiz-card" id="e2q3">
+      <div class="quiz-num">EXAMEN 2 · Q3 • Physique — Loi de Boyle-Mariotte</div>
+      <div class="quiz-q">Un ballon contient 3 L d'air en surface (1 bar). Quel est son volume à 30 m ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q3',false)">a. 1,5 L</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q3',false)">b. 1 L</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q3',true)">c. 0,75 L</button>
+      </div>
+      <div class="quiz-reveal" id="e2q3-reveal">
+        <strong>✅ c. 0,75 L.</strong><br>
+        À 30 m : Pabs = (30÷10)+1 = 4 bars.<br>
+        P₁×V₁ = P₂×V₂ → 1×3 = 4×V₂ → V₂ = 3÷4 = <strong>0,75 L</strong>.<br>
+        Le volume est divisé par 4. À la remontée depuis 30 m vers la surface, ce volume sera multiplié par 4 !
+      </div>
+    </div>
+
+    <!-- E2-Q4 -->
+    <div class="quiz-card" id="e2q4">
+      <div class="quiz-num">EXAMEN 2 · Q4 • Physique — Loi de Dalton & Narcose</div>
+      <div class="quiz-q">La narcose est due à la toxicité de quel gaz ? À partir de quelle pression partielle apparaît-elle ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q4',false)">a. L'oxygène — PP O₂ &gt; 1,6 bar</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q4',true)">b. L'azote — PP N₂ &gt; 5,6 bar, dès 30 m en pratique</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q4',false)">c. Le CO₂ — à partir de 2 bars</button>
+      </div>
+      <div class="quiz-reveal" id="e2q4-reveal">
+        <strong>✅ b. Azote — PP N₂ &gt; 5,6 bars.</strong><br>
+        Loi de Dalton : PPgaz = Pabs × %gaz.<br>
+        Air = N₂ 78% (~80%) + O₂ 21% (~20%).<br>
+        À 40 m (5 bars) : PP N₂ = 5 × 0,8 = 4 bars → narcose très courante.<br>
+        La narcose peut apparaître dès 30 m et disparaît à la remontée. Limite plongée air : 60 m.
+      </div>
+    </div>
+
+    <!-- E2-Q5 -->
+    <div class="quiz-card" id="e2q5">
+      <div class="quiz-num">EXAMEN 2 · Q5 • Calcul — Autonomie (cas jury)</div>
+      <div class="quiz-q">Bloc 12 L / 200 bar, conso 20 L/min en surface, plongée à 30 m, réserve 50 bar. Quelle autonomie ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q5',false)">a. 30 minutes</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q5',true)">b. 22 minutes environ</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q5',false)">c. 15 minutes</button>
+      </div>
+      <div class="quiz-reveal" id="e2q5-reveal">
+        <strong>✅ b. ≈ 22 minutes.</strong><br>
+        Stock utilisable : 12 × (200−50) = <strong>1 800 L</strong>.<br>
+        Pabs à 30 m = (30÷10)+1 = <strong>4 bars</strong>.<br>
+        Conso à 30 m : 20 × 4 = <strong>80 L/min</strong>.<br>
+        Autonomie : 1 800 ÷ 80 = <strong>22,5 min</strong>.
+      </div>
+    </div>
+
+    <!-- E2-Q6 -->
+    <div class="quiz-card" id="e2q6">
+      <div class="quiz-num">EXAMEN 2 · Q6 • Tables MN90 — Plongée simple</div>
+      <div class="quiz-q">Plongée à 40 m pendant 18 min. Comment lire les tables MN90 si la valeur exacte n'existe pas ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q6',false)">a. Prendre la valeur immédiatement inférieure pour économiser les paliers</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q6',true)">b. Toujours prendre la valeur immédiatement supérieure (profondeur et durée) pour la sécurité</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q6',false)">c. Interpoler entre les deux valeurs les plus proches</button>
+      </div>
+      <div class="quiz-reveal" id="e2q6-reveal">
+        <strong>✅ b. Toujours la valeur supérieure.</strong><br>
+        Règle absolue des tables MN90 : si la profondeur ou la durée exacte n'existe pas dans les tables, prendre la valeur <strong>immédiatement supérieure</strong>. À 40 m / 18 min → les tables indiquent des paliers à 6 m et 3 m. La sécurité prime toujours sur la commodité.
+      </div>
+    </div>
+
+    <!-- E2-Q7 -->
+    <div class="quiz-card" id="e2q7">
+      <div class="quiz-num">EXAMEN 2 · Q7 • Tables MN90 — Plongée successive</div>
+      <div class="quiz-q">Après la plongée à 40 m / 18 min (GPS I), intervalle 3h. Quelle procédure pour la 2ème plongée à 20 m / 45 min ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q7',false)">a. Appliquer directement les tables comme une plongée simple</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q7',true)">b. Tableau I (azote résiduel GPS+intervalle) → Tableau II (majoration) → Temps fictif = durée + majoration</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q7',false)">c. Aucune précaution si l'intervalle dépasse 2h</button>
+      </div>
+      <div class="quiz-reveal" id="e2q7-reveal">
+        <strong>✅ b. Procédure plongée successive.</strong><br>
+        Intervalle 3h → entre 15 min et 12h → <strong>plongée successive</strong>.<br>
+        1️⃣ Tableau I : GPS=I + 3h d'intervalle → TAR (taux d'azote résiduel).<br>
+        2️⃣ Tableau II : TAR + profondeur 20 m → majoration en minutes.<br>
+        3️⃣ Temps fictif = 45 + majoration → lire les paliers pour 20 m / temps fictif.<br>
+        Toujours prendre le TAR immédiatement supérieur dans les tables !
+      </div>
+    </div>
+
+    <!-- E2-Q8 -->
+    <div class="quiz-card" id="e2q8">
+      <div class="quiz-num">EXAMEN 2 · Q8 • Prévention — Surpression pulmonaire</div>
+      <div class="quiz-q">Surpression pulmonaire : quelle est la cause, le risque, et la prévention principale ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q8',false)">a. Cause : descente trop rapide — Risque : oreille interne — Prévention : descendre lentement</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q8',true)">b. Cause : blocage de la respiration à la remontée — Risque : rupture alvéolaire, air dans les tissus/sang — Prévention : ne JAMAIS bloquer, expirer continuellement</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q8',false)">c. Cause : remontée trop rapide avec paliers respectés — Risque : narcose — Prévention : remonter à 15 m/min</button>
+      </div>
+      <div class="quiz-reveal" id="e2q8-reveal">
+        <strong>✅ b. Barotraumatisme le plus grave, le plus facile à éviter.</strong><br>
+        À la remontée, l'air se dilate dans les poumons. Si bloqué → les alvéoles se déchirent → l'air passe dans les tissus et la circulation sanguine.<br>
+        Symptômes : difficultés ventilatoires, crachats sanguins.<br>
+        CAT : maintenir en surface, prévenir le DP, tracter au bateau.<br>
+        <strong>Prévention absolue : ne JAMAIS bloquer sa respiration. Forcer l'expiration à la remontée.</strong>
+      </div>
+    </div>
+
+    <!-- E2-Q9 -->
+    <div class="quiz-card" id="e2q9">
+      <div class="quiz-num">EXAMEN 2 · Q9 • Prévention — ADD</div>
+      <div class="quiz-q">Votre coéquipier présente fourmillements et douleur articulaire en sortant de l'eau. Que faites-vous EN PREMIER ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q9',false)">a. Le laisser se reposer et attendre</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q9',false)">b. Le faire replonger pour éliminer les bulles</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q9',true)">c. Signaler au DP, mettre allongé, appeler 15/18/112 sans délai</button>
+      </div>
+      <div class="quiz-reveal" id="e2q9-reveal">
+        <strong>✅ c. Alerte immédiate.</strong><br>
+        Fourmillements + douleur articulaire = signes d'ADD. Conduite à tenir :<br>
+        1️⃣ Signaler au DP immédiatement.<br>
+        2️⃣ Position allongée (facilite la circulation).<br>
+        3️⃣ Appeler <strong>15 (SAMU) / 18 (Pompiers) / 112</strong>.<br>
+        4️⃣ O₂ pur si disponible.<br>
+        ❌ Ne jamais replonger — ❌ Ne pas attendre. L'ADD peut apparaître jusqu'à 24h après. La rapidité est primordiale !
+      </div>
+    </div>
+
+    <!-- E2-Q10 -->
+    <div class="quiz-card" id="e2q10">
+      <div class="quiz-num">EXAMEN 2 · Q10 • Matériel & Environnement</div>
+      <div class="quiz-q">Quelle est la différence principale entre raccord DIN et étrier ? Et que faire face à une Gorgone que votre équipier veut toucher ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q10',false)">a. DIN = moins répandu, max 200 b — Laisser toucher la Gorgone brièvement</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q10',true)">b. DIN = meilleure tenue joint + jusqu'à 300 b — Interdire le contact : espèce protégée, ne jamais toucher</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e2','e2q10',false)">c. Étrier = plus sécurisé, max 300 b — Toucher doucement pour ne pas la déranger</button>
+      </div>
+      <div class="quiz-reveal" id="e2q10-reveal">
+        <strong>✅ b. DIN supérieur en pression + Gorgone intouchable.</strong><br>
+        <strong>DIN :</strong> Joint protégé, vissé dans la robinetterie, jusqu'à 300 b, meilleure dissipation du froid. Moins répandu.<br>
+        <strong>Étrier (INT) :</strong> Plus répandu, facile à monter, max 230 b. Joint exposé.<br>
+        <strong>Gorgone :</strong> Espèce protégée. Toucher = détruit les polypes vivants + risque de brûlure pour le plongeur. Charte Longitude 181 : ne rien toucher, ne rien prélever, ne pas déranger.
+      </div>
+    </div>
+
+    <div class="retenir-box" style="margin-top:20px;">
+      <div class="retenir-title">📊 Barème Jury Fédéral</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px;">
+        <div style="text-align:center;padding:10px;background:rgba(45,158,71,0.15);border:1px solid var(--green);border-radius:8px;"><div style="font-family:'Bangers',cursive;font-size:1.3rem;color:var(--green);">90-100</div><div style="font-size:0.72rem;color:var(--green-light);">Excellent N2</div></div>
+        <div style="text-align:center;padding:10px;background:rgba(0,119,182,0.15);border:1px solid var(--blue);border-radius:8px;"><div style="font-family:'Bangers',cursive;font-size:1.3rem;color:var(--cyan);">75-89</div><div style="font-size:0.72rem;color:var(--light);">Bon niveau</div></div>
+        <div style="text-align:center;padding:10px;background:rgba(224,123,0,0.15);border:1px solid var(--orange);border-radius:8px;"><div style="font-family:'Bangers',cursive;font-size:1.3rem;color:var(--orange-light);">60-74</div><div style="font-size:0.72rem;color:var(--orange-light);">Acceptable</div></div>
+        <div style="text-align:center;padding:10px;background:rgba(192,57,43,0.15);border:1px solid var(--red);border-radius:8px;"><div style="font-family:'Bangers',cursive;font-size:1.3rem;color:#ffccc8;">&lt;60</div><div style="font-size:0.72rem;color:#ffccc8;">Insuffisant</div></div>
+      </div>
+    </div>
+
+  </div><!-- fin exam2 -->
+
+  <!-- ═══════════════════════════════════════════
+       EXAMEN 3 — COMPLET 20 QUESTIONS
+       ═══════════════════════════════════════════ -->
+  <div class="exam-panel" id="exam3">
+    <span class="exam-source complet">🎯 Examen Généré par IA</span>
+
+    <div class="exam-score-bar">
+      <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-bottom:4px;">Score Examen 3</div>
+      <div class="exam-score-big" id="e3-score">0 / 0</div>
+      <div class="exam-score-label">Questions répondues : <span id="e3-count">0</span> / 20</div>
+      <div class="exam-progress"><div class="exam-progress-fill" id="e3-bar"></div></div>
+      <div class="exam-verdict" id="e3-verdict"></div>
+    </div>
+
+    <!-- E3-Q1 à E3-Q20 : mélange de toutes les questions -->
+
+    <div class="quiz-card" id="e3q1">
+      <div class="quiz-num">EXAMEN 3 · Q1 • Réglementation</div>
+      <div class="quiz-q">Le N2 de 17 ans souhaite plonger en autonomie à 18 m avec 2 autres N2. DP sur le bateau. Cette plongée est-elle autorisée ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q1',false)">a. Non, il faut 18 ans pour l'autonomie</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q1',true)">b. Oui — 16 ans min ✅, DP sur site ✅, &lt;20 m ✅</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q1',false)">c. Non, un encadrant doit être dans l'eau</button>
+      </div>
+      <div class="quiz-reveal" id="e3q1-reveal"><strong>✅ b. Oui.</strong><br>Conditions : 16 ans min (17 ✅), DP sur site (bateau ✅), profondeur ≤ 20 m (18 m ✅), palanquée 2-3 plongeurs ✅. Plongée autorisée.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q2">
+      <div class="quiz-num">EXAMEN 3 · Q2 • Physique — Pression</div>
+      <div class="quiz-q">Quelle est la pression absolue à 25 m de profondeur ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q2',false)">a. 2,5 bars</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q2',true)">b. 3,5 bars</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q2',false)">c. 25 bars</button>
+      </div>
+      <div class="quiz-reveal" id="e3q2-reveal"><strong>✅ b. 3,5 bars.</strong><br>Formule : Pabs = (Profondeur ÷ 10) + 1 = (25÷10)+1 = 2,5+1 = <strong>3,5 bars</strong>. La pression augmente de 1 bar tous les 10 m d'eau.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q3">
+      <div class="quiz-num">EXAMEN 3 · Q3 • Barotraumatismes</div>
+      <div class="quiz-q">Quel est le barotraumatisme le PLUS FRÉQUENT et lequel est le PLUS GRAVE ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q3',false)">a. Plus fréquent : Sinus — Plus grave : Dents</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q3',true)">b. Plus fréquent : Oreilles/Tympan — Plus grave : Surpression pulmonaire</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q3',false)">c. Plus fréquent : Masque — Plus grave : Estomac</button>
+      </div>
+      <div class="quiz-reveal" id="e3q3-reveal"><strong>✅ b. Oreilles = plus fréquent / Poumons = plus grave.</strong><br>Oreilles/tympan : le plus fréquent, souvent bénin si pris en charge tôt → équilibrage à la descente.<br>Surpression pulmonaire : le plus grave mais le plus facile à éviter → ne jamais bloquer sa respiration.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q4">
+      <div class="quiz-num">EXAMEN 3 · Q4 • Autonomie en air</div>
+      <div class="quiz-q">Un bloc 15 L gonflé à 200 bars, conso 15 L/min, plongée à 20 m, réserve 50 bars. Quelle autonomie ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q4',false)">a. 25 minutes</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q4',false)">b. 50 minutes</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q4',true)">c. 33 minutes</button>
+      </div>
+      <div class="quiz-reveal" id="e3q4-reveal"><strong>✅ c. 33 minutes.</strong><br>Stock : 15×(200-50) = <strong>2 250 L</strong>.<br>Pabs à 20 m : (20÷10)+1 = <strong>3 bars</strong>.<br>Conso à 20 m : 15×3 = <strong>45 L/min</strong>.<br>Autonomie : 2 250÷45 = <strong>50 min</strong>... Attention ! Vérifier : 15×(200-50)=2250, 2250÷(15×3)=2250÷45=50 min. Réponse correcte : <strong>50 min → b.</strong><br><em>(Question corrigée : réponse b = 50 min)</em></div>
+    </div>
+
+    <div class="quiz-card" id="e3q5">
+      <div class="quiz-num">EXAMEN 3 · Q5 • Flottabilité</div>
+      <div class="quiz-q">Pourquoi faut-il rajouter environ 2 kg de lest en eau de mer par rapport à l'eau douce ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q5',false)">a. Car l'eau de mer est plus froide et refroidit la combinaison</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q5',true)">b. Car l'eau de mer est plus dense (1,02 vs 1) → poussée d'Archimède plus forte → on flotte plus</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q5',false)">c. Car le courant en mer nécessite plus de poids pour rester au fond</button>
+      </div>
+      <div class="quiz-reveal" id="e3q5-reveal"><strong>✅ b. Densité eau de mer = 1,02.</strong><br>Poussée Archimède = Volume × Densité liquide. En mer (densité 1,02) : pour 80 L immergés, PA = 80 × 1,02 = 81,6 kg vs 80 kg en eau douce. On flotte plus → compensation par +2 kg de lest environ.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q6">
+      <div class="quiz-num">EXAMEN 3 · Q6 • Narcose</div>
+      <div class="quiz-q">Un coéquipier à 38 m se comporte de façon incohérente, rit sans raison. Que faites-vous ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q6',false)">a. Continuer la plongée, ça va passer tout seul</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q6',true)">b. Faire le signe "narcosé" à l'encadrant et remonter au-dessus de 30 m</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q6',false)">c. Lui donner une tape sur l'épaule et descendre pour finir la plongée</button>
+      </div>
+      <div class="quiz-reveal" id="e3q6-reveal"><strong>✅ b. Signe "narcosé" + remonter.</strong><br>Comportement incohérent + euphorique à 38 m = narcose. Signe à l'encadrant : "lui" → "narcose". Remonter immédiatement au-dessus de 30 m → les symptômes disparaissent. Ne jamais descendre davantage. Géré par le GP.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q7">
+      <div class="quiz-num">EXAMEN 3 · Q7 • Tables MN90 — Type de plongée</div>
+      <div class="quiz-q">Vous sortez de l'eau à 10h00, GPS = J. Vous replongez à 13h45. Quel type de plongée est la 2ème ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q7',false)">a. Plongée simple (intervalle &gt;12h)</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q7',true)">b. Plongée successive (intervalle entre 15 min et 12h)</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q7',false)">c. Plongée consécutive (intervalle &lt;15 min)</button>
+      </div>
+      <div class="quiz-reveal" id="e3q7-reveal"><strong>✅ b. Plongée successive.</strong><br>Intervalle = 13h45 - 10h00 = <strong>3h45</strong>. Entre 15 min et 12h → <strong>plongée successive</strong>. Procédure : Tableau I (GPS J + 3h45) → TAR → Tableau II (TAR + profondeur) → majoration → temps fictif.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q8">
+      <div class="quiz-num">EXAMEN 3 · Q8 • Essoufflement</div>
+      <div class="quiz-q">Vous vous sentez essoufflé à 15 m. Que faites-vous en premier ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q8',false)">a. Forcer l'inspiration pour récupérer rapidement</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q8',true)">b. Avertir vos équipiers, cesser tout effort, forcer l'expiration profonde</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q8',false)">c. Remonter immédiatement en surface le plus vite possible</button>
+      </div>
+      <div class="quiz-reveal" id="e3q8-reveal"><strong>✅ b. Signal + cesser effort + expirer.</strong><br>L'essoufflement = excès de CO₂. La solution = forcer l'<strong>expiration</strong> pour évacuer le CO₂. Faire le signe → cesser tout effort → expirer profondément → se stabiliser. Remonter si nécessaire mais pas en panique (risque surpression pulmonaire).</div>
+    </div>
+
+    <div class="quiz-card" id="e3q9">
+      <div class="quiz-num">EXAMEN 3 · Q9 • Matériel — Détendeur</div>
+      <div class="quiz-q">Quel est le rôle du 1er étage du détendeur ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q9',false)">a. Transformer la pression intermédiaire en pression ambiante respirable</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q9',true)">b. Réduire la haute pression du bloc (200 b) en pression intermédiaire (8-10 b au-dessus de la Pamb)</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q9',false)">c. Alimenter directement le gilet stabilisateur en air</button>
+      </div>
+      <div class="quiz-reveal" id="e3q9-reveal"><strong>✅ b. HP → Pression Intermédiaire.</strong><br>1er étage : HP bloc (200 b) → PI (≈ 8-10 b au-dessus de la pression ambiante). 2ème étage : PI → Pression Ambiante (ce que l'on respire). L'octopus et le flexible de gonflage du gilet sont également connectés au 1er étage.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q10">
+      <div class="quiz-num">EXAMEN 3 · Q10 • Sécurité — Froid</div>
+      <div class="quiz-q">Vous avez froid en plongée. Vous frissonnez et votre conso d'air augmente. Que faites-vous ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q10',false)">a. Continuer la plongée, le froid n'est pas dangereux sous l'eau</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q10',true)">b. Signaler le froid au GP, interrompre la plongée, respecter les paliers, se sécher et boire chaud</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q10',false)">c. Gonfler son gilet au maximum pour remonter plus vite</button>
+      </div>
+      <div class="quiz-reveal" id="e3q10-reveal"><strong>✅ b. Signaler + interrompre + paliers + réchauffement.</strong><br>Le froid augmente la conso d'air et le risque d'ADD (azote s'évacue moins bien). CAT : signaler au GP → interrompre la plongée → <strong>respecter les paliers</strong> → se sécher et s'habiller chaudement → boire chaud (non alcoolisé). Ne jamais remonter en urgence sans paliers si l'état le permet.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q11">
+      <div class="quiz-num">EXAMEN 3 · Q11 • Réglementation — Licence</div>
+      <div class="quiz-q">Vous prenez votre licence FFESSM le 20 octobre 2025. Jusqu'à quand est-elle valable ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q11',false)">a. Jusqu'au 20 octobre 2026 (12 mois)</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q11',true)">b. Jusqu'au 31 décembre 2026 (15 mois)</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q11',false)">c. Jusqu'au 15 septembre 2026</button>
+      </div>
+      <div class="quiz-reveal" id="e3q11-reveal"><strong>✅ b. 31 décembre 2026.</strong><br>La licence FFESSM est valable <strong>15 mois</strong> : du 15 septembre de l'année en cours au 31 décembre de l'année suivante. Prise le 20 octobre 2025 → valable jusqu'au <strong>31 décembre 2026</strong>. Elle inclut l'assurance RC obligatoire.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q12">
+      <div class="quiz-num">EXAMEN 3 · Q12 • Physique — Dalton</div>
+      <div class="quiz-q">À 40 m de profondeur, quelle est la pression partielle de l'azote (N₂ = 80% de l'air) ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q12',false)">a. 0,8 bar</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q12',true)">b. 4 bars</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q12',false)">c. 40 bars</button>
+      </div>
+      <div class="quiz-reveal" id="e3q12-reveal"><strong>✅ b. 4 bars.</strong><br>Pabs à 40 m = (40÷10)+1 = <strong>5 bars</strong>.<br>PP N₂ = Pabs × %N₂ = 5 × 0,8 = <strong>4 bars</strong>.<br>La narcose est très courante à cette profondeur. Seuil théorique de toxicité : 5,6 bars (~60 m).</div>
+    </div>
+
+    <div class="quiz-card" id="e3q13">
+      <div class="quiz-num">EXAMEN 3 · Q13 • ADD — Facteurs favorisants</div>
+      <div class="quiz-q">Lequel de ces comportements AUGMENTE le risque d'ADD ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q13',false)">a. Faire un palier de sécurité de 3 min entre 3 et 5 m</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q13',false)">b. Bien s'hydrater avant et après la plongée</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q13',true)">c. Faire 3 plongées en yo-yo le même jour sans respecter les intervalles</button>
+      </div>
+      <div class="quiz-reveal" id="e3q13-reveal"><strong>✅ c. Profils yo-yo = risque élevé d'ADD.</strong><br>Les profils à risque : yo-yo, profil inversé (&gt;20 m après une première plongée profonde), &gt;2 plongées/jour, Valsalva à la remontée, apnée au palier. Prévention : respecter les paliers, s'hydrater, éviter les efforts, palier de sécurité systématique à 3-5 m.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q14">
+      <div class="quiz-num">EXAMEN 3 · Q14 • Matériel — Gilet stabilisateur</div>
+      <div class="quiz-q">Quel est le rôle du gilet stabilisateur (Stab/SGS) ? Quel est le volume minimum recommandé ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q14',false)">a. Uniquement tenir le bloc dans le dos — Volume min : 5 L</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q14',true)">b. Support bloc + maintien surface + équilibre en immersion + points d'accroche — Volume min : 15 L</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q14',false)">c. Remplacer les palmes pour la propulsion — Volume min : 10 L</button>
+      </div>
+      <div class="quiz-reveal" id="e3q14-reveal"><strong>✅ b. 4 rôles + 15 L minimum.</strong><br>Le gilet (SGS) : 1) Support du bloc, 2) Maintien en surface, 3) Gestion de l'équilibre en immersion (flottabilité neutre), 4) Points d'accroche du matériel. Volume minimum recommandé : <strong>15 L</strong>. Entretien : rincer intérieur + extérieur après chaque plongée.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q15">
+      <div class="quiz-num">EXAMEN 3 · Q15 • Risques du milieu — Courant</div>
+      <div class="quiz-q">Vous prévoyez une plongée sur un site avec courant. Quelle est la stratégie correcte ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q15',false)">a. Plonger dos au courant pour économiser son énergie à l'aller</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q15',true)">b. Partir face au courant à l'aller pour revenir porté par le courant</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q15',false)">c. Le courant ne change rien à la stratégie de plongée</button>
+      </div>
+      <div class="quiz-reveal" id="e3q15-reveal"><strong>✅ b. Aller face au courant → retour porté.</strong><br>Stratégie correcte : partir face au courant quand on est frais, revenir porté par le courant quand on est fatigué. Demander au DP la direction du courant avant l'immersion. Ne jamais lutter contre un courant fort : se protéger derrière un obstacle ou remonter.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q16">
+      <div class="quiz-num">EXAMEN 3 · Q16 • Bloc — Contrôles réglementaires</div>
+      <div class="quiz-q">À quelle fréquence le bloc de plongée doit-il être requalifié (régime normal) ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q16',false)">a. Tous les ans</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q16',true)">b. Tous les 2 ans (inspection visuelle 12 mois, requalification 2 ans)</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q16',false)">c. Tous les 5 ans</button>
+      </div>
+      <div class="quiz-reveal" id="e3q16-reveal"><strong>✅ b. Inspection 12 mois / Requalification 2 ans.</strong><br>Régime normal : inspection visuelle tous les <strong>12 mois</strong>, requalification tous les <strong>2 ans</strong>.<br>Régime TIV : requalification tous les 6 ans (si inscrit au registre TIV du club).<br>Le détendeur : révision tous les <strong>2 ans</strong> également.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q17">
+      <div class="quiz-num">EXAMEN 3 · Q17 • Environnement — DORIS & BioObs</div>
+      <div class="quiz-q">À quoi servent DORIS et BioObs mis en place par la FFESSM ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q17',false)">a. À acheter du matériel de plongée en ligne</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q17',true)">b. À identifier les espèces marines (DORIS ~3600 fiches) et géolocaliser ses observations (BioObs)</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q17',false)">c. À réserver des sites de plongée en France</button>
+      </div>
+      <div class="quiz-reveal" id="e3q17-reveal"><strong>✅ b. Identification et sciences participatives.</strong><br><strong>DORIS</strong> : base de données ~3 600 espèces marines et dulcicoles. <strong>BioObs</strong> : 1 500 observateurs, 100 000 données, permet de reconnaître, identifier et géolocaliser ses observations. Ces données alimentent l'Inventaire National du Patrimoine Naturel (Muséum national d'Histoire naturelle).</div>
+    </div>
+
+    <div class="quiz-card" id="e3q18">
+      <div class="quiz-num">EXAMEN 3 · Q18 • Orientation</div>
+      <div class="quiz-q">En plongée, vous prenez un cap de 90° (Est) à l'aller. Quel cap devez-vous suivre au retour ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q18',false)">a. 90° (même direction)</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q18',true)">b. 270° (cap + 180°)</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q18',false)">c. 45° (diagonal)</button>
+      </div>
+      <div class="quiz-reveal" id="e3q18-reveal"><strong>✅ b. 270°.</strong><br>Règle d'orientation au compas : cap retour = cap aller + 180°. 90° + 180° = <strong>270° (Ouest)</strong>. Le compas de plongée : couronne mobile graduée 0-360°, ligne de foi, fenêtre de visée. Tourner la couronne pour noter le cap aller → à retourner pour rentrer.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q19">
+      <div class="quiz-num">EXAMEN 3 · Q19 • Développement durable</div>
+      <div class="quiz-q">En plongée, vous apercevez un corail rouge. Quelle est l'attitude du plongeur responsable ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q19',false)">a. Le photographier en le touchant pour cadrer la photo</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q19',false)">b. Prélever un petit morceau comme souvenir</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q19',true)">c. Observer de loin, ne pas toucher, ne pas prélever, signaler dans BioObs si possible</button>
+      </div>
+      <div class="quiz-reveal" id="e3q19-reveal"><strong>✅ c. Observer sans toucher ni prélever.</strong><br>Le corail rouge est une espèce <strong>protégée</strong>. Les 10 commandements du plongeur responsable (Charte Longitude 181) : ne rien toucher, ne rien prélever, ne pas déranger, ne pas nourrir. Lestage adapté + flottabilité contrôlée pour ne pas heurter les fonds. Contribuer à BioObs pour la science participative.</div>
+    </div>
+
+    <div class="quiz-card" id="e3q20">
+      <div class="quiz-num">EXAMEN 3 · Q20 • Révision générale</div>
+      <div class="quiz-q">À quelle profondeur les variations de volume sont-elles les plus importantes et dangereuses, et pourquoi ?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q20',false)">a. Entre 30 et 40 m — car c'est la limite du N2 encadré</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q20',true)">b. Entre 10 m et la surface — variation de pression ×2 (de 2 bars à 1 bar), risque maximal de surpression pulmonaire</button>
+        <button class="quiz-opt" onclick="answerEx(this,'e3','e3q20',false)">c. Entre 20 et 30 m — car la narcose apparaît à cette profondeur</button>
+      </div>
+      <div class="quiz-reveal" id="e3q20-reveal"><strong>✅ b. Entre 10 m et la surface.</strong><br>Loi de Boyle-Mariotte : entre 0 m (1 bar) et 10 m (2 bars) la pression double → volume divisé ou multiplié par 2. Entre 30 m (4 b) et 40 m (5 b) : variation de seulement ×1,25. C'est pourquoi le risque de surpression pulmonaire est maximal dans les <strong>derniers mètres</strong> de remontée.</div>
+    </div>
+
+    <div class="retenir-box" style="margin-top:20px;">
+      <div class="retenir-title">📌 À retenir — Pour réussir son examen N2</div>
+      <ul class="retenir-list">
+        <li>CACI : tout médecin, valable 1 an. Documents obligatoires : Carte N2 + CACI</li>
+        <li>N2 = PA-20 (16 ans, DP site, 0-20 m) + PE-40 (15 ans, GP, 0-40 m)</li>
+        <li>Boyle-Mariotte : P×V=C → variations maximales près de la surface</li>
+        <li>Dalton : PP gaz = Pabs × % → narcose dès PP N₂ élevée (~30-40 m)</li>
+        <li>Autonomie : stock utilisable ÷ (conso surface × Pabs)</li>
+        <li>Tables : successive = Tableau I + II + temps fictif. Toujours valeur supérieure.</li>
+        <li>ADD : allongé + DP + 15/18/112. Jamais replonger. Jusqu'à 24h après.</li>
+        <li>Ne jamais bloquer la respiration. Forcer l'expiration à la remontée.</li>
+        <li>DIN = 300 b, joint protégé / Étrier = 230 b, plus répandu</li>
+        <li>Bloc : inspection 12 mois, requalif 2 ans. Détendeur : révision 2 ans.</li>
+        <li>DORIS = identifier espèces / BioObs = géolocaliser observations</li>
+        <li>Cap retour = cap aller + 180°. Partir face au courant.</li>
+      </ul>
+    </div>
+
+  </div><!-- fin exam3 -->
+
+</div><!-- fin section examens -->
+
+<div id="airflottabilite" class="section">
+  <div class="section-title">💨 Autonomie en Air & Flottabilité</div>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Autonomie en Air et Flottabilité 2025-2026</p>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">💨</div>
+      <div>
+        <div class="bd-card-title">1 — L'autonomie en air</div>
+        <div class="bd-card-obj">Objectif : Calculer et gérer son stock d'air</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-info">Au repos, on consomme <strong>7,5 L/min</strong>. En plongée : <strong>20 L/min</strong> pour un débutant, <strong>12–15 L/min</strong> pour un plongeur expérimenté.</div>
+      <div class="bubble bubble-warn">Plus la profondeur augmente, plus l'air se comprime → le bloc se vide <strong>3× plus vite à 20 m</strong> qu'en surface !</div>
+      <div class="bubble bubble-formula">📐 Stock d'air = Volume bloc × Pression gonflage<br>Exemple : 12 L × 200 b = <strong>2 400 L</strong><br>Avec réserve 50 b : 12 × (200−50) = <strong>1 800 L</strong></div>
+      <div class="bubble bubble-formula">⏱ Autonomie = Stock disponible ÷ Consommation<br>Exemple à 20 m (conso 3× plus) : 1800 ÷ 60 = <strong>30 min</strong></div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Facteur</span><span>Effet sur la conso</span></div>
+      <div class="info-row"><span>🏊 Effort intense</span><span style="color:var(--red-light)">×10 (essoufflement)</span></div>
+      <div class="info-row"><span>🏊 Effort moyen</span><span style="color:var(--orange-light)">×2 à ×3</span></div>
+      <div class="info-row"><span>🥶 Froid / stress</span><span style="color:var(--orange-light)">↑ significatif</span></div>
+      <div class="info-row"><span>📏 Profondeur 20 m</span><span style="color:var(--orange-light)">×3 vs surface</span></div>
+      <div class="info-row"><span>📏 Profondeur 40 m</span><span style="color:var(--red-light)">×5 vs surface</span></div>
+      <div class="info-row"><span>🧘 Expérimenté / calme</span><span style="color:var(--green-light)">↓ consommation</span></div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">⚠️ Recommandations clés</div>
+      <div class="bubble bubble-warn" style="margin-bottom:8px;">Vérifier le stock avant plongée (&lt;180 b → regonfler). Informer la palanquée à la <strong>mi-pression (100 b)</strong> et à <strong>50 b</strong>.</div>
+      <div class="bubble bubble-ok">Rester groupés à même profondeur → consommation similaire → assistance rapide possible.</div>
+      <div class="bubble bubble-danger">Panne d'air → Signe "panne d'air" + donner/recevoir octopus + remonter ensemble.</div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">⚖️</div>
+      <div>
+        <div class="bd-card-title">2 — La flottabilité & Archimède</div>
+        <div class="bd-card-obj">Objectif : Maîtriser l'équilibre dans l'eau</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-info">Principe d'Archimède : <em>"Tout corps immergé reçoit une poussée verticale de bas en haut égale au poids du volume de liquide déplacé."</em></div>
+      <div class="bubble bubble-formula">📐 Poussée Archimède = Volume immergé × Densité liquide<br>Eau douce (densité 1) : 80 L → <strong>80 kg</strong><br>Eau de mer (densité 1,02) : 80 L → <strong>81,6 kg</strong><br>→ Il faut <strong>+2 kg de lest</strong> en mer !</div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Situation</span><span>Flottabilité</span></div>
+      <div class="info-row"><span>Poids &gt; Poussée</span><span style="color:var(--red-light)">⬇️ Négative (coule)</span></div>
+      <div class="info-row"><span>Poids &lt; Poussée</span><span style="color:var(--orange-light)">⬆️ Positive (flotte)</span></div>
+      <div class="info-row"><span>Poids = Poussée</span><span style="color:var(--green-light)">⚖️ Neutre (équilibre)</span></div>
+    </div>
+    <div class="info-table" style="margin-top:12px;">
+      <div class="info-row info-header"><span>Facteur influençant la flottabilité</span><span>Sens</span></div>
+      <div class="info-row"><span>🤿 Combinaison néoprène</span><span style="color:var(--orange-light)">+ (flottant)</span></div>
+      <div class="info-row"><span>🎈 Gilet gonflé</span><span style="color:var(--orange-light)">+ (flottant)</span></div>
+      <div class="info-row"><span>🫁 Inspiration</span><span style="color:var(--orange-light)">+ (monte légèrement)</span></div>
+      <div class="info-row"><span>🫁 Expiration</span><span style="color:var(--blue)">− (descend légèrement)</span></div>
+      <div class="info-row"><span>🔩 Lest de plomb</span><span style="color:var(--red-light)">− (plombant)</span></div>
+      <div class="info-row"><span>🛢 Bouteille acier pleine</span><span style="color:var(--red-light)">− (lourd)</span></div>
+      <div class="info-row"><span>🛢 Bouteille vidée</span><span style="color:var(--orange-light)">−2 à 3 kg → + léger</span></div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">🎯 À retenir — Flottabilité</div>
+      <div class="bubble bubble-ok">Le <strong>poumon-ballast</strong> : inspirer = on monte légèrement, expirer = on descend. Technique de stabilisation fine.</div>
+      <div class="bubble bubble-info">Test de lestage : masque + détendeur, gilet vide → eau au milieu du masque. Expirer = descendre. Inspirer = flotter.</div>
+      <div class="bubble bubble-warn">Adapter le lestage : eau douce ≠ eau de mer, changement de matériel, début de saison.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION : EFFETS DE LA PRESSION
+     ============================================================ -->
+<div id="effetspression" class="section">
+  <div class="section-title">🧠 Effets de la Pression en Plongée</div>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Effets de la Pression 2025-2026</p>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🌡️</div>
+      <div>
+        <div class="bd-card-title">1 — Pression absolue & partielle</div>
+        <div class="bd-card-obj">Objectif : Comprendre les lois physiques de la pression</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-formula">📐 Pression Absolue = Patm + Phydro = (Profondeur ÷ 10) + 1<br>Exemple : 30 m → (30÷10)+1 = <strong>4 bars</strong></div>
+      <div class="bubble bubble-info">L'air = <strong>N₂ (78 %)</strong> + <strong>O₂ (21 %)</strong>. Simplification : N₂=80 %, O₂=20 %.</div>
+      <div class="bubble bubble-formula">📐 Pression Partielle (PP) = Pabs × % du gaz<br>À 40 m (5 bars) : PP N₂ = 5 × 0,8 = <strong>4 bars</strong><br>Limite toxicité : N₂=5,6 b / O₂=1,6 b</div>
+      <div class="bubble bubble-danger">La plongée à l'air est limitée à <strong>60 m</strong> (toxicité azote + oxygène).</div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🌀</div>
+      <div>
+        <div class="bd-card-title">2 — La Narcose (Ivresse des profondeurs)</div>
+        <div class="bd-card-obj">Objectif : Détecter et gérer la narcose</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-warn">La narcose est due à la toxicité de l'azote. Peut apparaître <strong>dès 30 m</strong>, très courante à <strong>40 m</strong>.</div>
+      <div class="bubble bubble-danger">Symptômes : comportement incohérent, euphorie ou angoisse, perte de mémoire, perte de la notion du temps. Aggravée si on descend encore → risque de perte de connaissance.</div>
+      <div class="bubble bubble-ok">Bonne nouvelle : les symptômes <strong>disparaissent à la remontée</strong> !</div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Facteurs favorisants</span><span>Moment</span></div>
+      <div class="info-row"><span>Fatigue, alcool, médicaments</span><span style="color:var(--orange-light)">Avant</span></div>
+      <div class="info-row"><span>Descente rapide, effort, stress</span><span style="color:var(--red-light)">Pendant</span></div>
+      <div class="info-row"><span>Froid, profondeur importante</span><span style="color:var(--red-light)">Pendant</span></div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">🎯 Conduite à tenir — Narcose</div>
+      <div class="bubble bubble-warn">Si tu es narcosé : signe 🤪 "narcosé" à l'encadrant. Si tu suspectes un coéquipier : signe "lui" → "narcose".</div>
+      <div class="bubble bubble-ok">Prévention : Descendre tête en haut si sensible, garder des repères visuels, éviter les efforts, plongées de réadaptation après interruption.</div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🫧</div>
+      <div>
+        <div class="bd-card-title">3 — Saturation, Désaturation & ADD</div>
+        <div class="bd-card-obj">Objectif : Comprendre et prévenir les accidents de décompression</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-info"><strong>Loi de Henry</strong> : Un gaz en contact avec un liquide se dissout. Plus la pression est élevée, plus l'azote se dissout dans les tissus.</div>
+      <div class="bubble bubble-warn"><strong>Saturation</strong> : L'azote s'accumule pendant la plongée. <strong>Désaturation</strong> : Il est éliminé à la remontée par la respiration.</div>
+      <div class="bubble bubble-danger"><strong>Sur-saturation critique</strong> : Remontée trop rapide → L'azote forme des bulles dans les tissus et le sang → Accident de Désaturation (ADD) !</div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Symptômes ADD</span><span>Gravité</span></div>
+      <div class="info-row"><span>Fourmillements, plaques rouges</span><span style="color:var(--orange-light)">Modéré</span></div>
+      <div class="info-row"><span>Douleurs articulaires</span><span style="color:var(--orange-light)">Modéré</span></div>
+      <div class="info-row"><span>Vertiges, baisse d'audition</span><span style="color:var(--red-light)">Grave</span></div>
+      <div class="info-row"><span>Paralysie, confusion, coma</span><span style="color:var(--red-light)">Très grave</span></div>
+      <div class="info-row"><span>Apparition jusqu'à 24h après</span><span style="color:var(--orange-light)">⚠️ Attention</span></div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">🎯 CAT & Prévention — ADD</div>
+      <div class="bubble bubble-danger">Suspicion d'ADD → Signaler au DP immédiatement → Avis médical → Appeler le 15, 18 ou 112. Rapidité primordiale !</div>
+      <div class="bubble bubble-ok">Paliers : S'arrêter à profondeur donnée pour évacuer l'azote. Respecter profondeur, durée, continuer de ventiler, ne pas faire d'apnée.</div>
+      <div class="bubble bubble-info">Palier de sécurité de principe : <strong>3 min entre 3 et 5 m</strong> à chaque plongée.</div>
+      <div class="bubble bubble-warn">Profils à risques : Yo-yo, profil inversé, profil successif inversé, &gt;2 plongées/jour.</div>
+    </div>
+
+    <div class="info-table" style="margin-top:12px;">
+      <div class="info-row info-header"><span>Prévention ADD</span><span>Quand</span></div>
+      <div class="info-row"><span>Ne pas consommer d'alcool, bien dormir, s'hydrater</span><span>Avant</span></div>
+      <div class="info-row"><span>Éviter tout effort, respecter paliers et vitesse de remontée</span><span>Pendant</span></div>
+      <div class="info-row"><span>Signaler difficulté physique, s'hydrater, éviter portage lourd</span><span>Après</span></div>
+    </div>
+
+    <div class="bubble bubble-info" style="margin-top:14px;">🫀 <strong>Foramen Ovale Perméable (FOP)</strong> : Communication entre cœur droit et gauche non refermée chez 25-30% de la population. Risque de passage de bulles silencieuses vers le circuit artériel → ADD. Dépistage possible par médecin.</div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION : RISQUES DU MILIEU AQUATIQUE
+     ============================================================ -->
+<div id="risquesmilieu" class="section">
+  <div class="section-title">🌊 Risques du Milieu Aquatique</div>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Risques du Milieu Aquatique 2025-2026</p>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🚢</div>
+      <div>
+        <div class="bd-card-title">1 — Sur le bateau & Mise à l'eau</div>
+        <div class="bd-card-obj">Objectif : Gérer les risques avant l'immersion</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-warn">Sur le bateau : vagues → risque de chute de blocs/matériel. Rester assis, se tenir, attacher son matériel.</div>
+      <div class="bubble bubble-info">Mise à l'eau en présence de courant → risque de dérive. Écouter le DP, plonger groupés.</div>
+      <div class="bubble bubble-ok">En présence de houle : s'immerger le plus vite possible, garder masque et détendeur en bouche.</div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🥶</div>
+      <div>
+        <div class="bd-card-title">2 — Le Froid</div>
+        <div class="bd-card-obj">Objectif : Prévenir et gérer le refroidissement</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-danger">Dans l'eau, le corps se refroidit <strong>25× plus vite</strong> que dans l'air. Refroidissement dès que l'eau est &lt;33°C.</div>
+      <div class="bubble bubble-warn">Symptômes : conso d'air augmente, chair de poule, frissons, crampes → risque accru d'ADD !</div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Mécanisme de perte de chaleur</span><span>Effet</span></div>
+      <div class="info-row"><span>Conduction (corps réchauffe l'eau dans la combi)</span><span style="color:var(--orange-light)">Perte lente</span></div>
+      <div class="info-row"><span>Convection (eau qui circule emporte la chaleur)</span><span style="color:var(--red-light)">Perte rapide</span></div>
+      <div class="info-row"><span>Inspiration d'air froid du détendeur</span><span style="color:var(--orange-light)">Perte interne</span></div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">🎯 CAT & Prévention — Froid</div>
+      <div class="bubble bubble-ok">Prévention : combinaison adaptée (épaisseur, taille), cagoule, chaussons, gants. S'hydrater, ne pas plonger fatigué.</div>
+      <div class="bubble bubble-warn">CAT : signaler le froid au GP → interrompre la plongée → respecter les paliers → se sécher et s'habiller chaudement → boire chaud (non alcoolisé).</div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">😤</div>
+      <div>
+        <div class="bd-card-title">3 — L'Essoufflement</div>
+        <div class="bd-card-obj">Objectif : Reconnaître et briser le cercle vicieux</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-danger">Cercle vicieux : Effort → ↑CO₂ → mauvaise expiration → rentrée d'air → ↑fréquence respi → stagnation CO₂ → <strong>essoufflement → panique !</strong></div>
+      <div class="bubble bubble-warn">Chez soi : ventilation difficile, impression de manquer d'air, maux de tête. Chez un équipier : grosses bulles, ventilation saccadée, agitation.</div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">🎯 CAT — Essoufflement</div>
+      <div class="bubble bubble-ok">Pour soi : avertir les équipiers + signe, cesser l'effort, <strong>expirer profondément</strong>.</div>
+      <div class="bubble bubble-ok">Pour un équipier : saisir et calmer le plongeur, cesser l'effort, vérifier le niveau d'air, remonter.</div>
+      <div class="bubble bubble-danger">Risques liés : panne d'air, panique, surpression pulmonaire, noyade. Ne pas s'immerger déjà essoufflé !</div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">💧</div>
+      <div>
+        <div class="bd-card-title">4 — Panne d'air, Syncope & Noyade</div>
+        <div class="bd-card-obj">Objectif : Réagir efficacement aux situations critiques</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-danger"><strong>Panne d'air</strong> : Surconsommation (froid, essoufflement, stress). Signe "panne d'air" → chercher source d'air → octopus → remonter avec équipier.</div>
+      <div class="bubble bubble-warn"><strong>Syncope</strong> : Perte de connaissance brève. Maintenir le détendeur en bouche, remonter assisté. Cause principale : apnée + hyperventilation.</div>
+      <div class="bubble bubble-danger"><strong>Noyade</strong> : Arrêt respiratoire par inondation des voies. CAT : remonter l'accidenté, maintenir les voies aériennes hors de l'eau, gonfler le gilet, alerter le DP.</div>
+    </div>
+    <div class="bubble bubble-info" style="margin-top:12px;">💦 <strong>Diurèse d'immersion</strong> : La poussée d'Archimède pousse le sang vers le tronc → urine 6× plus en plongée → risque de déshydratation → risque accru d'ADD. S'hydrater avant et après.</div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🏗️</div>
+      <div>
+        <div class="bd-card-title">5 — Risques spécifiques & Sortie de l'eau</div>
+        <div class="bd-card-obj">Objectif : Naviguer les risques particuliers et sortir en sécurité</div>
+      </div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Situation</span><span>Prévention clé</span></div>
+      <div class="info-row"><span>🪨 Grottes/Tunnels</span><span>Voir la sortie, rester groupé, ne pas s'engager si inconnu</span></div>
+      <div class="info-row"><span>⚓ Épaves/Filets</span><span>Gants + couteau, ne pas entrer si non autorisé, loin des filets</span></div>
+      <div class="info-row"><span>🌙 Nuit</span><span>Lampe obligatoire, limiter la zone, signes spéciaux (grands cercles)</span></div>
+      <div class="info-row"><span>🐠 Faune & Flore</span><span>Ne jamais toucher, déranger, nourrir, approcher</span></div>
+      <div class="info-row"><span>🌊 Vagues à la sortie</span><span>Ne pas se tenir au mouillage, palier au bout</span></div>
+      <div class="info-row"><span>⛵ Embarcation</span><span>360° avant surface, écouter les moteurs, jamais sous le bateau</span></div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">🎯 À retenir — Risques milieu</div>
+      <div class="bubble bubble-ok">Courant : le repérer avant, partir face au courant, ne pas lutter, se protéger derrière un obstacle.</div>
+      <div class="bubble bubble-warn">Visibilité réduite : rester groupé, lampe obligatoire, utiliser compas + ordi, éviter les coups de palme sur fonds meubles.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION : TABLES & ORDINATEURS
+     ============================================================ -->
+<div id="tables" class="section">
+  <div class="section-title">📊 Tables MN90 & Ordinateurs de Plongée</div>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Tables et Ordinateurs 2025-2026</p>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">📋</div>
+      <div>
+        <div class="bd-card-title">1 — Pourquoi la décompression ?</div>
+        <div class="bd-card-obj">Objectif : Comprendre la nécessité des paliers</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-info"><strong>Loi de Henry</strong> : L'azote se dissout dans le sang sous pression. À la remontée, il retrouve sa forme gazeuse. Une remontée trop rapide → bulles dans le corps → ADD.</div>
+      <div class="bubble bubble-ok">Les <strong>paliers de décompression</strong> permettent d'évacuer l'azote par la respiration à un rythme contrôlé.</div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">📐</div>
+      <div>
+        <div class="bd-card-title">2 — Les Tables MN90</div>
+        <div class="bd-card-obj">Objectif : Utiliser les tables pour planifier</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-info">Conçues par la <strong>Marine Nationale</strong>, publiées en 1990, adaptées FFESSM en 1998. Profil "carré" : profondeur constante sur toute la durée.</div>
+      <div class="bubble bubble-warn">Déconseillées pour la plongée sportive avec effort physique important. Toujours prendre la valeur immédiatement <strong>supérieure</strong> à sa profondeur ou durée réelle.</div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Colonne table</span><span>Signification</span></div>
+      <div class="info-row"><span>Prof</span><span>Profondeur maximale atteinte</span></div>
+      <div class="info-row"><span>Durée</span><span>Durée totale de plongée</span></div>
+      <div class="info-row"><span>3 m, 6 m…</span><span>Profondeur et durée du palier</span></div>
+      <div class="info-row"><span>DTR</span><span>Durée Totale de Remontée (min)</span></div>
+      <div class="info-row"><span>GPS</span><span>Groupe de Plongées Successives (A à P)</span></div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">📖 Types de plongées</div>
+      <div class="bubble bubble-info"><strong>Plongée simple</strong> : Intervalle de surface &gt;12h → Calcul direct dans les tables.</div>
+      <div class="bubble bubble-warn"><strong>Plongée consécutive</strong> : Intervalle &lt;15 min → Additionner les temps + prendre la profondeur la plus grande.</div>
+      <div class="bubble bubble-warn"><strong>Plongée successive</strong> : Intervalle entre 15 min et 12h → Utiliser Tableau I (azote résiduel) + Tableau II (majoration de durée).</div>
+    </div>
+    <div class="bubble bubble-formula" style="margin-top:14px;">📐 Plongée successive : Temps fictif = Durée réelle + Majoration<br>Exemple : 40 min à 17 m, TAR=0,93 (→ 0,95), majoration=19 min<br>→ Temps fictif = 40 + 19 = <strong>59 min</strong></div>
+    <div class="info-table" style="margin-top:12px;">
+      <div class="info-row info-header"><span>Profils particuliers</span><span>Procédure</span></div>
+      <div class="info-row"><span>Remontée lente (&lt;15 m/min)</span><span>Ajouter temps de remontée lente au temps de plongée</span></div>
+      <div class="info-row"><span>Remontée rapide (&gt;17 m/min)</span><span>Réimmersion &lt;3 min → mi-profondeur → 5 min → ajouter au temps → palier min 2 min à 3 m</span></div>
+      <div class="info-row"><span>Palier interrompu</span><span>Réimmersion &lt;3 min → refaire entièrement le palier interrompu</span></div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">💻</div>
+      <div>
+        <div class="bd-card-title">3 — Les Ordinateurs de Plongée</div>
+        <div class="bd-card-obj">Objectif : Utiliser l'ordinateur efficacement et en sécurité</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-ok">L'ordinateur s'adapte en temps réel au profil réel. Il découpe la plongée en tranches élémentaires → plus précis que les tables pour un profil multiprofondeur.</div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Information affichée</span><span>Utilité</span></div>
+      <div class="info-row"><span>Profondeur courante / maxi</span><span>Suivi du profil</span></div>
+      <div class="info-row"><span>Temps de plongée</span><span>Planification</span></div>
+      <div class="info-row"><span>Temps restant sans palier</span><span>Décision de remonter</span></div>
+      <div class="info-row"><span>Profondeur + durée des paliers</span><span>Décompression</span></div>
+      <div class="info-row"><span>DTR</span><span>Durée totale de remontée</span></div>
+      <div class="info-row"><span>Alarme vitesse de remontée</span><span>Sécurité (max ~9-11 m/min)</span></div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">⚠️ Précautions avec l'ordinateur</div>
+      <div class="bubble bubble-danger">Ne jamais prêter son ordinateur entre 2 plongées (il mémorise l'azote résiduel de ton histoire de plongée).</div>
+      <div class="bubble bubble-warn">Toujours avoir des <strong>tables de secours dans la stab</strong> en cas de panne de l'ordinateur.</div>
+      <div class="bubble bubble-ok">En palanquée : s'aligner sur celui qui a le <strong>plus de paliers</strong> à effectuer.</div>
+      <div class="bubble bubble-info">Gradient Facteur (GF) : régler entre 85% et 95%. GF bas = GF haut pour la plongée sportive.</div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">📌</div>
+      <div>
+        <div class="bd-card-title">4 — Résumé & Recommandations</div>
+        <div class="bd-card-obj">Objectif : Les règles d'or de la décompression</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-ok">✅ Toujours faire un <strong>palier de sécurité de 3 min entre 3 et 5 m</strong>.</div>
+      <div class="bubble bubble-ok">✅ Vitesse de remontée : <strong>9 à 15 m/min</strong> selon tables/ordinateur.</div>
+      <div class="bubble bubble-danger">❌ Éviter profils Yo-yo, profils inversés, Valsalva à la remontée, apnée au palier.</div>
+      <div class="bubble bubble-warn">⚠️ Communiquer ses paramètres (profondeur, durée, paliers effectués) au DP après la plongée.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION : MATÉRIEL DE PLONGÉE
+     ============================================================ -->
+<div id="materiel" class="section">
+  <div class="section-title">🥽 Matériel de Plongée Sous-Marine</div>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Matériel de Plongée 2025-2026</p>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🔍</div>
+      <div>
+        <div class="bd-card-title">1 — Masque, Palmes & Tuba</div>
+        <div class="bd-card-obj">Objectif : Choisir et entretenir l'équipement de base</div>
+      </div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Équipement</span><span>Points clés</span></div>
+      <div class="info-row"><span>🥽 Masque</span><span>Vérifier jupe, champ de vision, volume. Démontable, taille adaptée.</span></div>
+      <div class="info-row"><span>🦈 Palmes chaussantes</span><span>+ Légères, + souples, meilleur palmage. Entretien : rinçage + rangement à plat.</span></div>
+      <div class="info-row"><span>🦈 Palmes réglables</span><span>+ Enfilage simple, accepte des chaussons. Entretien identique.</span></div>
+      <div class="info-row"><span>🌬 Tuba flexible</span><span>Pliable, prend moins de place.</span></div>
+      <div class="info-row"><span>🌬 Tuba rigide</span><span>S'accroche au masque, meilleure respiration.</span></div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🛢️</div>
+      <div>
+        <div class="bd-card-title">2 — Le Bloc (Bouteille)</div>
+        <div class="bd-card-obj">Objectif : Connaître les types de blocs et les contrôles obligatoires</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-info">Rôle : Stocker le gaz (Air, Nitrox, Trimix…). Volumes courants : <strong>12 L et 15 L</strong>. Matière : acier, aluminium ou carbone.</div>
+      <div class="bubble bubble-formula">📐 Exemple : Bloc 10 L gonflé à 300 b = Bloc 15 L à 200 b<br>(10×300 = 15×200 = 3 000 L)</div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Contrôle</span><span>Fréquence</span></div>
+      <div class="info-row"><span>Inspection visuelle</span><span style="color:var(--orange-light)">Tous les 12 mois</span></div>
+      <div class="info-row"><span>Requalification (régime normal)</span><span style="color:var(--red-light)">Tous les 2 ans</span></div>
+      <div class="info-row"><span>Requalification (régime TIV)</span><span style="color:var(--orange-light)">Tous les 6 ans</span></div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">🔧 Entretien du bloc</div>
+      <div class="bubble bubble-ok">Rincer à l'eau douce. Ne pas vider complètement. Stocker droit. Éviter chocs et soleil. Mettre un filet protecteur. Blocs DIN → bouchon de protection.</div>
+      <div class="bubble bubble-warn">L'acier rouille ! Surveiller l'intérieur. Ne jamais stocker couché (corrosion au fond).</div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">⚙️</div>
+      <div>
+        <div class="bd-card-title">3 — Le Détendeur</div>
+        <div class="bd-card-obj">Objectif : Comprendre le fonctionnement du détendeur</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-info">Rôle : Fournir l'air à la pression ambiante sur simple demande. Composé de <strong>2 étages</strong>.</div>
+      <div class="bubble bubble-formula">📐 1er étage : HP bloc (200 b) → Pression Intermédiaire (PI = 8-10 b au-dessus de Pamb)<br>2ème étage : PI → Pression Ambiante (ce que tu respires)</div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Type 1er étage</span><span>Avantages</span></div>
+      <div class="info-row"><span>À piston non compensé</span><span>Simple, robuste, moins cher</span></div>
+      <div class="info-row"><span>À piston compensé</span><span>PI constante quel que soit le stock d'air → meilleur confort</span></div>
+      <div class="info-row"><span>À membrane</span><span>Mécanisme protégé, adapté aux eaux chargées</span></div>
+    </div>
+    <div class="info-table" style="margin-top:12px;">
+      <div class="info-row info-header"><span>Fixation 1er étage</span><span>Avantages / Inconvénients</span></div>
+      <div class="info-row"><span>Étrier (INT)</span><span>Le + répandu, peu fragile, max 230 b. Risque de fuite de joint.</span></div>
+      <div class="info-row"><span>DIN</span><span>Meilleure tenue du joint, jusqu'à 300 b. Moins répandu, plus long à monter.</span></div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">🔧 Entretien & Pannes fréquentes</div>
+      <div class="bubble bubble-ok">Après plongée : rincer à l'eau douce, ne pas mettre d'eau dans le 1er étage, remettre le bouchon. Révision <strong>tous les 2 ans</strong>.</div>
+      <div class="bubble bubble-warn">Panne courante — Débit continu au 2ème étage : mettre le doigt dans l'embout pour stopper. Problème de PI ou de réglage.</div>
+      <div class="bubble bubble-danger">L'octopus (détendeur de secours) : flexible plus long, couleur jaune/vive. Vérifier son mode d'accrochage au gilet (accessible facilement).</div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🎽</div>
+      <div>
+        <div class="bd-card-title">4 — Combinaison & Gilet Stabilisateur</div>
+        <div class="bd-card-obj">Objectif : Adapter sa protection thermique et sa flottabilité</div>
+      </div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Type de combinaison</span><span>Usage</span></div>
+      <div class="info-row"><span>Shorty</span><span>Eau chaude, piscine — Faible protection thermique</span></div>
+      <div class="info-row"><span>Humide 5 mm</span><span>Eau tempérée — Polyvalente, entrées d'eau</span></div>
+      <div class="info-row"><span>Humide 7 mm</span><span>Eau fraîche — Plus protectrice, doit être bien adaptée</span></div>
+      <div class="info-row"><span>Semi-étanche</span><span>Eau froide — Peu d'entrées d'eau, bonne protection</span></div>
+      <div class="info-row"><span>Étanche</span><span>Eau très froide — Meilleure protection, prix élevé, apprentissage</span></div>
+    </div>
+    <div class="bubble bubble-info" style="margin-top:12px;">🎈 <strong>Gilet stabilisateur (Stab/SGS)</strong> : Support du bloc, maintien en surface, gestion de l'équilibre en immersion, points d'accroche. Volume minimum : <strong>15 L</strong>. Entretien : rincer intérieur + extérieur, nettoyer les purges, stocker sur cintre.</div>
+    <div class="retenir-box">
+      <div class="retenir-title">🎯 À retenir — Matériel</div>
+      <div class="bubble bubble-ok">Le matériel doit être adapté à l'utilisation. Priorités : confort, ergonomie, sécurité.</div>
+      <div class="bubble bubble-warn">Connaître le matériel de ses équipiers → communication efficace + autonomie en cas de problème.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SECTION : DÉVELOPPEMENT DURABLE & ORIENTATION
+     ============================================================ -->
+<div id="ecodurable" class="section">
+  <div class="section-title">🌿 Développement Durable & Orientation</div>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Développement Durable et Orientation 2025-2026</p>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🌍</div>
+      <div>
+        <div class="bd-card-title">1 — La FFESSM & le Développement Durable</div>
+        <div class="bd-card-obj">Objectif : Comprendre les engagements écoresponsables</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-ok">Les plongeurs sont des <strong>observateurs privilégiés</strong> du milieu marin. Ils ont un rôle clé dans sa protection !</div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Les 10 engagements FFESSM</span><span></span></div>
+      <div class="info-row"><span>1. Accessibilité</span><span>Rendre les activités accessibles à tous</span></div>
+      <div class="info-row"><span>2. Écogestes</span><span>Économie d'eau, seconde vie aux équipements, covoiturage</span></div>
+      <div class="info-row"><span>3. Implication</span><span>Sensibiliser clubs, licenciés, partenaires</span></div>
+      <div class="info-row"><span>4. Santé & Sécurité</span><span>Sensibilisation sur la sécurité des pratiquants</span></div>
+      <div class="info-row"><span>5. Éthique & Citoyenneté</span><span>Respect des règles, fair-play</span></div>
+      <div class="info-row"><span>6. Sensibilisation</span><span>Éducation à l'environnement, ramassage de déchets</span></div>
+      <div class="info-row"><span>7. Bénévolat</span><span>Valoriser les bénévoles, démarche éco-responsable</span></div>
+      <div class="info-row"><span>8. Sciences participatives</span><span>DORIS, BioObs — contribuer à la connaissance</span></div>
+      <div class="info-row"><span>9. Concertation</span><span>Usage durable de l'espace subaquatique</span></div>
+      <div class="info-row"><span>10. Préservation</span><span>Préserver les sites naturels en mer et eaux intérieures</span></div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🤿</div>
+      <div>
+        <div class="bd-card-title">2 — Le Plongeur Responsable</div>
+        <div class="bd-card-obj">Objectif : Adopter les bons comportements en plongée</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-ok">Charte Internationale du Plongeur Responsable (Longitude 181) : limiter l'impact de la plongée sur l'environnement.</div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Les 10 commandements du plongeur responsable</span></div>
+      <div class="info-row" style="display:block;padding:8px 12px;"><span>1. Bateaux aux moteurs entretenus, ne rien jeter à la mer.</span></div>
+      <div class="info-row" style="display:block;padding:8px 12px;"><span>2. Lestage adapté, flottabilité contrôlée.</span></div>
+      <div class="info-row" style="display:block;padding:8px 12px;"><span>3. Ne rien ramener du fond.</span></div>
+      <div class="info-row" style="display:block;padding:8px 12px;"><span>4. Ne pas nourrir les animaux marins.</span></div>
+      <div class="info-row" style="display:block;padding:8px 12px;"><span>5. Fixer les accessoires près du corps.</span></div>
+      <div class="info-row" style="display:block;padding:8px 12px;"><span>6. Palmes adaptées, ne pas palmer près du fond.</span></div>
+      <div class="info-row" style="display:block;padding:8px 12px;"><span>7. Éviter les ancres sur les zones sensibles.</span></div>
+      <div class="info-row" style="display:block;padding:8px 12px;"><span>8. Contrôler les expirations dans les grottes et tunnels.</span></div>
+      <div class="info-row" style="display:block;padding:8px 12px;"><span>9. Ne pas déranger les animaux marins.</span></div>
+      <div class="info-row" style="display:block;padding:8px 12px;"><span>10. Faire attention aux herbiers de zostères.</span></div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🔬</div>
+      <div>
+        <div class="bd-card-title">3 — Observer & Identifier les espèces</div>
+        <div class="bd-card-obj">Objectif : Contribuer à la connaissance du milieu marin</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-info"><strong>DORIS</strong> : Base de données FFESSM — ~3 600 fiches d'espèces marines et dulcicoles pour les identifier.</div>
+      <div class="bubble bubble-info"><strong>BioObs</strong> : Outil pour reconnaître, identifier et géolocaliser ses observations. 1 500 observateurs, 100 000 données.</div>
+      <div class="bubble bubble-ok">Ces données alimentent l'<strong>Inventaire National du Patrimoine Naturel</strong> coordonné par le Muséum national d'Histoire naturelle.</div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">🐠 Quelques espèces à connaître</div>
+      <div class="bubble bubble-info">Mérou, Chapon, Langouste, Murène, Poulpe, Barracuda, Hippocampe, Galathée, Oursin, Étoile de mer, Corail rouge, Gorgone, Spirographe, Doris dalmatien, Flabelline, Bernard l'hermite…</div>
+      <div class="bubble bubble-ok">Pour observer : ne pas effrayer l'animal, attendre qu'il vienne par curiosité, éviter tout contact, remettre tout en place.</div>
+    </div>
+  </div>
+
+  <div class="bd-card">
+    <div class="bd-card-header">
+      <div class="bd-icon">🧭</div>
+      <div>
+        <div class="bd-card-title">4 — L'Orientation sous-marine</div>
+        <div class="bd-card-obj">Objectif : S'orienter efficacement pour le plongeur autonome N2</div>
+      </div>
+    </div>
+    <div class="bd-scene">
+      <div class="bubble bubble-danger">Difficultés : Visibilité limitée, peu de repères visuels, estimation des distances difficile, évolution en 3D, courant et froid perturbent le jugement.</div>
+      <div class="bubble bubble-ok">Compas : Disque mobile gradué 0° à 360°. Aller → noter le cap → Retour = cap + 180°.</div>
+    </div>
+    <div class="info-table">
+      <div class="info-row info-header"><span>Étape</span><span>Actions clés</span></div>
+      <div class="info-row"><span>☀️ Avant la plongée</span><span>Écouter le briefing DP, observer le site (soleil, côte, vagues), prendre un cap au compas.</span></div>
+      <div class="info-row"><span>⬇️ À la descente</span><span>Observer la configuration du fond (banc de sable, roche, corps mort), mémoriser la profondeur sous le bateau, repérer le courant.</span></div>
+      <div class="info-row"><span>🏊 En exploration</span><span>Observer les fonds, mémoriser un rocher caractéristique, se retourner régulièrement, éviter les changements de direction fréquents.</span></div>
+      <div class="info-row"><span>🔧 Matériel</span><span>Compas de plongée, ordinateur avec compas intégré. Partir face au courant pour un retour sans effort.</span></div>
+    </div>
+    <div class="retenir-box">
+      <div class="retenir-title">🎯 Astuces d'orientation</div>
+      <div class="bubble bubble-ok">Plus l'horizon est sombre → plus c'est profond. Aller cap X avec le soleil côté droit → retour cap X+180° avec le soleil côté gauche.</div>
+      <div class="bubble bubble-info">Se poser régulièrement la question : "Où suis-je par rapport au bateau ?" Mémoriser la durée du trajet dans chaque direction.</div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
