@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plongee-n2-v2';
+const CACHE_NAME = 'plongee-n2-v3';
 const ASSETS = [
   './index.html',
   './manifest.json',
