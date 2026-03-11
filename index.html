@@ -7,7 +7,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Plongée N2">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
 <title>Révision Plongée N2 — Galathée Club</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -957,7 +959,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('sw.js').catch(function() {});
+    navigator.serviceWorker.register('./sw.js').catch(function() {});
   });
 }
 </script>
@@ -1000,8 +1002,8 @@ if ('serviceWorker' in navigator) {
         <div class="nav-group-label">📝 Examens blancs</div>
         <div class="nav-group-btns">
           <button class="nav-btn" onclick="showSection('examens');switchExam(1)">📝 Examen 1 — Galathée</button>
-          <button class="nav-btn" onclick="showSection('examens');switchExam(2)">🏅 Examen 2 — Généré Par IA</button>
-          <button class="nav-btn" onclick="showSection('examens');switchExam(3)">🎯 Examen 3 — Généré Par IA</button>
+          <button class="nav-btn" onclick="showSection('examens');switchExam(2)">🏅 Examen 2 — Jury Fédéral</button>
+          <button class="nav-btn" onclick="showSection('examens');switchExam(3)">🎯 Examen 3 — Complet 20Q</button>
         </div>
       </div>
 
@@ -1198,7 +1200,7 @@ if ('serviceWorker' in navigator) {
     <!-- Mot de passe mis en avant -->
     <div style="background:rgba(0,30,60,0.5);border:2px solid var(--cyan);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;">
       <div style="font-size:0.72rem;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;">🔑 MOT DE PASSE D'ACCÈS</div>
-      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Galathee2025</div>
+      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Galathe2025</div>
       <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:8px;">À saisir sur le site lors de votre première visite</div>
     </div>
 
@@ -2023,7 +2025,7 @@ if ('serviceWorker' in navigator) {
      ============================================================ -->
 <div id="examens" class="section">
   <div class="section-title">📝 Examens Blancs N2</div>
-  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">3 examens issus des documents du Galathée Club et du Jury Fédéral FFESSM</p>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">3 examens issus des documents du Galathée Club et de l'IA</p>
 
   <!-- Sélecteur d'examens -->
   <div class="exam-selector">
@@ -2034,12 +2036,12 @@ if ('serviceWorker' in navigator) {
     </div>
     <div class="exam-tab" onclick="switchExam(2)" id="tab2">
       <span class="exam-tab-num">🏅 2</span>
-      <span class="exam-tab-label">Généré par IA</span>
+      <span class="exam-tab-label">Généré par l'IA</span>
       <span class="exam-tab-score" id="tab2-score"></span>
     </div>
     <div class="exam-tab" onclick="switchExam(3)" id="tab3">
       <span class="exam-tab-num">🎯 3</span>
-      <span class="exam-tab-label">Généré par IA</span>
+      <span class="exam-tab-label">Généré par l'IA</span>
       <span class="exam-tab-score" id="tab3-score"></span>
     </div>
   </div>
@@ -2219,7 +2221,7 @@ if ('serviceWorker' in navigator) {
        EXAMEN 2 — JURY FÉDÉRAL
        ═══════════════════════════════════════════ -->
   <div class="exam-panel" id="exam2">
-    <span class="exam-source jury">🏅 Source : Examen Généré par IA — 2h30, Tables MN90 obligatoires</span>
+    <span class="exam-source jury">🏅 Source : Examen généré par l'IA — 2h30, Tables MN90 obligatoires</span>
 
     <div class="exam-score-bar">
       <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-bottom:4px;">Score Examen 2</div>
@@ -2419,7 +2421,7 @@ if ('serviceWorker' in navigator) {
        EXAMEN 3 — COMPLET 20 QUESTIONS
        ═══════════════════════════════════════════ -->
   <div class="exam-panel" id="exam3">
-    <span class="exam-source complet">🎯 Examen Généré par IA</span>
+    <span class="exam-source complet">🎯 Examen complet — Examen généré par l'IA</span>
 
     <div class="exam-score-bar">
       <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-bottom:4px;">Score Examen 3</div>
