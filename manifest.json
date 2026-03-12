@@ -2,8 +2,8 @@
   "name": "Révision Plongée N2 — Galathée Club",
   "short_name": "Plongée N2",
   "description": "Application de révision pour le Brevet Plongeur Niveau 2 FFESSM — Galathée Club Muret",
-  "start_url": "./index.html",
-  "scope": "./",
+  "start_url": "/Formation_PLONGEE_NIVEAU_2_GALATHEE/index.html",
+  "scope": "/Formation_PLONGEE_NIVEAU_2_GALATHEE/",
   "display": "standalone",
   "background_color": "#0a1628",
   "theme_color": "#0077b6",
@@ -12,13 +12,13 @@
   "categories": ["education", "sports"],
   "icons": [
     {
-      "src": "./icon-192.png",
+      "src": "/Formation_PLONGEE_NIVEAU_2_GALATHEE/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "./icon-512.png",
+      "src": "/Formation_PLONGEE_NIVEAU_2_GALATHEE/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

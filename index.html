@@ -818,6 +818,74 @@ body::before {
   min-height: 1.4em;
 }
 
+/* ====== BANNIÈRE INSTALLATION iOS ====== */
+#ios-install-banner {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: linear-gradient(135deg, #023e73, #0077b6);
+  border-top: 2px solid #00b4d8;
+  padding: 14px 16px 20px;
+  box-shadow: 0 -4px 24px rgba(0,0,0,0.5);
+  animation: slideUp 0.4s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+#ios-install-banner .ios-banner-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+#ios-install-banner .ios-banner-title {
+  font-family: 'Bangers', cursive;
+  font-size: 1.1rem;
+  color: #fff;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  padding-right: 24px;
+}
+#ios-install-banner .ios-banner-steps {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.8;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+#ios-install-banner .ios-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#ios-install-banner .ios-step-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+#ios-install-banner .ios-arrow {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.4rem;
+  color: #00b4d8;
+  animation: bounce 1.2s infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(4px); }
+}
 </style>
 <script>
 // ====== ACCORDION NAV ======
@@ -956,15 +1024,57 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+// ====== BANNIÈRE iOS ======
+(function() {
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  var isInStandalone = window.navigator.standalone === true;
+  var dismissed = sessionStorage.getItem('ios-banner-dismissed');
+  if (isIOS && !isInStandalone && !dismissed) {
+    document.addEventListener('DOMContentLoaded', function() {
+      var banner = document.getElementById('ios-install-banner');
+      if (banner) {
+        setTimeout(function() { banner.style.display = 'block'; }, 1500);
+      }
+    });
+  }
+})();
+
+window.dismissIOSBanner = function() {
+  var banner = document.getElementById('ios-install-banner');
+  if (banner) banner.style.display = 'none';
+  sessionStorage.setItem('ios-banner-dismissed', '1');
+};
+
 // PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('./sw.js').catch(function() {});
+    navigator.serviceWorker.register('./sw.js', { scope: '/Formation_PLONGEE_NIVEAU_2_GALATHEE/' }).catch(function() {});
   });
 }
 </script>
 </head>
 <body>
+
+<!-- ====== BANNIÈRE INSTALLATION iOS ====== -->
+<div id="ios-install-banner">
+  <button class="ios-banner-close" onclick="dismissIOSBanner()">✕</button>
+  <div class="ios-banner-title">📲pour les Iphones: pour Installer l'application</div>
+  <div class="ios-banner-steps">
+    <div class="ios-step">
+      <span class="ios-step-icon">1️⃣</span>
+      <span>Appuyez sur <strong>le bouton Partager</strong> <span style="font-size:1rem;">⬆️</span> en bas de Safari</span>
+    </div>
+    <div class="ios-step">
+      <span class="ios-step-icon">2️⃣</span>
+      <span>Faites défiler et appuyez sur <strong>« Sur l'écran d'accueil »</strong> <span style="font-size:0.9rem;">➕</span></span>
+    </div>
+    <div class="ios-step">
+      <span class="ios-step-icon">3️⃣</span>
+      <span>Appuyez sur <strong>« Ajouter »</strong> en haut à droite</span>
+    </div>
+  </div>
+  <span class="ios-arrow">▼</span>
+</div>
 
 <nav id="mainNav">
   <div class="nav-header" onclick="toggleNav()">
@@ -1015,7 +1125,7 @@ if ('serviceWorker' in navigator) {
   <div class="hero">
     <div class="hero-badge">🐙 Galathée Club Muret • FFESSM</div>
     <h1>Révision Plongée N2</h1>
-    <p>Fiches synthétiques en bande dessinée pour mémoriser facilement toutes les notions clés du Niveau 2 FFESSM 2025-2026</p>
+    <p>Fiches synthétiques pour mémoriser facilement toutes les notions clés du Niveau 2 FFESSM 2025-2026</p>
   </div>
 
   <div class="legend">
@@ -1162,7 +1272,7 @@ if ('serviceWorker' in navigator) {
         </div>
       </div>
       <div class="bd-scene">
-        <div class="bubble bubble-warn">Accès avec mot de passe requis : <strong>Glathee2025</strong></div>
+        <div class="bubble bubble-warn">Accès avec mot de passe requis : <strong>Galathee2025</strong></div>
         <div class="bubble bubble-info">Infographies visuelles résumant tous les modules du cours N2.</div>
       </div>
     </div>
@@ -1200,7 +1310,7 @@ if ('serviceWorker' in navigator) {
     <!-- Mot de passe mis en avant -->
     <div style="background:rgba(0,30,60,0.5);border:2px solid var(--cyan);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;">
       <div style="font-size:0.72rem;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;">🔑 MOT DE PASSE D'ACCÈS</div>
-      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Galathe2025</div>
+      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Galathee2025</div>
       <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:8px;">À saisir sur le site lors de votre première visite</div>
     </div>
 
@@ -1259,7 +1369,7 @@ if ('serviceWorker' in navigator) {
     <!-- Mot de passe -->
     <div style="background:rgba(0,30,60,0.5);border:2px solid var(--cyan);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;">
       <div style="font-size:0.72rem;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;">🔑 MOT DE PASSE D'ACCÈS</div>
-      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Glathee2025</div>
+      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Galathee2025</div>
       <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:8px;">À saisir sur le site lors de votre première visite</div>
     </div>
 
@@ -1288,7 +1398,7 @@ if ('serviceWorker' in navigator) {
       </tr>
       <tr>
         <td class="tag-cyan">Étape 2</td>
-        <td>Saisir le mot de passe : <strong style="color:var(--cyan);font-family:'Space Mono',monospace;">Glathee2025</strong></td>
+        <td>Saisir le mot de passe : <strong style="color:var(--cyan);font-family:'Space Mono',monospace;">Galathee2025</strong></td>
       </tr>
       <tr>
         <td class="tag-cyan">Étape 3</td>
@@ -2025,7 +2135,7 @@ if ('serviceWorker' in navigator) {
      ============================================================ -->
 <div id="examens" class="section">
   <div class="section-title">📝 Examens Blancs N2</div>
-  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">3 examens issus des documents du Galathée Club et de l'IA</p>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">3 examens: 1 issus des documents du Galathée Club et 2 générés par IA</p>
 
   <!-- Sélecteur d'examens -->
   <div class="exam-selector">
@@ -2036,12 +2146,12 @@ if ('serviceWorker' in navigator) {
     </div>
     <div class="exam-tab" onclick="switchExam(2)" id="tab2">
       <span class="exam-tab-num">🏅 2</span>
-      <span class="exam-tab-label">Généré par l'IA</span>
+      <span class="exam-tab-label">Jury Fédéral</span>
       <span class="exam-tab-score" id="tab2-score"></span>
     </div>
     <div class="exam-tab" onclick="switchExam(3)" id="tab3">
       <span class="exam-tab-num">🎯 3</span>
-      <span class="exam-tab-label">Généré par l'IA</span>
+      <span class="exam-tab-label">Complet 20Q</span>
       <span class="exam-tab-score" id="tab3-score"></span>
     </div>
   </div>
@@ -2406,7 +2516,7 @@ if ('serviceWorker' in navigator) {
     </div>
 
     <div class="retenir-box" style="margin-top:20px;">
-      <div class="retenir-title">📊 Barème Jury Fédéral</div>
+      <div class="retenir-title">📊 Barème</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px;">
         <div style="text-align:center;padding:10px;background:rgba(45,158,71,0.15);border:1px solid var(--green);border-radius:8px;"><div style="font-family:'Bangers',cursive;font-size:1.3rem;color:var(--green);">90-100</div><div style="font-size:0.72rem;color:var(--green-light);">Excellent N2</div></div>
         <div style="text-align:center;padding:10px;background:rgba(0,119,182,0.15);border:1px solid var(--blue);border-radius:8px;"><div style="font-family:'Bangers',cursive;font-size:1.3rem;color:var(--cyan);">75-89</div><div style="font-size:0.72rem;color:var(--light);">Bon niveau</div></div>
@@ -2421,7 +2531,7 @@ if ('serviceWorker' in navigator) {
        EXAMEN 3 — COMPLET 20 QUESTIONS
        ═══════════════════════════════════════════ -->
   <div class="exam-panel" id="exam3">
-    <span class="exam-source complet">🎯 Examen complet — Examen généré par l'IA</span>
+    <span class="exam-source complet">🎯 Examen complet — 20 questions générées par l'IA</span>
 
     <div class="exam-score-bar">
       <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-bottom:4px;">Score Examen 3</div>

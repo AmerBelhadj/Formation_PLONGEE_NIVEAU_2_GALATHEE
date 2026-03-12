@@ -1,15 +1,19 @@
-const CACHE_NAME = 'plongee-n2-v3';
+const CACHE_NAME = 'plongee-n2-v5';
+const BASE = '/Formation_PLONGEE_NIVEAU_2_GALATHEE';
 const ASSETS = [
-  './index.html',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png'
+  BASE + '/',
+  BASE + '/index.html',
+  BASE + '/manifest.json',
+  BASE + '/icon-192.png',
+  BASE + '/icon-512.png'
 ];
 
 self.addEventListener('install', event => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then(cache =>
+      cache.addAll(ASSETS).catch(err => console.warn('Cache partiel:', err))
+    )
   );
 });
 
@@ -23,8 +27,10 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request).catch(() => caches.match('./index.html'));
-    })
+    caches.match(event.request).then(response =>
+      response || fetch(event.request).catch(() =>
+        caches.match(BASE + '/index.html')
+      )
+    )
   );
 });
