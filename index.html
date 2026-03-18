@@ -656,103 +656,106 @@ body::before {
 }
 .bd-card, .quiz-card, .card-full {
 
-/* ====== NAV TOUJOURS VISIBLE ====== */
+/* ====== NAV ACCORDÉON ====== */
 nav {
   position: sticky;
   top: 0;
   z-index: 200;
-  background: rgba(10,22,40,0.97);
-  backdrop-filter: blur(20px);
-  border-bottom: 2px solid rgba(0,180,216,0.2);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  background: rgba(10,22,40,0.96);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--panel-border);
 }
-.nav-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 12px;
-}
-/* Ligne 1 : logo + WA badge */
-.nav-top {
+.nav-header {
   display: flex;
   align-items: center;
-  height: 44px;
-  gap: 10px;
-  border-bottom: 1px solid rgba(0,180,216,0.08);
+  justify-content: center;
+  gap: 16px;
+  padding: 0 16px;
+  height: 56px;
+  cursor: pointer;
+  user-select: none;
+  max-width: 900px;
+  margin: 0 auto;
 }
 .nav-logo {
   font-family: 'Bangers', cursive;
-  font-size: 1.3rem;
-  color: var(--cyan);
-  letter-spacing: 1px;
-  flex: 1;
-  white-space: nowrap;
+  font-size: 1.8rem;
+  color: #fff;
+  letter-spacing: 2px;
+  text-shadow: 0 0 20px rgba(0,180,216,0.6);
 }
-/* Ligne 2 : scroll horizontal des boutons */
-.nav-scroll {
+.nav-menu-btn {
   display: flex;
-  gap: 6px;
-  padding: 7px 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-.nav-scroll::-webkit-scrollbar { display: none; }
-
-/* Séparateurs entre groupes */
-.nav-sep {
-  width: 1px;
-  min-width: 1px;
-  background: rgba(0,180,216,0.2);
-  margin: 3px 2px;
-  border-radius: 1px;
-  flex-shrink: 0;
-}
-
-/* Boutons */
-.nav-btn {
-  display: inline-flex;
   align-items: center;
-  gap: 5px;
-  background: linear-gradient(135deg, var(--ocean), var(--blue));
-  border: 1px solid var(--cyan);
+  gap: 6px;
+  background: rgba(0,180,216,0.12);
+  border: 1.5px solid rgba(0,180,216,0.4);
+  border-radius: 20px;
+  padding: 7px 14px;
+  cursor: pointer;
   color: #fff;
   font-family: 'Nunito', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 800;
-  padding: 5px 13px;
-  border-radius: 30px;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: all 0.18s;
-  letter-spacing: 0.5px;
+  transition: all 0.2s;
+}
+.nav-menu-btn:hover { background: rgba(0,180,216,0.25); border-color: var(--cyan); }
+.nav-menu-bars { font-size: 1.1rem; color: var(--cyan); }
+.nav-menu-txt { font-size: 0.75rem; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; }
+.nav-arrow { color: var(--cyan); font-size: 0.9rem; transition: transform 0.2s; }
+.nav-body {
+  display: none;
+  border-top: 1px solid rgba(0,180,216,0.15);
+}
+.nav-body.open {
+  display: block;
+}
+.nav-body-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 10px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.nav-group { display: flex; flex-direction: column; gap: 6px; }
+.nav-group-label {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: rgba(0,180,216,0.7);
   text-transform: uppercase;
-  opacity: 0.75;
+  padding: 2px 4px;
 }
-.nav-btn .btn-emoji { font-size: 0.82rem; }
+.nav-group-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.nav-btn {
+  background: rgba(0,180,216,0.08);
+  border: 1.5px solid rgba(0,180,216,0.25);
+  color: rgba(255,255,255,0.85);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
 .nav-btn:hover {
-  opacity: 1;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 12px rgba(0,119,182,0.5);
-}
-.nav-btn.active {
-  opacity: 1;
-  background: linear-gradient(135deg, var(--ocean), var(--blue));
+  background: rgba(0,180,216,0.2);
   border-color: var(--cyan);
   color: #fff;
-  box-shadow: 0 0 0 2px rgba(0,180,216,0.4), 0 3px 14px rgba(0,119,182,0.5);
   transform: translateY(-1px);
 }
-
-/* Indicateur scroll droite */
-.nav-fade-right {
-  position: absolute;
-  right: 0; top: 0; bottom: 0;
-  width: 32px;
-  background: linear-gradient(to right, transparent, rgba(10,22,40,0.95));
-  pointer-events: none;
+.nav-btn.active {
+  background: var(--blue);
+  border-color: var(--cyan);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(0,119,182,0.5);
 }
-.nav-scroll-wrap { position: relative; }
 
 /* ====== EXAM SELECTOR ====== */
 .exam-selector {
@@ -986,23 +989,37 @@ nav {
 }
 </style>
 <script>
-// ====== ACCORDION NAV ======
-window.toggleNav = function toggleNav() { /* accordéon supprimé */ }
+// ====== ACCORDÉON ======
+function toggleNav() {
+  var body  = document.getElementById('navBody');
+  var arrow = document.getElementById('navArrow');
+  if (!body) return;
+  if (body.style.display === 'block') {
+    body.style.display = 'none';
+    if (arrow) arrow.textContent = '▼';
+  } else {
+    body.style.display = 'block';
+    if (arrow) arrow.textContent = '▲';
+  }
+}
+window.toggleNav = toggleNav;
 
 // ====== NAVIGATION ======
 window.showSection = function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
   var el = document.getElementById(id);
   if (el) el.classList.add('active');
-  // Mettre à jour bouton actif
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => {
-    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) {
+  document.querySelectorAll('.nav-btn').forEach(function(b) {
+    b.classList.remove('active');
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').indexOf("'" + id + "'") !== -1) {
       b.classList.add('active');
-      // Scroller le nav pour que le bouton actif soit visible
-      b.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
   });
+  // Fermer le menu
+  var body  = document.getElementById('navBody');
+  var arrow = document.getElementById('navArrow');
+  if (body)  body.style.display = 'none';
+  if (arrow) arrow.textContent = '▼';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -1076,6 +1093,10 @@ window.updateExamScore = function updateExamScore(examId) {
 
 // ====== EVENT DELEGATION ======
 document.addEventListener('DOMContentLoaded', function() {
+  // Forcer le menu fermé au chargement
+  var nb = document.getElementById('navBody');
+  if (nb) nb.style.display = 'none';
+
   document.addEventListener('click', function(e) {
     var target = e.target;
 
@@ -1222,7 +1243,7 @@ if ('serviceWorker' in navigator) {
 <!-- ====== BANNIÈRE INSTALLATION iOS ====== -->
 <div id="ios-install-banner">
   <button class="ios-banner-close" onclick="dismissIOSBanner()">✕</button>
-  <div class="ios-banner-title">📲 Installer l'application</div>
+  <div class="ios-banner-title">📲 Comment installer l'application dans un IOS:</div>
   <div class="ios-banner-steps">
     <div class="ios-step">
       <span class="ios-step-icon">1️⃣</span>
@@ -1237,41 +1258,53 @@ if ('serviceWorker' in navigator) {
       <span>Appuyez sur <strong>« Ajouter »</strong> en haut à droite</span>
     </div>
   </div>
-  <span class="ios-arrow">▼</span>
+  
 </div>
 
 <nav id="mainNav">
-  <div class="nav-inner">
-    <!-- Ligne 1 : logo -->
-    <div class="nav-top">
-      <div class="nav-logo">🤿 Plongée N2</div>
-    </div>
-    <!-- Ligne 2 : boutons scrollables -->
-    <div class="nav-scroll-wrap">
-      <div class="nav-scroll" id="navScroll">
-        <!-- Accueil -->
-        <button class="nav-btn active" onclick="showSection('home')"><span class="btn-emoji">🏠</span>Accueil</button>
-        <div class="nav-sep"></div>
-        <!-- Cours -->
-        <button class="nav-btn" onclick="showSection('reglementation')"><span class="btn-emoji">📋</span>Réglementation</button>
-        <button class="nav-btn" onclick="showSection('barotraumatismes')"><span class="btn-emoji">🫁</span>Barotraumatismes</button>
-        <button class="nav-btn" onclick="showSection('airflottabilite')"><span class="btn-emoji">💨</span>Air & Flottabilité</button>
-        <button class="nav-btn" onclick="showSection('effetspression')"><span class="btn-emoji">🧠</span>Effets pression</button>
-        <button class="nav-btn" onclick="showSection('risquesmilieu')"><span class="btn-emoji">🌊</span>Risques milieu</button>
-        <button class="nav-btn" onclick="showSection('tables')"><span class="btn-emoji">📊</span>Tables & Ordis</button>
-        <button class="nav-btn" onclick="showSection('materiel')"><span class="btn-emoji">🥽</span>Matériel</button>
-        <button class="nav-btn" onclick="showSection('ecodurable')"><span class="btn-emoji">🌿</span>Éco & Orient.</button>
-        <div class="nav-sep"></div>
-        <!-- Examens -->
-        <button class="nav-btn" onclick="showSection('examens');switchExam(1)"><span class="btn-emoji">📝</span>Examen 1</button>
-        <button class="nav-btn" onclick="showSection('examens');switchExam(2)"><span class="btn-emoji">🏅</span>Examen 2</button>
-        <button class="nav-btn" onclick="showSection('examens');switchExam(3)"><span class="btn-emoji">🎯</span>Examen 3</button>
-        <div class="nav-sep"></div>
-        <!-- Médias -->
-        <button class="nav-btn" onclick="showSection('videos')"><span class="btn-emoji">🎬</span>Vidéos</button>
-        <button class="nav-btn" onclick="showSection('photos')"><span class="btn-emoji">📸</span>Photos</button>
+  <div class="nav-header" onclick="toggleNav()">
+    <div class="nav-logo">🤿 Plongée N2</div>
+    <button class="nav-menu-btn">
+      <span class="nav-menu-bars">☰</span>
+      <span class="nav-menu-txt">MENU</span>
+      <span class="nav-arrow" id="navArrow">▼</span>
+    </button>
+  </div>
+  <div class="nav-body" id="navBody">
+    <div class="nav-body-inner">
+
+      <div class="nav-group">
+        <div class="nav-group-label">🏠 Général</div>
+        <div class="nav-group-btns">
+          <button class="nav-btn active" onclick="showSection('home')">🏠 Accueil</button>
+          <button class="nav-btn" onclick="showSection('videos')">🎬 Liens Vidéos</button>
+          <button class="nav-btn" onclick="showSection('photos')">📸 Photos</button>
+        </div>
       </div>
-      <div class="nav-fade-right"></div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">📚 Cours théoriques</div>
+        <div class="nav-group-btns">
+          <button class="nav-btn" onclick="showSection('reglementation')">📋 Réglementation</button>
+          <button class="nav-btn" onclick="showSection('barotraumatismes')">🫁 Barotraumatismes</button>
+          <button class="nav-btn" onclick="showSection('airflottabilite')">💨 Air & Flottabilité</button>
+          <button class="nav-btn" onclick="showSection('effetspression')">🧠 Effets de la pression</button>
+          <button class="nav-btn" onclick="showSection('risquesmilieu')">🌊 Risques du milieu</button>
+          <button class="nav-btn" onclick="showSection('tables')">📊 Tables & Ordinateurs</button>
+          <button class="nav-btn" onclick="showSection('materiel')">🥽 Matériel</button>
+          <button class="nav-btn" onclick="showSection('ecodurable')">🌿 Éco & Orientation</button>
+        </div>
+      </div>
+
+      <div class="nav-group">
+        <div class="nav-group-label">📝 Examens blancs</div>
+        <div class="nav-group-btns">
+          <button class="nav-btn" onclick="showSection('examens');switchExam(1)">📝 Examen 1 — Galathée</button>
+          <button class="nav-btn" onclick="showSection('examens');switchExam(2)">🏅 Examen 2 — Jury Fédéral</button>
+          <button class="nav-btn" onclick="showSection('examens');switchExam(3)">🎯 Examen 3 — Complet 20Q</button>
+        </div>
+      </div>
+
     </div>
   </div>
 </nav>
