@@ -1159,30 +1159,10 @@ window.dismissIOSBanner = function() {
 window.checkForUpdate = function() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistration().then(function(reg) {
-      if (reg) {
-        reg.update().then(function() {
-          if (reg.waiting) {
-            showUpdateToast();
-          } else {
-            // Pas de mise à jour : feedback visuel
-            var bell = document.getElementById('bell-btn');
-            if (bell) {
-              bell.textContent = '✅';
-              setTimeout(function() { bell.textContent = '🔔'; }, 2000);
-            }
-          }
-        });
-      }
+      if (reg) reg.update();
     });
   }
 };
-
-function showUpdateToast() {
-  var toast = document.getElementById('update-toast');
-  var bell  = document.getElementById('bell-btn');
-  if (toast) toast.style.display = 'block';
-  if (bell)  { bell.classList.add('has-update'); bell.innerHTML = '🔔<span class="fab-badge">1</span>'; }
-}
 
 window.dismissUpdate = function() {
   var toast = document.getElementById('update-toast');
@@ -1190,43 +1170,14 @@ window.dismissUpdate = function() {
 };
 
 window.applyUpdate = function() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistration().then(function(reg) {
-      if (reg && reg.waiting) {
-        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-      }
-    });
-  }
   window.location.reload();
 };
 
-// Détection automatique au chargement
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('controllerchange', function() {
-    showUpdateToast();
-  });
-}
-
-// ====== PWA SERVICE WORKER ======
+// ====== PWA ======
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('./sw.js', {
-      scope: '/Formation_PLONGEE_NIVEAU_2_GALATHEE/'
-    }).then(function(reg) {
-      reg.addEventListener('updatefound', function() {
-        var newSW = reg.installing;
-        newSW.addEventListener('statechange', function() {
-          if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-            showUpdateToast();
-          }
-        });
-      });
-    }).catch(function(err) {
-      console.warn('SW registration failed:', err);
-    });
-    navigator.serviceWorker.addEventListener('controllerchange', function() {
-      showUpdateToast();
-    });
+    navigator.serviceWorker.register('./sw.js', {scope: '/Formation_PLONGEE_NIVEAU_2_GALATHEE/'})
+    .catch(function(e){ console.log('SW error:', e); });
   });
 }
 </script>
