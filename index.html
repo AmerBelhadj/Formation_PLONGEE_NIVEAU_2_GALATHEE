@@ -82,6 +82,13 @@ body::before {
   color: var(--cyan);
   margin-bottom: 16px;
 }
+.hero-badge:hover {
+  background: linear-gradient(135deg, #25d366, #1da851);
+  border-color: #25d366;
+  color: #fff;
+  transform: scale(1.04);
+  transition: all 0.2s;
+}
 
 .hero h1 {
   font-family: 'Bangers', cursive;
@@ -109,6 +116,31 @@ body::before {
   padding: 24px 16px 80px;
 }
 .section.active { display: block; }
+
+/* Bouton retour accueil */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(0,180,216,0.1);
+  border: 1.5px solid rgba(0,180,216,0.3);
+  color: var(--cyan);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 7px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 20px;
+  letter-spacing: 0.3px;
+}
+.btn-back:hover {
+  background: rgba(0,180,216,0.2);
+  border-color: var(--cyan);
+  transform: translateX(-2px);
+}
+.btn-back::before { content: '←'; font-size: 1rem; }
 
 .section-title {
   font-family: 'Bangers', cursive;
@@ -624,97 +656,103 @@ body::before {
 }
 .bd-card, .quiz-card, .card-full {
 
-/* ====== ACCORDION NAV ====== */
-.nav-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 0 16px;
-  height: 52px;
-  cursor: pointer;
-  user-select: none;
+/* ====== NAV TOUJOURS VISIBLE ====== */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(10,22,40,0.97);
+  backdrop-filter: blur(20px);
+  border-bottom: 2px solid rgba(0,180,216,0.2);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+.nav-inner {
   max-width: 900px;
   margin: 0 auto;
+  padding: 0 12px;
+}
+/* Ligne 1 : logo + WA badge */
+.nav-top {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  gap: 10px;
+  border-bottom: 1px solid rgba(0,180,216,0.08);
 }
 .nav-logo {
   font-family: 'Bangers', cursive;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   color: var(--cyan);
   letter-spacing: 1px;
   flex: 1;
-}
-.nav-menu-label {
-  font-size: 0.68rem;
-  color: rgba(255,255,255,0.35);
-  font-weight: 700;
-  letter-spacing: 0.5px;
-}
-.nav-arrow {
-  color: var(--cyan);
-  font-size: 1rem;
-  transition: transform 0.3s ease;
-  flex-shrink: 0;
-}
-.nav-body.open .nav-arrow, .nav-arrow.open { transform: rotate(180deg); }
-
-.nav-body {
-  height: 0;
-  overflow: hidden;
-  border-top: 1px solid transparent;
-}
-.nav-body.open {
-  height: auto;
-  overflow: visible;
-  border-top-color: rgba(0,180,216,0.15);
-}
-
-.nav-body-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 8px 12px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.nav-group { display: flex; flex-direction: column; gap: 5px; }
-.nav-group-label {
-  font-size: 0.58rem;
-  font-weight: 900;
-  letter-spacing: 2px;
-  color: rgba(255,255,255,0.28);
-  text-transform: uppercase;
-  padding: 2px 4px;
-}
-.nav-group-btns {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-}
-.nav-btn {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.65);
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.73rem;
-  font-weight: 700;
-  padding: 6px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s;
   white-space: nowrap;
 }
+/* Ligne 2 : scroll horizontal des boutons */
+.nav-scroll {
+  display: flex;
+  gap: 6px;
+  padding: 7px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.nav-scroll::-webkit-scrollbar { display: none; }
+
+/* Séparateurs entre groupes */
+.nav-sep {
+  width: 1px;
+  min-width: 1px;
+  background: rgba(0,180,216,0.2);
+  margin: 3px 2px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+/* Boutons */
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: linear-gradient(135deg, var(--ocean), var(--blue));
+  border: 1px solid var(--cyan);
+  color: #fff;
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 5px 13px;
+  border-radius: 30px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.18s;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.nav-btn .btn-emoji { font-size: 0.82rem; }
 .nav-btn:hover {
-  background: rgba(0,180,216,0.15);
-  border-color: var(--cyan);
-  color: var(--cyan);
+  opacity: 1;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 12px rgba(0,119,182,0.5);
 }
 .nav-btn.active {
-  background: var(--blue);
+  opacity: 1;
+  background: linear-gradient(135deg, var(--ocean), var(--blue));
   border-color: var(--cyan);
   color: #fff;
-  box-shadow: 0 0 12px rgba(0,119,182,0.4);
+  box-shadow: 0 0 0 2px rgba(0,180,216,0.4), 0 3px 14px rgba(0,119,182,0.5);
+  transform: translateY(-1px);
 }
+
+/* Indicateur scroll droite */
+.nav-fade-right {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 32px;
+  background: linear-gradient(to right, transparent, rgba(10,22,40,0.95));
+  pointer-events: none;
+}
+.nav-scroll-wrap { position: relative; }
 
 /* ====== EXAM SELECTOR ====== */
 .exam-selector {
@@ -886,35 +924,85 @@ body::before {
   0%, 100% { transform: translateX(-50%) translateY(0); }
   50%       { transform: translateX(-50%) translateY(4px); }
 }
+/* ====== TOAST MISE À JOUR ====== */
+#update-toast {
+  display: none;
+  position: fixed;
+  top: 64px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9000;
+  background: linear-gradient(135deg, #023e73, #0077b6);
+  border: 1.5px solid #00b4d8;
+  border-radius: 12px;
+  padding: 14px 18px;
+  min-width: 280px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  animation: slideDown 0.35s ease;
+}
+@keyframes slideDown {
+  from { opacity:0; transform: translateX(-50%) translateY(-20px); }
+  to   { opacity:1; transform: translateX(-50%) translateY(0); }
+}
+#update-toast .toast-title {
+  font-family: 'Bangers', cursive;
+  font-size: 1.1rem;
+  color: #00b4d8;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+#update-toast .toast-msg {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+#update-toast .toast-btns {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+#update-toast .toast-btn-update {
+  background: #00b4d8;
+  color: #0a1628;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+}
+#update-toast .toast-btn-dismiss {
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+}
 </style>
 <script>
 // ====== ACCORDION NAV ======
-window.toggleNav = function toggleNav() {
-  var body = document.querySelector('.nav-body');
-  var arrow = document.querySelector('.nav-arrow');
-  if (!body) return;
-  if (body.style.display === 'block') {
-    body.style.display = 'none';
-    if (arrow) arrow.textContent = '▼';
-  } else {
-    body.style.display = 'block';
-    if (arrow) arrow.textContent = '▲';
-  }
-}
+window.toggleNav = function toggleNav() { /* accordéon supprimé */ }
 
 // ====== NAVIGATION ======
 window.showSection = function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   var el = document.getElementById(id);
   if (el) el.classList.add('active');
+  // Mettre à jour bouton actif
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('[data-section]').forEach(b => {
-    if (b.dataset.section === id) b.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) {
+      b.classList.add('active');
+      // Scroller le nav pour que le bouton actif soit visible
+      b.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
   });
-  var navBody = document.querySelector('.nav-body');
-  if (navBody) { navBody.style.display = 'none'; }
-  var arrow = document.querySelector('.nav-arrow');
-  if (arrow) arrow.textContent = '▼';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -988,9 +1076,6 @@ window.updateExamScore = function updateExamScore(examId) {
 
 // ====== EVENT DELEGATION ======
 document.addEventListener('DOMContentLoaded', function() {
-  var navBody = document.querySelector('.nav-body');
-  if (navBody) navBody.style.display = 'none';
-  // Nav toggle
   document.addEventListener('click', function(e) {
     var target = e.target;
 
@@ -1028,7 +1113,8 @@ document.addEventListener('DOMContentLoaded', function() {
 (function() {
   var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   var isInStandalone = window.navigator.standalone === true;
-  var dismissed = sessionStorage.getItem('ios-banner-dismissed');
+  var dismissed = localStorage.getItem('ios-banner-dismissed');
+  // Afficher uniquement sur iOS, pas encore installé, et jamais fermé
   if (isIOS && !isInStandalone && !dismissed) {
     document.addEventListener('DOMContentLoaded', function() {
       var banner = document.getElementById('ios-install-banner');
@@ -1042,8 +1128,63 @@ document.addEventListener('DOMContentLoaded', function() {
 window.dismissIOSBanner = function() {
   var banner = document.getElementById('ios-install-banner');
   if (banner) banner.style.display = 'none';
-  sessionStorage.setItem('ios-banner-dismissed', '1');
+  // localStorage = permanent, ne réapparaît plus jamais
+  localStorage.setItem('ios-banner-dismissed', '1');
 };
+
+// ====== MISE À JOUR PWA ======
+var newWorker = null;
+
+window.checkForUpdate = function() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistration().then(function(reg) {
+      if (reg) {
+        reg.update().then(function() {
+          if (reg.waiting) {
+            showUpdateToast();
+          } else {
+            // Pas de mise à jour : feedback visuel
+            var bell = document.getElementById('bell-btn');
+            if (bell) {
+              bell.textContent = '✅';
+              setTimeout(function() { bell.textContent = '🔔'; }, 2000);
+            }
+          }
+        });
+      }
+    });
+  }
+};
+
+function showUpdateToast() {
+  var toast = document.getElementById('update-toast');
+  var bell  = document.getElementById('bell-btn');
+  if (toast) toast.style.display = 'block';
+  if (bell)  { bell.classList.add('has-update'); bell.innerHTML = '🔔<span class="fab-badge">1</span>'; }
+}
+
+window.dismissUpdate = function() {
+  var toast = document.getElementById('update-toast');
+  if (toast) toast.style.display = 'none';
+};
+
+window.applyUpdate = function() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistration().then(function(reg) {
+      if (reg && reg.waiting) {
+        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+    });
+  }
+  window.location.reload();
+};
+
+// Détection automatique au chargement
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.addEventListener('controllerchange', function() {
+    showUpdateToast();
+  });
+}
 
 // PWA
 if ('serviceWorker' in navigator) {
@@ -1055,10 +1196,33 @@ if ('serviceWorker' in navigator) {
 </head>
 <body>
 
+<!-- ====== TOAST MISE À JOUR ====== -->
+<div id="update-toast">
+  <div class="toast-title">🔔 Mise à jour disponible !</div>
+  <div class="toast-msg">Une nouvelle version de l'application est disponible. Rechargez pour en profiter.</div>
+  <div class="toast-btns">
+    <button class="toast-btn-dismiss" onclick="dismissUpdate()">Plus tard</button>
+    <button class="toast-btn-update" onclick="applyUpdate()">🔄 Mettre à jour</button>
+  </div>
+</div>
+
+
+
+<!-- ====== CLOCHE MISE À JOUR ====== -->
+<div style="position:fixed;bottom:20px;right:16px;z-index:500;">
+  <button id="bell-btn" onclick="checkForUpdate()"
+    style="width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
+           background:var(--blue);box-shadow:0 4px 16px rgba(0,119,182,0.4);
+           font-size:1.3rem;display:flex;align-items:center;justify-content:center;
+           transition:transform 0.2s;" title="Vérifier les mises à jour">
+    🔔
+  </button>
+</div>
+
 <!-- ====== BANNIÈRE INSTALLATION iOS ====== -->
 <div id="ios-install-banner">
   <button class="ios-banner-close" onclick="dismissIOSBanner()">✕</button>
-  <div class="ios-banner-title">📲pour les Iphones: pour Installer l'application</div>
+  <div class="ios-banner-title">📲 Installer l'application</div>
   <div class="ios-banner-steps">
     <div class="ios-step">
       <span class="ios-step-icon">1️⃣</span>
@@ -1077,55 +1241,55 @@ if ('serviceWorker' in navigator) {
 </div>
 
 <nav id="mainNav">
-  <div class="nav-header" onclick="toggleNav()">
-    <div class="nav-logo">🤿 Plongée N2</div>
-    <span class="nav-menu-label">MENU</span>
-    <span class="nav-arrow">▼</span>
-  </div>
-  <div class="nav-body">
-    <div class="nav-body-inner">
-
-      <div class="nav-group">
-        <div class="nav-group-label">🏠 Général</div>
-        <div class="nav-group-btns">
-          <button class="nav-btn active" onclick="showSection('home')">🏠 Accueil</button>
-          <button class="nav-btn" onclick="showSection('videos')" style="background:rgba(224,123,0,0.15);border-color:#e07b00;color:#ffb347;">🎬 Liens Vidéos</button>
-          <button class="nav-btn" onclick="showSection('photos')" style="background:rgba(45,158,71,0.15);border-color:#2d9e47;color:#90e0ef;">🖼️ Infographies</button>
-        </div>
+  <div class="nav-inner">
+    <!-- Ligne 1 : logo -->
+    <div class="nav-top">
+      <div class="nav-logo">🤿 Plongée N2</div>
+    </div>
+    <!-- Ligne 2 : boutons scrollables -->
+    <div class="nav-scroll-wrap">
+      <div class="nav-scroll" id="navScroll">
+        <!-- Accueil -->
+        <button class="nav-btn active" onclick="showSection('home')"><span class="btn-emoji">🏠</span>Accueil</button>
+        <div class="nav-sep"></div>
+        <!-- Cours -->
+        <button class="nav-btn" onclick="showSection('reglementation')"><span class="btn-emoji">📋</span>Réglementation</button>
+        <button class="nav-btn" onclick="showSection('barotraumatismes')"><span class="btn-emoji">🫁</span>Barotraumatismes</button>
+        <button class="nav-btn" onclick="showSection('airflottabilite')"><span class="btn-emoji">💨</span>Air & Flottabilité</button>
+        <button class="nav-btn" onclick="showSection('effetspression')"><span class="btn-emoji">🧠</span>Effets pression</button>
+        <button class="nav-btn" onclick="showSection('risquesmilieu')"><span class="btn-emoji">🌊</span>Risques milieu</button>
+        <button class="nav-btn" onclick="showSection('tables')"><span class="btn-emoji">📊</span>Tables & Ordis</button>
+        <button class="nav-btn" onclick="showSection('materiel')"><span class="btn-emoji">🥽</span>Matériel</button>
+        <button class="nav-btn" onclick="showSection('ecodurable')"><span class="btn-emoji">🌿</span>Éco & Orient.</button>
+        <div class="nav-sep"></div>
+        <!-- Examens -->
+        <button class="nav-btn" onclick="showSection('examens');switchExam(1)"><span class="btn-emoji">📝</span>Examen 1</button>
+        <button class="nav-btn" onclick="showSection('examens');switchExam(2)"><span class="btn-emoji">🏅</span>Examen 2</button>
+        <button class="nav-btn" onclick="showSection('examens');switchExam(3)"><span class="btn-emoji">🎯</span>Examen 3</button>
+        <div class="nav-sep"></div>
+        <!-- Médias -->
+        <button class="nav-btn" onclick="showSection('videos')"><span class="btn-emoji">🎬</span>Vidéos</button>
+        <button class="nav-btn" onclick="showSection('photos')"><span class="btn-emoji">📸</span>Photos</button>
       </div>
-
-      <div class="nav-group">
-        <div class="nav-group-label">📚 Cours théoriques</div>
-        <div class="nav-group-btns">
-          <button class="nav-btn" onclick="showSection('reglementation')">📋 Réglementation</button>
-          <button class="nav-btn" onclick="showSection('barotraumatismes')">🫁 Barotraumatismes</button>
-          <button class="nav-btn" onclick="showSection('airflottabilite')">💨 Air & Flottabilité</button>
-          <button class="nav-btn" onclick="showSection('effetspression')">🧠 Effets de la pression</button>
-          <button class="nav-btn" onclick="showSection('risquesmilieu')">🌊 Risques du milieu</button>
-          <button class="nav-btn" onclick="showSection('tables')">📊 Tables & Ordinateurs</button>
-          <button class="nav-btn" onclick="showSection('materiel')">🥽 Matériel</button>
-          <button class="nav-btn" onclick="showSection('ecodurable')">🌿 Éco & Orientation</button>
-        </div>
-      </div>
-
-      <div class="nav-group">
-        <div class="nav-group-label">📝 Examens blancs</div>
-        <div class="nav-group-btns">
-          <button class="nav-btn" onclick="showSection('examens');switchExam(1)">📝 Examen 1 — Galathée</button>
-          <button class="nav-btn" onclick="showSection('examens');switchExam(2)">🏅 Examen 2 — Jury Fédéral</button>
-          <button class="nav-btn" onclick="showSection('examens');switchExam(3)">🎯 Examen 3 — Complet 20Q</button>
-        </div>
-      </div>
-
+      <div class="nav-fade-right"></div>
     </div>
   </div>
 </nav>
 
 <div id="home" class="section active">
   <div class="hero">
-    <div class="hero-badge">🐙 Galathée Club Muret • FFESSM</div>
+    <a class="hero-badge" id="wa-hero-badge"
+       href="https://wa.me/33752837806?text=Bonjour%20Galath%C3%A9e%20Club%20%F0%9F%A4%BF%20!"
+       target="_blank" rel="noopener"
+       style="text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
+      🐙 Galathée Club Muret • FFESSM
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:0.85;flex-shrink:0;">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.118 1.529 5.845L.057 23.571l5.9-1.548A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.848 0-3.576-.492-5.072-1.35l-.363-.216-3.502.919.934-3.417-.236-.373A9.959 9.959 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+      </svg>
+    </a>
     <h1>Révision Plongée N2</h1>
-    <p>Fiches synthétiques pour mémoriser facilement toutes les notions clés du Niveau 2 FFESSM 2025-2026</p>
+    <p>Fiches synthétiques en bande dessinée pour mémoriser facilement toutes les notions clés du Niveau 2 FFESSM 2025-2026</p>
   </div>
 
   <div class="legend">
@@ -1258,7 +1422,7 @@ if ('serviceWorker' in navigator) {
         </div>
       </div>
       <div class="bd-scene">
-        <div class="bubble bubble-warn">Accès avec mot de passe requis : <strong>Galathee2025</strong></div>
+        <div class="bubble bubble-warn">Accès avec mot de passe requis : <strong>Galathée2025</strong></div>
         <div class="bubble bubble-info">Plateforme vidéo dédiée Galathée Club — tous les modules du cours N2.</div>
       </div>
     </div>
@@ -1272,7 +1436,7 @@ if ('serviceWorker' in navigator) {
         </div>
       </div>
       <div class="bd-scene">
-        <div class="bubble bubble-warn">Accès avec mot de passe requis : <strong>Galathee2025</strong></div>
+        <div class="bubble bubble-warn">Accès avec mot de passe requis : <strong>Glathee2025</strong></div>
         <div class="bubble bubble-info">Infographies visuelles résumant tous les modules du cours N2.</div>
       </div>
     </div>
@@ -1297,6 +1461,8 @@ if ('serviceWorker' in navigator) {
 <!-- SECTION VIDEOS -->
 <div id="videos" class="section">
   <div class="section-title">🎬 Liens Vidéos — Révision N2</div>
+  <button class="btn-back" onclick="showSection('home')">Accueil</button>
+
   <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Galathée Club Muret — Vidéos de cours exclusives</p>
 
   <!-- ACCÈS VIDÉOS -->
@@ -1310,7 +1476,7 @@ if ('serviceWorker' in navigator) {
     <!-- Mot de passe mis en avant -->
     <div style="background:rgba(0,30,60,0.5);border:2px solid var(--cyan);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;">
       <div style="font-size:0.72rem;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;">🔑 MOT DE PASSE D'ACCÈS</div>
-      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Galathee2025</div>
+      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Galathée2025</div>
       <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:8px;">À saisir sur le site lors de votre première visite</div>
     </div>
 
@@ -1337,7 +1503,7 @@ if ('serviceWorker' in navigator) {
       </tr>
       <tr>
         <td class="tag-cyan">Étape 2</td>
-        <td>Saisir le mot de passe : <strong style="color:var(--cyan);font-family:'Space Mono',monospace;">Galathee2025</strong></td>
+        <td>Saisir le mot de passe : <strong style="color:var(--cyan);font-family:'Space Mono',monospace;">Galathée2025</strong></td>
       </tr>
       <tr>
         <td class="tag-cyan">Étape 3</td>
@@ -1356,6 +1522,8 @@ if ('serviceWorker' in navigator) {
 <!-- SECTION PHOTOS -->
 <div id="photos" class="section">
   <div class="section-title">🖼️ Infographies — Résumés visuels des cours</div>
+  <button class="btn-back" onclick="showSection('home')">Accueil</button>
+
   <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Galathée Club Muret — Infographies de révision N2</p>
 
   <!-- ACCÈS INFOGRAPHIES -->
@@ -1369,7 +1537,7 @@ if ('serviceWorker' in navigator) {
     <!-- Mot de passe -->
     <div style="background:rgba(0,30,60,0.5);border:2px solid var(--cyan);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;">
       <div style="font-size:0.72rem;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;">🔑 MOT DE PASSE D'ACCÈS</div>
-      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Galathee2025</div>
+      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Glathee2025</div>
       <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:8px;">À saisir sur le site lors de votre première visite</div>
     </div>
 
@@ -1398,7 +1566,7 @@ if ('serviceWorker' in navigator) {
       </tr>
       <tr>
         <td class="tag-cyan">Étape 2</td>
-        <td>Saisir le mot de passe : <strong style="color:var(--cyan);font-family:'Space Mono',monospace;">Galathee2025</strong></td>
+        <td>Saisir le mot de passe : <strong style="color:var(--cyan);font-family:'Space Mono',monospace;">Glathee2025</strong></td>
       </tr>
       <tr>
         <td class="tag-cyan">Étape 3</td>
@@ -1423,6 +1591,8 @@ if ('serviceWorker' in navigator) {
 </div>
 <div id="reglementation" class="section">
   <div class="section-title">📋 Réglementation & Prérogatives N2</div>
+  <button class="btn-back" onclick="showSection('home')">Accueil</button>
+
   <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Prérogatives N2 2025-2026</p>
 
   <!-- CONDITIONS D'ACCÈS -->
@@ -1728,6 +1898,8 @@ if ('serviceWorker' in navigator) {
      ============================================================ -->
 <div id="barotraumatismes" class="section">
   <div class="section-title">🫁 Les Barotraumatismes</div>
+  <button class="btn-back" onclick="showSection('home')">Accueil</button>
+
   <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 2025-2026 — Les Barotraumatismes</p>
 
   <!-- DÉFINITION -->
@@ -2135,7 +2307,9 @@ if ('serviceWorker' in navigator) {
      ============================================================ -->
 <div id="examens" class="section">
   <div class="section-title">📝 Examens Blancs N2</div>
-  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">3 examens: 1 issus des documents du Galathée Club et 2 générés par IA</p>
+  <button class="btn-back" onclick="showSection('home')">Accueil</button>
+
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">3 examens issus des documents du Galathée Club et du Jury Fédéral FFESSM</p>
 
   <!-- Sélecteur d'examens -->
   <div class="exam-selector">
@@ -2331,7 +2505,7 @@ if ('serviceWorker' in navigator) {
        EXAMEN 2 — JURY FÉDÉRAL
        ═══════════════════════════════════════════ -->
   <div class="exam-panel" id="exam2">
-    <span class="exam-source jury">🏅 Source : Examen généré par l'IA — 2h30, Tables MN90 obligatoires</span>
+    <span class="exam-source jury">🏅 Source : Examen type Jury Fédéral FFESSM — 2h30, Tables MN90 obligatoires</span>
 
     <div class="exam-score-bar">
       <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-bottom:4px;">Score Examen 2</div>
@@ -2516,7 +2690,7 @@ if ('serviceWorker' in navigator) {
     </div>
 
     <div class="retenir-box" style="margin-top:20px;">
-      <div class="retenir-title">📊 Barème</div>
+      <div class="retenir-title">📊 Barème Jury Fédéral</div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px;">
         <div style="text-align:center;padding:10px;background:rgba(45,158,71,0.15);border:1px solid var(--green);border-radius:8px;"><div style="font-family:'Bangers',cursive;font-size:1.3rem;color:var(--green);">90-100</div><div style="font-size:0.72rem;color:var(--green-light);">Excellent N2</div></div>
         <div style="text-align:center;padding:10px;background:rgba(0,119,182,0.15);border:1px solid var(--blue);border-radius:8px;"><div style="font-family:'Bangers',cursive;font-size:1.3rem;color:var(--cyan);">75-89</div><div style="font-size:0.72rem;color:var(--light);">Bon niveau</div></div>
@@ -2531,7 +2705,7 @@ if ('serviceWorker' in navigator) {
        EXAMEN 3 — COMPLET 20 QUESTIONS
        ═══════════════════════════════════════════ -->
   <div class="exam-panel" id="exam3">
-    <span class="exam-source complet">🎯 Examen complet — 20 questions générées par l'IA</span>
+    <span class="exam-source complet">🎯 Examen complet — 20 questions tous thèmes confondus</span>
 
     <div class="exam-score-bar">
       <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-bottom:4px;">Score Examen 3</div>
@@ -2787,6 +2961,8 @@ if ('serviceWorker' in navigator) {
 
 <div id="airflottabilite" class="section">
   <div class="section-title">💨 Autonomie en Air & Flottabilité</div>
+  <button class="btn-back" onclick="showSection('home')">Accueil</button>
+
   <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Autonomie en Air et Flottabilité 2025-2026</p>
 
   <div class="bd-card">
@@ -2862,6 +3038,8 @@ if ('serviceWorker' in navigator) {
      ============================================================ -->
 <div id="effetspression" class="section">
   <div class="section-title">🧠 Effets de la Pression en Plongée</div>
+  <button class="btn-back" onclick="showSection('home')">Accueil</button>
+
   <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Effets de la Pression 2025-2026</p>
 
   <div class="bd-card">
@@ -2951,6 +3129,8 @@ if ('serviceWorker' in navigator) {
      ============================================================ -->
 <div id="risquesmilieu" class="section">
   <div class="section-title">🌊 Risques du Milieu Aquatique</div>
+  <button class="btn-back" onclick="showSection('home')">Accueil</button>
+
   <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Risques du Milieu Aquatique 2025-2026</p>
 
   <div class="bd-card">
@@ -3059,6 +3239,8 @@ if ('serviceWorker' in navigator) {
      ============================================================ -->
 <div id="tables" class="section">
   <div class="section-title">📊 Tables MN90 & Ordinateurs de Plongée</div>
+  <button class="btn-back" onclick="showSection('home')">Accueil</button>
+
   <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Tables et Ordinateurs 2025-2026</p>
 
   <div class="bd-card">
@@ -3161,6 +3343,8 @@ if ('serviceWorker' in navigator) {
      ============================================================ -->
 <div id="materiel" class="section">
   <div class="section-title">🥽 Matériel de Plongée Sous-Marine</div>
+  <button class="btn-back" onclick="showSection('home')">Accueil</button>
+
   <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Matériel de Plongée 2025-2026</p>
 
   <div class="bd-card">
@@ -3267,6 +3451,8 @@ if ('serviceWorker' in navigator) {
      ============================================================ -->
 <div id="ecodurable" class="section">
   <div class="section-title">🌿 Développement Durable & Orientation</div>
+  <button class="btn-back" onclick="showSection('home')">Accueil</button>
+
   <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Source : Théorie N2 — Développement Durable et Orientation 2025-2026</p>
 
   <div class="bd-card">
