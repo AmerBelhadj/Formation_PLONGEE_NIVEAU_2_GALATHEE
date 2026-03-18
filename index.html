@@ -1154,7 +1154,7 @@ window.dismissIOSBanner = function() {
 };
 
 // ====== MISE À JOUR PWA ======
-var newWorker = null;
+
 
 window.checkForUpdate = function() {
   if ('serviceWorker' in navigator) {
@@ -1207,10 +1207,26 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// PWA
+// ====== PWA SERVICE WORKER ======
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function() {
-    navigator.serviceWorker.register('./sw.js', { scope: '/Formation_PLONGEE_NIVEAU_2_GALATHEE/' }).catch(function() {});
+    navigator.serviceWorker.register('./sw.js', {
+      scope: '/Formation_PLONGEE_NIVEAU_2_GALATHEE/'
+    }).then(function(reg) {
+      reg.addEventListener('updatefound', function() {
+        var newSW = reg.installing;
+        newSW.addEventListener('statechange', function() {
+          if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
+            showUpdateToast();
+          }
+        });
+      });
+    }).catch(function(err) {
+      console.warn('SW registration failed:', err);
+    });
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+      showUpdateToast();
+    });
   });
 }
 </script>
@@ -1243,7 +1259,7 @@ if ('serviceWorker' in navigator) {
 <!-- ====== BANNIÈRE INSTALLATION iOS ====== -->
 <div id="ios-install-banner">
   <button class="ios-banner-close" onclick="dismissIOSBanner()">✕</button>
-  <div class="ios-banner-title">📲 Comment installer l'application dans un IOS:</div>
+  <div class="ios-banner-title">📲 Installer l'application</div>
   <div class="ios-banner-steps">
     <div class="ios-step">
       <span class="ios-step-icon">1️⃣</span>

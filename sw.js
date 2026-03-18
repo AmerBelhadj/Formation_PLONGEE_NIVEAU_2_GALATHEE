@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plongee-n2-v5';
+const CACHE_NAME = 'plongee-n2-v6';
 const BASE = '/Formation_PLONGEE_NIVEAU_2_GALATHEE';
 const ASSETS = [
   BASE + '/',
@@ -7,6 +7,12 @@ const ASSETS = [
   BASE + '/icon-192.png',
   BASE + '/icon-512.png'
 ];
+
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
 
 self.addEventListener('install', event => {
   self.skipWaiting();
