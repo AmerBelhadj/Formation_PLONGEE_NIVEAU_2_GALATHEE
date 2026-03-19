@@ -1154,29 +1154,62 @@ window.dismissIOSBanner = function() {
 };
 
 // ====== MISE À JOUR PWA ======
+var updateReady = false;
 
+function showUpdateToast() {
+  updateReady = true;
+  var bell = document.getElementById('bell-btn');
+  if (bell) {
+    bell.style.background = '#e07b00';
+    bell.style.boxShadow = '0 4px 20px rgba(224,123,0,0.7)';
+    bell.title = 'Mise à jour disponible — Cliquez pour recharger';
+    // Ajouter badge "1"
+    var badge = document.getElementById('bell-badge');
+    if (badge) badge.style.display = 'flex';
+  }
+}
 
 window.checkForUpdate = function() {
+  if (updateReady) {
+    window.location.reload();
+    return;
+  }
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistration().then(function(reg) {
-      if (reg) reg.update();
+      if (reg) {
+        reg.update().then(function() {
+          if (reg.waiting) {
+            showUpdateToast();
+          } else {
+            var bell = document.getElementById('bell-btn');
+            if (bell) {
+              bell.textContent = '✅';
+              setTimeout(function() { bell.textContent = '🔔'; }, 2000);
+            }
+          }
+        });
+      }
     });
   }
 };
 
-window.dismissUpdate = function() {
-  var toast = document.getElementById('update-toast');
-  if (toast) toast.style.display = 'none';
-};
-
-window.applyUpdate = function() {
-  window.location.reload();
-};
+window.dismissUpdate = function() {};
+window.applyUpdate = function() { window.location.reload(); };
 
 // ====== PWA ======
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent.com') {
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('./sw.js', {scope: '/Formation_PLONGEE_NIVEAU_2_GALATHEE/'})
+    .then(function(reg) {
+      reg.addEventListener('updatefound', function() {
+        var sw = reg.installing;
+        sw.addEventListener('statechange', function() {
+          if (sw.state === 'installed' && navigator.serviceWorker.controller) {
+            showUpdateToast();
+          }
+        });
+      });
+    })
     .catch(function(e){ console.log('SW error:', e); });
   });
 }
@@ -1185,26 +1218,27 @@ if ('serviceWorker' in navigator) {
 <body>
 
 <!-- ====== TOAST MISE À JOUR ====== -->
-<div id="update-toast">
-  <div class="toast-title">🔔 Mise à jour disponible !</div>
-  <div class="toast-msg">Une nouvelle version de l'application est disponible. Rechargez pour en profiter.</div>
-  <div class="toast-btns">
-    <button class="toast-btn-dismiss" onclick="dismissUpdate()">Plus tard</button>
-    <button class="toast-btn-update" onclick="applyUpdate()">🔄 Mettre à jour</button>
-  </div>
-</div>
+<div id="update-toast"></div>
 
 
 
 <!-- ====== CLOCHE MISE À JOUR ====== -->
-<div style="position:fixed;bottom:20px;right:16px;z-index:500;">
-  <button id="bell-btn" onclick="checkForUpdate()"
-    style="width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
-           background:var(--blue);box-shadow:0 4px 16px rgba(0,119,182,0.4);
-           font-size:1.3rem;display:flex;align-items:center;justify-content:center;
-           transition:transform 0.2s;" title="Vérifier les mises à jour">
-    🔔
-  </button>
+<div style="position:fixed;bottom:20px;right:16px;z-index:500;position:fixed;">
+  <div style="position:relative;display:inline-block;">
+    <button id="bell-btn" onclick="checkForUpdate()"
+      style="width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
+             background:var(--blue);box-shadow:0 4px 16px rgba(0,119,182,0.4);
+             font-size:1.3rem;display:flex;align-items:center;justify-content:center;
+             transition:all 0.2s;" title="Vérifier les mises à jour">
+      🔔
+    </button>
+    <div id="bell-badge" style="display:none;position:absolute;top:-4px;right:-4px;
+         width:18px;height:18px;background:#e53935;border-radius:50%;
+         border:2px solid #0a1628;font-size:0.65rem;font-weight:900;color:#fff;
+         align-items:center;justify-content:center;font-family:'Nunito',sans-serif;">
+      1
+    </div>
+  </div>
 </div>
 
 <!-- ====== BANNIÈRE INSTALLATION iOS ====== -->

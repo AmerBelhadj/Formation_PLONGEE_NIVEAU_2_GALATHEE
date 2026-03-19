@@ -1,4 +1,4 @@
-const CACHE_NAME = 'plongee-n2-v6';
+const CACHE_NAME = 'plongee-n2-v7';
 const BASE = '/Formation_PLONGEE_NIVEAU_2_GALATHEE';
 const ASSETS = [
   BASE + '/',
