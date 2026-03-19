@@ -1254,22 +1254,20 @@ var MESSAGE_URL = 'https://raw.githubusercontent.com/amerbelhadj/Formation_PLONG
 var lastMessage = '';
 
 function checkMessage() {
-  fetch(MESSAGE_URL + '?t=' + Date.now())
+  fetch(MESSAGE_URL + '?t=' + Date.now(), { cache: 'no-store' })
     .then(function(r) { return r.text(); })
     .then(function(txt) {
       var msg = txt.trim();
       var msgBadge = document.getElementById('msg-badge');
       var msgBtn   = document.getElementById('msg-btn');
-      if (msg && msg !== lastMessage) {
+      if (msg) {
         lastMessage = msg;
         if (msgBadge) { msgBadge.textContent = 'M'; msgBadge.style.display = 'flex'; }
-        if (msgBtn)   msgBtn.style.display = 'flex';
-        // Stocker le message pour le popup
-        if (msgBtn) msgBtn.setAttribute('data-msg', msg);
-      } else if (!msg) {
+        if (msgBtn)   { msgBtn.style.display = 'flex'; msgBtn.setAttribute('data-msg', msg); }
+      } else {
+        lastMessage = '';
         if (msgBadge) msgBadge.style.display = 'none';
         if (msgBtn)   msgBtn.style.display   = 'none';
-        lastMessage = '';
       }
     })
     .catch(function() {});
@@ -1294,7 +1292,7 @@ function closeMsgPopup() {
 // Vérifier au chargement puis toutes les 5 minutes
 document.addEventListener('DOMContentLoaded', function() {
   checkMessage();
-  setInterval(checkMessage, 300000);
+  setInterval(checkMessage, 60000); // toutes les 60 secondes
 });
 
 // ====== MISE À JOUR PWA ======
