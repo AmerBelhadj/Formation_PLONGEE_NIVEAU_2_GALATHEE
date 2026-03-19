@@ -1153,6 +1153,102 @@ window.dismissIOSBanner = function() {
   localStorage.setItem('ios-banner-dismissed', '1');
 };
 
+// ====== GALERIE PDFs GITHUB ======
+var GITHUB_USER   = 'amerbelhadj';
+var GITHUB_REPO   = 'Formation_PLONGEE_NIVEAU_2_GALATHEE';
+var GITHUB_BRANCH = 'main';
+var pdfsList = [];
+var pdfLoaded = false;
+
+function loadPDFs() {
+  if (pdfLoaded) return;
+  var apiUrl = 'https://api.github.com/repos/' + GITHUB_USER + '/' + GITHUB_REPO + '/contents/Documents?ref=' + GITHUB_BRANCH;
+  fetch(apiUrl)
+    .then(function(r){ return r.json(); })
+    .then(function(files) {
+      var pdfs = Array.isArray(files) ? files.filter(function(f){
+        return /\.pdf$/i.test(f.name);
+      }) : [];
+
+      var grid    = document.getElementById('pdf-grid');
+      var loading = document.getElementById('pdf-loading');
+      var empty   = document.getElementById('pdf-empty');
+      if (!grid) return;
+      pdfLoaded = true;
+
+      if (pdfs.length === 0) {
+        if (loading) loading.style.display = 'none';
+        if (empty)   empty.style.display   = 'block';
+        return;
+      }
+
+      if (loading) loading.remove();
+
+      pdfsList = pdfs.map(function(f) {
+        return {
+          url:  'https://raw.githubusercontent.com/' + GITHUB_USER + '/' + GITHUB_REPO + '/' + GITHUB_BRANCH + '/Documents/' + encodeURIComponent(f.name),
+          name: f.name.replace(/\.pdf$/i, '').replace(/[-_]/g, ' ')
+        };
+      });
+
+      pdfsList.forEach(function(p, idx) {
+        var row = document.createElement('div');
+        row.style.cssText = 'background:var(--panel);border:1px solid var(--panel-border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;';
+
+        // Icône
+        var icon = document.createElement('div');
+        icon.style.cssText = 'font-size:2rem;flex-shrink:0;';
+        icon.textContent = '📄';
+
+        // Nom + numéro
+        var info = document.createElement('div');
+        info.style.cssText = 'flex:1;min-width:0;';
+        var num = document.createElement('div');
+        num.style.cssText = 'font-size:0.65rem;color:rgba(255,255,255,0.35);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;';
+        num.textContent = 'Document ' + (idx + 1);
+        var name = document.createElement('div');
+        name.style.cssText = 'font-size:0.88rem;font-weight:800;color:#fff;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+        name.textContent = p.name;
+        info.appendChild(num);
+        info.appendChild(name);
+
+        // Boutons
+        var btns = document.createElement('div');
+        btns.style.cssText = 'display:flex;gap:8px;flex-shrink:0;';
+
+        var btnView = document.createElement('a');
+        btnView.href   = p.url;
+        btnView.target = '_blank';
+        btnView.rel    = 'noopener';
+        btnView.style.cssText = 'background:var(--blue);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:0.78rem;font-weight:800;text-decoration:none;white-space:nowrap;';
+        btnView.textContent = '👁️ Ouvrir';
+
+        var btnDl = document.createElement('a');
+        btnDl.href     = p.url;
+        btnDl.download = p.name + '.pdf';
+        btnDl.style.cssText = 'background:rgba(0,180,216,0.12);color:var(--cyan);border:1px solid var(--cyan);border-radius:8px;padding:8px 14px;font-size:0.78rem;font-weight:800;text-decoration:none;white-space:nowrap;';
+        btnDl.textContent = '⬇️';
+
+        btns.appendChild(btnView);
+        btns.appendChild(btnDl);
+        row.appendChild(icon);
+        row.appendChild(info);
+        row.appendChild(btns);
+        grid.appendChild(row);
+      });
+    })
+    .catch(function() {
+      var loading = document.getElementById('pdf-loading');
+      if (loading) loading.textContent = '❌ Impossible de charger les documents.';
+    });
+}
+
+var _origShowSection = window.showSection;
+window.showSection = function(id) {
+  _origShowSection(id);
+  if (id === 'photos') loadPDFs();
+};
+
 // ====== MISE À JOUR PWA ======
 var updateReady = false;
 
@@ -1555,70 +1651,24 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 
 <!-- SECTION PHOTOS -->
 <div id="photos" class="section">
-  <div class="section-title">🖼️ Infographies — Résumés visuels des cours</div>
+  <div class="section-title">📄 Documents PDF</div>
   <button class="btn-back" onclick="showSection('home')">Accueil</button>
+  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Galathée Club Muret — Documents et fiches de cours</p>
 
-  <p style="color:rgba(255,255,255,0.5);font-size:0.8rem;margin-bottom:20px;">Galathée Club Muret — Infographies de révision N2</p>
-
-  <!-- ACCÈS INFOGRAPHIES -->
   <div class="card-full">
-    <div class="card-full-title">🖼️ Infographies de résumé des cours N2</div>
-
+    <div class="card-full-title">📚 Bibliothèque de documents</div>
     <div class="bubble bubble-info" style="margin-bottom:16px;">
-      Ces infographies résument visuellement les différents points du cours N2 : réglementation, physique, barotraumatismes, tables, matériel et environnement. Un support idéal pour réviser rapidement.
+      Cliquez sur <strong>👁️ Ouvrir</strong> pour consulter un PDF ou <strong>⬇️ Télécharger</strong> pour le sauvegarder. Les documents sont hébergés dans le dossier <code style="color:var(--cyan);">/Documents</code> de votre repo GitHub.
     </div>
 
-    <!-- Mot de passe -->
-    <div style="background:rgba(0,30,60,0.5);border:2px solid var(--cyan);border-radius:12px;padding:20px;text-align:center;margin-bottom:20px;">
-      <div style="font-size:0.72rem;font-weight:900;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:10px;">🔑 MOT DE PASSE D'ACCÈS</div>
-      <div style="font-family:'Bangers',cursive;font-size:2.4rem;color:var(--cyan);letter-spacing:4px;">Glathee2025</div>
-      <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:8px;">À saisir sur le site lors de votre première visite</div>
+    <div id="pdf-grid" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+      <div id="pdf-loading" style="grid-column:1/-1;text-align:center;padding:30px;color:rgba(255,255,255,0.4);font-size:0.85rem;">
+        📄 Chargement des documents...
+      </div>
     </div>
 
-    <!-- Bouton accès -->
-    <div style="text-align:center;margin-bottom:20px;">
-      <a href="https://plongee-sous-marine.fammies.com/index.html" target="_blank" rel="noopener"
-         style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#2d9e47,#90e0ef);color:#0a1628;font-family:'Bangers',cursive;font-size:1.3rem;letter-spacing:1px;padding:16px 32px;border-radius:30px;text-decoration:none;box-shadow:0 4px 20px rgba(45,158,71,0.4);">
-        🖼️ Accéder aux infographies
-      </a>
-      <div style="margin-top:10px;font-size:0.7rem;color:rgba(255,255,255,0.3);">↗ S'ouvre dans un nouvel onglet</div>
-    </div>
-
-    <div class="bubble bubble-ok">
-      💡 Conseil : Consultez les infographies <strong>après avoir lu le cours</strong> correspondant pour ancrer les notions clés.
-    </div>
-  </div>
-
-  <!-- CONTENU DES INFOGRAPHIES -->
-  <div class="card-full">
-    <div class="card-full-title">📋 Comment accéder aux infographies ?</div>
-    <table class="info-table">
-      <tr><th>Étape</th><th>Action</th></tr>
-      <tr>
-        <td class="tag-cyan">Étape 1</td>
-        <td>Cliquer sur le bouton <strong style="color:#90e0ef;">🖼️ Accéder aux infographies</strong> ci-dessus</td>
-      </tr>
-      <tr>
-        <td class="tag-cyan">Étape 2</td>
-        <td>Saisir le mot de passe : <strong style="color:var(--cyan);font-family:'Space Mono',monospace;">Glathee2025</strong></td>
-      </tr>
-      <tr>
-        <td class="tag-cyan">Étape 3</td>
-        <td>Parcourir les infographies résumant chaque module du cours N2</td>
-      </tr>
-    </table>
-
-    <div class="retenir-box" style="margin-top:16px;">
-      <div class="retenir-title">🖼️ Thèmes couverts par les infographies</div>
-      <ul class="retenir-list">
-        <li>Réglementation & Prérogatives N2 (PA-20, PE-40, CACI, DP…)</li>
-        <li>Physique de la plongée (Boyle-Mariotte, Dalton, Archimède…)</li>
-        <li>Barotraumatismes (oreilles, poumons, sinus, masque…)</li>
-        <li>Effets de la pression (narcose, ADD, FOP, pressions partielles…)</li>
-        <li>Tables MN90 et ordinateurs de plongée</li>
-        <li>Matériel (bloc, détendeur, combinaison, gilet…)</li>
-        <li>Environnement & orientation sous-marine</li>
-      </ul>
+    <div class="bubble bubble-warn" id="pdf-empty" style="display:none;">
+      📁 Aucun document trouvé. Uploadez vos PDFs dans le dossier <strong>/Documents</strong> de votre repo GitHub.
     </div>
   </div>
 
