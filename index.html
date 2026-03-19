@@ -1249,6 +1249,54 @@ window.showSection = function(id) {
   if (id === 'photos') loadPDFs();
 };
 
+// ====== MESSAGE ADMIN (message.txt) ======
+var MESSAGE_URL = 'https://raw.githubusercontent.com/amerbelhadj/Formation_PLONGEE_NIVEAU_2_GALATHEE/main/message.txt';
+var lastMessage = '';
+
+function checkMessage() {
+  fetch(MESSAGE_URL + '?t=' + Date.now())
+    .then(function(r) { return r.text(); })
+    .then(function(txt) {
+      var msg = txt.trim();
+      var msgBadge = document.getElementById('msg-badge');
+      var msgBtn   = document.getElementById('msg-btn');
+      if (msg && msg !== lastMessage) {
+        lastMessage = msg;
+        if (msgBadge) { msgBadge.textContent = 'M'; msgBadge.style.display = 'flex'; }
+        if (msgBtn)   msgBtn.style.display = 'flex';
+        // Stocker le message pour le popup
+        if (msgBtn) msgBtn.setAttribute('data-msg', msg);
+      } else if (!msg) {
+        if (msgBadge) msgBadge.style.display = 'none';
+        if (msgBtn)   msgBtn.style.display   = 'none';
+        lastMessage = '';
+      }
+    })
+    .catch(function() {});
+}
+
+function showMsgPopup() {
+  var btn = document.getElementById('msg-btn');
+  var popup = document.getElementById('msg-popup');
+  var text  = document.getElementById('msg-popup-text');
+  if (!popup || !btn) return;
+  var msg = btn.getAttribute('data-msg') || '';
+  if (!msg) return;
+  if (text) text.textContent = msg;
+  popup.style.display = 'flex';
+}
+
+function closeMsgPopup() {
+  var popup = document.getElementById('msg-popup');
+  if (popup) popup.style.display = 'none';
+}
+
+// Vérifier au chargement puis toutes les 5 minutes
+document.addEventListener('DOMContentLoaded', function() {
+  checkMessage();
+  setInterval(checkMessage, 300000);
+});
+
 // ====== MISE À JOUR PWA ======
 var updateReady = false;
 
@@ -1338,8 +1386,41 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 
 
 
+<!-- ====== POPUP MESSAGE ====== -->
+<div id="msg-popup" onclick="closeMsgPopup()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9998;align-items:center;justify-content:center;padding:20px;">
+  <div onclick="event.stopPropagation()" style="background:linear-gradient(135deg,#023e73,#0077b6);border:2px solid #00b4d8;border-radius:16px;padding:24px;max-width:340px;width:100%;position:relative;box-shadow:0 8px 32px rgba(0,0,0,0.5);">
+    <button onclick="closeMsgPopup()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(255,255,255,0.6);font-size:1.2rem;cursor:pointer;">✕</button>
+    <div style="font-family:'Bangers',cursive;font-size:1.2rem;color:#00b4d8;letter-spacing:1px;margin-bottom:12px;">📢 Message du club</div>
+    <div id="msg-popup-text" style="font-size:0.88rem;color:#fff;line-height:1.6;font-weight:600;"></div>
+    <div style="text-align:right;margin-top:16px;">
+      <button onclick="closeMsgPopup()" style="background:#00b4d8;color:#0a1628;border:none;border-radius:8px;padding:8px 20px;font-size:0.82rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;">OK</button>
+    </div>
+  </div>
+</div>
+
 <!-- ====== CLOCHE MISE À JOUR ====== -->
-<div style="position:fixed;bottom:20px;right:16px;z-index:500;position:fixed;">
+<div style="position:fixed;bottom:20px;right:16px;z-index:500;display:flex;flex-direction:column;align-items:center;gap:10px;">
+
+  <!-- Bouton message (caché si pas de message) -->
+  <div style="position:relative;display:inline-block;">
+    <button id="msg-btn"
+      onclick="showMsgPopup()"
+      onmouseenter="showMsgPopup()"
+      style="display:none;width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
+             background:#2d9e47;box-shadow:0 4px 16px rgba(45,158,71,0.5);
+             font-size:1.3rem;align-items:center;justify-content:center;
+             transition:all 0.2s;" title="Message du club">
+      📢
+    </button>
+    <div id="msg-badge" style="display:none;position:absolute;top:-4px;right:-4px;
+         width:20px;height:20px;background:#e53935;border-radius:50%;
+         border:2px solid #0a1628;font-size:0.6rem;font-weight:900;color:#fff;
+         align-items:center;justify-content:center;font-family:'Nunito',sans-serif;">
+      M
+    </div>
+  </div>
+
+  <!-- Cloche MAJ -->
   <div style="position:relative;display:inline-block;">
     <button id="bell-btn" onclick="checkForUpdate()"
       style="width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
@@ -1355,6 +1436,7 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       1
     </div>
   </div>
+
 </div>
 
 <!-- ====== BANNIÈRE INSTALLATION iOS ====== -->
