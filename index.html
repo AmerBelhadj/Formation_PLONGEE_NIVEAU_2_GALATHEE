@@ -1297,16 +1297,36 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
   window.addEventListener('load', function() {
     navigator.serviceWorker.register('./sw.js', {scope: '/Formation_PLONGEE_NIVEAU_2_GALATHEE/'})
     .then(function(reg) {
+
+      // Détecter un nouveau SW en attente
       reg.addEventListener('updatefound', function() {
-        var sw = reg.installing;
-        sw.addEventListener('statechange', function() {
-          if (sw.state === 'installed' && navigator.serviceWorker.controller) {
-            showUpdateToast();
+        var newSW = reg.installing;
+        newSW.addEventListener('statechange', function() {
+          if (newSW.state === 'installed') {
+            if (navigator.serviceWorker.controller) {
+              // Nouveau SW prêt — notifier via la cloche
+              showUpdateToast();
+              // Demander au nouveau SW de prendre le contrôle immédiatement
+              newSW.postMessage({ type: 'SKIP_WAITING' });
+            }
           }
         });
       });
+
+      // Vérifier les mises à jour toutes les 60 secondes
+      setInterval(function() { reg.update(); }, 60000);
+
     })
     .catch(function(e){ console.log('SW error:', e); });
+
+    // Recharger automatiquement quand le nouveau SW prend le contrôle
+    var refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+      if (!refreshing) {
+        refreshing = true;
+        window.location.reload();
+      }
+    });
   });
 }
 </script>
@@ -1658,7 +1678,7 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
   <div class="card-full">
     <div class="card-full-title">📚 Bibliothèque de documents</div>
     <div class="bubble bubble-info" style="margin-bottom:16px;">
-      Cliquez sur <strong>👁️ Ouvrir</strong> pour consulter un PDF ou <strong>⬇️ Télécharger</strong> pour le sauvegarder.
+      Cliquez sur <strong>👁️ Ouvrir</strong> pour consulter un PDF ou <strong>⬇️ Télécharger</strong> pour le sauvegarder. Les documents sont hébergés dans le dossier <code style="color:var(--cyan);">/Documents</code> de votre repo GitHub.
     </div>
 
     <div id="pdf-grid" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
