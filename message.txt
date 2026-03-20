@@ -1,2 +1,2 @@
 Hello
-test d'envoie de message dans l'appli
+test d'envoie de message 
