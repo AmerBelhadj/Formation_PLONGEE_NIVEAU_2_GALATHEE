@@ -2129,7 +2129,10 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 
   <!-- Bouton calendrier (caché si CSV vide) -->
   <div id="cal-fab">
-    <button id="cal-btn" onclick="openCalendar()" title="Calendrier des événements">
+    <button id="cal-btn" onclick="openCalendar()" title="Calendrier des événements"
+      style="display:flex;width:48px;height:48px;border-radius:50%;border:none;cursor:pointer;
+             background:#ffffff;box-shadow:0 4px 16px rgba(255,255,255,0.3);
+             font-size:1.3rem;align-items:center;justify-content:center;transition:all 0.2s;">
       📅
     </button>
     <div id="cal-badge" style="display:none;position:absolute;top:-4px;right:-4px;
