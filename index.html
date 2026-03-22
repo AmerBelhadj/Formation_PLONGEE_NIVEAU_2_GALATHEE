@@ -1153,8 +1153,9 @@ nav {
   margin-bottom: 2px;
 }
 .cal-mv-num.has-ev-num {
-  font-weight: 900;
-  font-size: 0.75rem;
+  font-weight: 900 !important;
+  font-size: 0.8rem !important;
+  font-style: normal;
 }
 .cal-ev-pill {
   display: block;
@@ -1775,7 +1776,6 @@ function renderMonthView(y, m) {
       var evs = getEventsForDay(y, m, day);
       if (evs.length > 0) {
         num.classList.add('has-ev-num');
-        // Couleur du numéro = couleur du premier événement du jour
         var colorMap = {
           'ev-plongee': '#90e0ef',
           'ev-cours':   '#a8e6b8',
@@ -1785,15 +1785,18 @@ function renderMonthView(y, m) {
           'ev-default': '#ffb347'
         };
         var cls = getEventClass(evs[0].evenement);
-        num.style.color = colorMap[cls] || '#ffb347';
+        num.style.color      = colorMap[cls] || '#ffb347';
+        num.style.fontWeight = '900';
+        num.style.fontSize   = '0.82rem';
+        num.style.cursor     = 'pointer';
+        num.style.textDecoration = 'underline';
+        num.onclick = (function(evList) {
+          return function(e) {
+            e.stopPropagation();
+            showEvPopup(evList[0]);
+          };
+        })(evs);
       }
-      evs.forEach(function(ev) {
-        var pill = document.createElement('div');
-        pill.className = 'cal-ev-pill ' + getEventClass(ev.evenement);
-        pill.textContent = (ev.heure ? ev.heure+' ' : '') + ev.evenement;
-        pill.onclick = function(e) { e.stopPropagation(); showEvPopup(ev); };
-        cell.appendChild(pill);
-      });
       grid.appendChild(cell);
     })(d);
   }
