@@ -987,6 +987,273 @@ nav {
   cursor: pointer;
   font-family: 'Nunito', sans-serif;
 }
+/* ====== CALENDRIER ====== */
+#cal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.82);
+  z-index: 9000;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 10px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+#cal-box {
+  background: #0d1f3c;
+  border: 2px solid rgba(0,180,216,0.35);
+  border-radius: 20px;
+  padding: 18px 14px;
+  width: 100%;
+  max-width: 860px;
+  margin: auto;
+  position: relative;
+}
+.cal-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 8px;
+}
+.cal-year-label {
+  font-family: 'Bangers', cursive;
+  font-size: 1.8rem;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  text-align: center;
+  flex: 1;
+}
+.cal-nav {
+  background: rgba(0,180,216,0.1);
+  border: 1.5px solid rgba(0,180,216,0.3);
+  color: var(--cyan);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.cal-nav:hover { background: rgba(0,180,216,0.25); }
+.cal-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.45);
+  font-size: 1.5rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  line-height: 1;
+}
+/* Grille annuelle */
+.cal-year-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+.cal-month-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(0,180,216,0.12);
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.cal-month-card:hover { border-color: var(--cyan); }
+.cal-month-title {
+  font-family: 'Bangers', cursive;
+  font-size: 0.95rem;
+  color: var(--cyan);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.cal-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+}
+.cal-mini-hdr {
+  font-size: 0.52rem;
+  font-weight: 900;
+  color: rgba(255,255,255,0.28);
+  text-align: center;
+  text-transform: uppercase;
+}
+.cal-mini-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  border-radius: 50%;
+}
+.cal-mini-day.has-ev {
+  background: rgba(224,123,0,0.25);
+  border: 1px solid #e07b00;
+  color: #ffb347;
+  font-weight: 900;
+  cursor: pointer;
+}
+.cal-mini-day.has-ev:hover { background: rgba(224,123,0,0.5); }
+.cal-mini-day.today-cell { border: 1.5px solid var(--cyan); color: var(--cyan); }
+/* Vue mois */
+#cal-month-view { display: none; }
+.cal-month-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.cal-month-label {
+  font-family: 'Bangers', cursive;
+  font-size: 1.3rem;
+  color: var(--cyan);
+  letter-spacing: 1px;
+}
+.cal-back-btn {
+  background: none;
+  border: none;
+  color: rgba(0,180,216,0.7);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 0;
+  display: block;
+  margin-bottom: 8px;
+}
+.cal-mv-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+}
+.cal-mv-hdr {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
+  text-transform: uppercase;
+  padding: 3px 0;
+}
+.cal-mv-cell {
+  min-height: 46px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 7px;
+  padding: 3px;
+}
+.cal-mv-cell.today-cell { border-color: var(--cyan); }
+.cal-mv-num {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 2px;
+}
+.cal-ev-pill {
+  display: block;
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition: filter 0.15s;
+}
+.cal-ev-pill:hover { filter: brightness(1.3); }
+.ev-plongee  { background:rgba(0,119,182,0.3);  border:1px solid #0077b6; color:#90e0ef; }
+.ev-cours    { background:rgba(45,158,71,0.3);   border:1px solid #2d9e47; color:#a8e6b8; }
+.ev-sortie   { background:rgba(0,180,216,0.25);  border:1px solid #00b4d8; color:#caf0f8; }
+.ev-reunion  { background:rgba(142,68,173,0.3);  border:1px solid #9b59b6; color:#d7bde2; }
+.ev-examen   { background:rgba(192,57,43,0.3);   border:1px solid #c0392b; color:#ffccc8; }
+.ev-default  { background:rgba(224,123,0,0.25);  border:1px solid #e07b00; color:#ffb347; }
+/* Popup événement */
+#cal-ev-popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.cal-ev-box {
+  background: linear-gradient(160deg, #0d1f3c 0%, #07122a 100%);
+  border: 2px solid #e07b00;
+  border-radius: 18px;
+  padding: 22px 20px;
+  max-width: 340px;
+  width: 100%;
+  position: relative;
+}
+.cal-ev-x {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: none; border: none;
+  color: rgba(255,255,255,0.4);
+  font-size: 1.2rem; cursor: pointer;
+}
+.cal-ev-date-line {
+  font-family: 'Bangers', cursive;
+  font-size: 1.5rem;
+  color: #ffb347;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+.cal-ev-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+.cal-ev-ico { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.cal-ev-col { display: flex; flex-direction: column; }
+.cal-ev-lbl { font-size: 0.6rem; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 2px; }
+.cal-ev-val-heure  { font-family: 'Space Mono', monospace; font-size: 1rem; font-weight: 700; color: var(--cyan); }
+.cal-ev-val-event  { font-family: 'Bangers', cursive; font-size: 1.2rem; letter-spacing: 0.5px; color: #ffb347; }
+.cal-ev-val-lieu   { font-size: 0.88rem; font-weight: 700; color: #90e0ef; }
+.cal-ev-val-prereq { font-size: 0.82rem; font-weight: 600; color: #a8e6b8; line-height: 1.4; }
+.cal-ev-ok {
+  width: 100%;
+  margin-top: 14px;
+  background: linear-gradient(135deg, #7a3800, #e07b00);
+  border: none;
+  border-radius: 10px;
+  padding: 11px;
+  font-family: 'Bangers', cursive;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  color: #fff;
+  cursor: pointer;
+}
+/* Bouton calendrier flottant */
+#cal-fab { position: relative; display: inline-block; }
+#cal-btn {
+  display: flex;
+  width: 48px; height: 48px;
+  border-radius: 50%; border: none;
+  cursor: pointer;
+  background: #e07b00;
+  box-shadow: 0 4px 16px rgba(224,123,0,0.5);
+  font-size: 1.3rem;
+  align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+#cal-btn:hover { transform: scale(1.1); }
+#cal-badge {
+  display: none;
+  position: absolute; top: -4px; right: -4px;
+  min-width: 18px; height: 18px;
+  background: #e53935;
+  border-radius: 9px;
+  border: 2px solid #0a1628;
+  font-size: 0.6rem; font-weight: 900; color: #fff;
+  align-items: center; justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  padding: 0 3px;
+}
 </style>
 <script>
 // ====== ACCORDÉON ======
@@ -1249,6 +1516,314 @@ window.showSection = function(id) {
   if (id === 'photos') loadPDFs();
 };
 
+// ====== CALENDRIER ======
+var CAL_CSV_URL  = 'https://raw.githubusercontent.com/amerbelhadj/Formation_PLONGEE_NIVEAU_2_GALATHEE/main/Calendrier.csv';
+var calEvents    = [];
+var calYear      = new Date().getFullYear();
+var calMonth     = new Date().getMonth();
+var MOIS         = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+var JOURS        = ['Lu','Ma','Me','Je','Ve','Sa','Di'];
+
+function parseCalCSV(txt) {
+  // Nettoyer les caractères mal encodés (latin-1 -> UTF-8 approximatif)
+  txt = txt.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  var lines = txt.split('\n').map(function(l){ return l.trim(); }).filter(Boolean);
+  if (!lines.length) return [];
+  // Ignorer la première ligne si c'est un entête (ne commence pas par un chiffre)
+  var start = /^\d/.test(lines[0]) ? 0 : 1;
+  var evs = [];
+  for (var i = start; i < lines.length; i++) {
+    var cols = lines[i].indexOf(';') !== -1 ? lines[i].split(';') : lines[i].split(',');
+    if (cols.length < 4) continue;
+    var dateStr = cols[0].trim();
+    if (!dateStr) continue;
+    evs.push({
+      date:      dateStr,
+      heure:     (cols[1]||'').trim(),
+      evenement: (cols[2]||'').trim(),
+      lieu:      (cols[3]||'').trim(),
+      prerequis: (cols[4]||'').trim()
+    });
+  }
+  return evs;
+}
+
+function parseDate(str) {
+  if (!str) return null;
+  str = str.trim();
+  var m;
+  if ((m = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/)))
+    return new Date(+m[3], +m[2]-1, +m[1]);
+  if ((m = str.match(/^(\d{4})-(\d{2})-(\d{2})$/)))
+    return new Date(+m[1], +m[2]-1, +m[3]);
+  if ((m = str.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/)))
+    return new Date(+m[3], +m[2]-1, +m[1]);
+  return null;
+}
+
+function getEventsForDay(y, mo, d) {
+  return calEvents.filter(function(ev) {
+    var dt = parseDate(ev.date);
+    return dt && dt.getFullYear()===y && dt.getMonth()===mo && dt.getDate()===d;
+  });
+}
+
+function loadCalendar() {
+  var urls = [
+    CAL_CSV_URL + '?t=' + Date.now(),
+    './Calendrier.csv?t=' + Date.now(),
+    './calendrier.csv?t=' + Date.now()
+  ];
+  var tried = 0;
+
+  function applyEvents(txt) {
+    var evs = parseCalCSV(txt);
+    calEvents = evs;
+    var btn   = document.getElementById('cal-btn');
+    var badge = document.getElementById('cal-badge');
+    if (!evs.length) {
+      if (btn)   btn.style.display   = 'none';
+      if (badge) badge.style.display = 'none';
+      return;
+    }
+    if (btn) btn.style.display = 'flex';
+    var today = new Date(); today.setHours(0,0,0,0);
+    var upcoming = evs.filter(function(ev){ var d=parseDate(ev.date); return d && d>=today; }).length;
+    var nb = upcoming > 0 ? upcoming : evs.length;
+    if (badge) { badge.textContent = nb > 9 ? '9+' : nb; badge.style.display = 'flex'; }
+    var ov = document.getElementById('cal-overlay');
+    if (ov && ov.style.display === 'flex') {
+      renderMonthView(calYear, calMonth);
+      var lbl = document.getElementById('cal-month-lbl');
+      if (lbl) lbl.textContent = MOIS[calMonth] + ' ' + calYear;
+    }
+  }
+
+  function tryNext() {
+    if (tried >= urls.length) return;
+    var url = urls[tried++];
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onload = function() {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        applyEvents(xhr.responseText);
+      } else {
+        tryNext();
+      }
+    };
+    xhr.onerror = function() { tryNext(); };
+    xhr.send();
+  }
+  tryNext();
+}
+
+function openCalendar() {
+  calYear  = new Date().getFullYear();
+  calMonth = new Date().getMonth();
+  var ov = document.getElementById('cal-overlay');
+  if (ov) ov.style.display = 'flex';
+  renderMonthView(calYear, calMonth);
+  var lbl = document.getElementById('cal-month-lbl');
+  if (lbl) lbl.textContent = MOIS[calMonth] + ' ' + calYear;
+}
+
+function closeCalendar() {
+  var ov = document.getElementById('cal-overlay');
+  if (ov) ov.style.display = 'none';
+}
+
+function showYearView() {
+  document.getElementById('cal-year-view').style.display  = 'block';
+  document.getElementById('cal-month-view').style.display = 'none';
+  document.getElementById('cal-year-lbl').textContent = calYear;
+  renderYearView();
+}
+
+function showMonthView(y, m) {
+  calYear = y; calMonth = m;
+  document.getElementById('cal-year-view').style.display  = 'none';
+  document.getElementById('cal-month-view').style.display = 'block';
+  document.getElementById('cal-year-lbl').textContent  = MOIS[m] + ' ' + y;
+  document.getElementById('cal-month-lbl').textContent = MOIS[m] + ' ' + y;
+  renderMonthView(y, m);
+}
+
+function renderCurrentCalView() {
+  if (document.getElementById('cal-year-view').style.display !== 'none') renderYearView();
+  else renderMonthView(calYear, calMonth);
+}
+
+function calYearNav(dir) {
+  calYear += dir;
+  document.getElementById('cal-year-lbl').textContent = calYear;
+  renderYearView();
+}
+
+function calMonthNav(dir) {
+  calMonth += dir;
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  if (calMonth > 11) { calMonth = 0;  calYear++; }
+  var lbl = document.getElementById('cal-month-lbl');
+  if (lbl) lbl.textContent = MOIS[calMonth] + ' ' + calYear;
+  renderMonthView(calYear, calMonth);
+}
+
+function firstDayOfMonth(y, m) {
+  var d = new Date(y, m, 1).getDay();
+  return (d + 6) % 7; // lundi=0
+}
+
+function renderYearView() {
+  var grid  = document.getElementById('cal-year-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  var today = new Date();
+  for (var mo = 0; mo < 12; mo++) {
+    (function(month) {
+      var card = document.createElement('div');
+      card.className = 'cal-month-card';
+      card.onclick = function(){ showMonthView(calYear, month); };
+
+      var mTitle = document.createElement('div');
+      mTitle.className = 'cal-month-title';
+      mTitle.textContent = MOIS[month];
+      card.appendChild(mTitle);
+
+      var miniGrid = document.createElement('div');
+      miniGrid.className = 'cal-mini-grid';
+
+      JOURS.forEach(function(j) {
+        var h = document.createElement('div');
+        h.className = 'cal-mini-hdr';
+        h.textContent = j;
+        miniGrid.appendChild(h);
+      });
+
+      var first = firstDayOfMonth(calYear, month);
+      var days  = new Date(calYear, month+1, 0).getDate();
+
+      for (var i = 0; i < first; i++) miniGrid.appendChild(document.createElement('div'));
+
+      for (var d = 1; d <= days; d++) {
+        (function(day) {
+          var cell = document.createElement('div');
+          cell.className = 'cal-mini-day';
+          cell.textContent = day;
+          var evs = getEventsForDay(calYear, month, day);
+          if (evs.length) {
+            cell.classList.add('has-ev');
+            cell.onclick = function(e) {
+              e.stopPropagation();
+              if (evs.length === 1) showEvPopup(evs[0]);
+              else showMonthView(calYear, month);
+            };
+          }
+          if (today.getFullYear()===calYear && today.getMonth()===month && today.getDate()===day)
+            cell.classList.add('today-cell');
+          miniGrid.appendChild(cell);
+        })(d);
+      }
+      card.appendChild(miniGrid);
+      grid.appendChild(card);
+    })(mo);
+  }
+}
+
+function getEventClass(evenement) {
+  var e = (evenement || '').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // enlever accents
+  if (/plonge|dive|immersion/.test(e))        return 'ev-plongee';
+  if (/cours|theorie|formation/.test(e))       return 'ev-cours';
+  if (/sortie|balade|excursion/.test(e))       return 'ev-sortie';
+  if (/reunion|assembl|^ag$| ag /.test(e))     return 'ev-reunion';
+  if (/examen|brevet|jury|passage/.test(e))    return 'ev-examen';
+  return 'ev-default';
+}
+
+function renderMonthView(y, m) {
+  var grid = document.getElementById('cal-mv-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  var today = new Date();
+
+  JOURS.forEach(function(j) {
+    var h = document.createElement('div');
+    h.className = 'cal-mv-hdr';
+    h.textContent = j;
+    grid.appendChild(h);
+  });
+
+  var first = firstDayOfMonth(y, m);
+  var days  = new Date(y, m+1, 0).getDate();
+
+  for (var i = 0; i < first; i++) grid.appendChild(document.createElement('div'));
+
+  for (var d = 1; d <= days; d++) {
+    (function(day) {
+      var cell = document.createElement('div');
+      cell.className = 'cal-mv-cell';
+      if (today.getFullYear()===y && today.getMonth()===m && today.getDate()===day)
+        cell.classList.add('today-cell');
+      var num = document.createElement('div');
+      num.className = 'cal-mv-num';
+      num.textContent = day;
+      cell.appendChild(num);
+      var evs = getEventsForDay(y, m, day);
+      evs.forEach(function(ev) {
+        var pill = document.createElement('div');
+        pill.className = 'cal-ev-pill ' + getEventClass(ev.evenement);
+        pill.textContent = (ev.heure ? ev.heure+' ' : '') + ev.evenement;
+        pill.onclick = function(e) { e.stopPropagation(); showEvPopup(ev); };
+        cell.appendChild(pill);
+      });
+      grid.appendChild(cell);
+    })(d);
+  }
+}
+
+function showEvPopup(ev) {
+  var dt = parseDate(ev.date);
+  var dateStr = dt
+    ? dt.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long', year:'numeric'})
+    : ev.date;
+  dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+  document.getElementById('cal-ev-date').textContent    = '📅 ' + dateStr;
+  document.getElementById('cal-ev-heure').textContent   = ev.heure     || '—';
+  document.getElementById('cal-ev-event').textContent   = ev.evenement || '—';
+  document.getElementById('cal-ev-lieu').textContent    = ev.lieu      || '—';
+  document.getElementById('cal-ev-prereq').textContent  = ev.prerequis || 'Aucun';
+
+  // Couleur de la bordure selon le type
+  var colorMap = {
+    'ev-plongee': '#0077b6',
+    'ev-cours':   '#2d9e47',
+    'ev-sortie':  '#00b4d8',
+    'ev-reunion': '#9b59b6',
+    'ev-examen':  '#c0392b',
+    'ev-default': '#e07b00'
+  };
+  var cls   = getEventClass(ev.evenement);
+  var color = colorMap[cls] || '#e07b00';
+  var box   = document.querySelector('#cal-ev-popup > div');
+  if (box) box.style.borderColor = color;
+  var dateLine = document.getElementById('cal-ev-date');
+  if (dateLine) dateLine.style.color = color;
+
+  var popup = document.getElementById('cal-ev-popup');
+  if (popup) popup.style.display = 'flex';
+}
+
+function closeEvPopup() {
+  var p = document.getElementById('cal-ev-popup');
+  if (p) p.style.cssText = 'display:none; position:fixed; inset:0; background:rgba(0,0,0,0.72); z-index:99999; align-items:center; justify-content:center; padding:20px;';
+}
+
+// Chargement au démarrage + toutes les 60s
+document.addEventListener('DOMContentLoaded', function() {
+  loadCalendar();
+  setInterval(loadCalendar, 60000);
+});
+
 // ====== MESSAGE ADMIN (message.txt) ======
 var MESSAGE_URL = 'https://raw.githubusercontent.com/amerbelhadj/Formation_PLONGEE_NIVEAU_2_GALATHEE/main/message.txt';
 var lastMessage = '';
@@ -1338,6 +1913,18 @@ window.checkForUpdate = function() {
 window.dismissUpdate = function() {};
 window.applyUpdate = function() { window.location.reload(); };
 
+// ====== EXPOSITION FONCTIONS GLOBALES ======
+window.openCalendar   = openCalendar;
+window.closeCalendar  = closeCalendar;
+window.calYearNav     = calYearNav;
+window.calMonthNav    = calMonthNav;
+window.showYearView   = showYearView;
+window.showMonthView  = showMonthView;
+window.showEvPopup    = showEvPopup;
+window.closeEvPopup   = closeEvPopup;
+window.showMsgPopup   = showMsgPopup;
+window.closeMsgPopup  = closeMsgPopup;
+
 // ====== PWA ======
 if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent.com') {
   window.addEventListener('load', function() {
@@ -1384,6 +1971,99 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 
 
 
+<!-- ====== CALENDRIER OVERLAY ====== -->
+<div id="cal-overlay" onclick="if(event.target===this)closeCalendar()"
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9000;
+         align-items:flex-start;justify-content:center;padding:10px;overflow-y:auto;">
+  <div id="cal-box"
+    style="background:#0d1f3c;border:2px solid rgba(0,180,216,0.35);border-radius:20px;
+           padding:18px 14px;width:100%;max-width:500px;margin:0 auto;position:relative;">
+
+    <!-- Barre navigation mois -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px;">
+      <button onclick="calMonthNav(-1)"
+        style="background:rgba(0,180,216,0.1);border:1.5px solid rgba(0,180,216,0.3);color:#00b4d8;
+               border-radius:8px;padding:6px 14px;font-size:1rem;font-weight:900;cursor:pointer;">‹</button>
+      <div id="cal-month-lbl"
+        style="font-family:'Bangers',cursive;font-size:1.5rem;color:#00b4d8;
+               letter-spacing:2px;text-align:center;flex:1;"></div>
+      <button onclick="calMonthNav(1)"
+        style="background:rgba(0,180,216,0.1);border:1.5px solid rgba(0,180,216,0.3);color:#00b4d8;
+               border-radius:8px;padding:6px 14px;font-size:1rem;font-weight:900;cursor:pointer;">›</button>
+      <button onclick="closeCalendar()"
+        style="background:none;border:none;color:rgba(255,255,255,0.45);font-size:1.5rem;
+               cursor:pointer;line-height:1;flex-shrink:0;">✕</button>
+    </div>
+
+    <!-- Grille mensuelle -->
+    <div id="cal-mv-grid"
+      style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;">
+    </div>
+
+  </div>
+</div>
+
+<!-- ====== POPUP ÉVÉNEMENT CALENDRIER ====== -->
+<div id="cal-ev-popup" onclick="if(event.target===this)closeEvPopup()"
+  style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9999;
+         align-items:center;justify-content:center;padding:20px;">
+  <div style="background:linear-gradient(160deg,#0d1f3c,#07122a);border:2px solid #e07b00;
+              border-radius:18px;padding:22px 20px;max-width:340px;width:100%;position:relative;">
+    <button onclick="closeEvPopup()"
+      style="position:absolute;top:12px;right:14px;background:none;border:none;
+             color:rgba(255,255,255,0.4);font-size:1.2rem;cursor:pointer;">✕</button>
+
+    <div id="cal-ev-date"
+      style="font-family:'Bangers',cursive;font-size:1.4rem;color:#ffb347;
+             letter-spacing:1px;margin-bottom:16px;line-height:1.2;"></div>
+
+    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;">
+      <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">🕐</span>
+      <div>
+        <div style="font-size:0.6rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;
+                    color:rgba(255,255,255,0.35);margin-bottom:2px;">Heure</div>
+        <div id="cal-ev-heure"
+          style="font-family:'Space Mono',monospace;font-size:1rem;font-weight:700;color:#00b4d8;"></div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;">
+      <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">📌</span>
+      <div>
+        <div style="font-size:0.6rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;
+                    color:rgba(255,255,255,0.35);margin-bottom:2px;">Événement</div>
+        <div id="cal-ev-event"
+          style="font-family:'Bangers',cursive;font-size:1.2rem;letter-spacing:0.5px;color:#ffb347;"></div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;">
+      <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">📍</span>
+      <div>
+        <div style="font-size:0.6rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;
+                    color:rgba(255,255,255,0.35);margin-bottom:2px;">Lieu</div>
+        <div id="cal-ev-lieu"
+          style="font-size:0.88rem;font-weight:700;color:#90e0ef;"></div>
+      </div>
+    </div>
+
+    <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px;">
+      <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px;">✅</span>
+      <div>
+        <div style="font-size:0.6rem;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;
+                    color:rgba(255,255,255,0.35);margin-bottom:2px;">Prérequis</div>
+        <div id="cal-ev-prereq"
+          style="font-size:0.82rem;font-weight:600;color:#a8e6b8;line-height:1.4;"></div>
+      </div>
+    </div>
+
+    <button onclick="closeEvPopup()"
+      style="width:100%;margin-top:14px;background:linear-gradient(135deg,#7a3800,#e07b00);
+             border:none;border-radius:10px;padding:11px;font-family:'Bangers',cursive;
+             font-size:1.1rem;letter-spacing:1px;color:#fff;cursor:pointer;">OK</button>
+  </div>
+</div>
+
 <!-- ====== POPUP MESSAGE ====== -->
 <div id="msg-popup" onclick="closeMsgPopup()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9998;align-items:center;justify-content:center;padding:20px;">
   <div onclick="event.stopPropagation()" style="background:linear-gradient(135deg,#023e73,#0077b6);border:2px solid #00b4d8;border-radius:16px;padding:24px;max-width:340px;width:100%;position:relative;box-shadow:0 8px 32px rgba(0,0,0,0.5);">
@@ -1398,6 +2078,14 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 
 <!-- ====== CLOCHE MISE À JOUR ====== -->
 <div style="position:fixed;bottom:20px;right:16px;z-index:500;display:flex;flex-direction:column;align-items:center;gap:10px;">
+
+  <!-- Bouton calendrier (caché si CSV vide) -->
+  <div id="cal-fab">
+    <button id="cal-btn" onclick="openCalendar()" title="Calendrier des événements">
+      📅
+    </button>
+    <div id="cal-badge">0</div>
+  </div>
 
   <!-- Bouton message (caché si pas de message) -->
   <div style="position:relative;display:inline-block;">
@@ -1439,6 +2127,22 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 <!-- ====== BANNIÈRE INSTALLATION iOS ====== -->
 <div id="ios-install-banner">
   <button class="ios-banner-close" onclick="dismissIOSBanner()">✕</button>
+  <div class="ios-banner-title">📲 Comment Installer l'application sur IOS:</div>
+  <div class="ios-banner-steps">
+    <div class="ios-step">
+      <span class="ios-step-icon">1️⃣</span>
+      <span>Appuyez sur <strong>le bouton Partager</strong> <span style="font-size:1rem;">⬆️</span> en bas de Safari</span>
+    </div>
+    <div class="ios-step">
+      <span class="ios-step-icon">2️⃣</span>
+      <span>Faites défiler et appuyez sur <strong>« Sur l'écran d'accueil »</strong> <span style="font-size:0.9rem;">➕</span></span>
+    </div>
+    <div class="ios-step">
+      <span class="ios-step-icon">3️⃣</span>
+      <span>Appuyez sur <strong>« Ajouter »</strong> en haut à droite</span>
+    </div>
+  </div>
+  
 </div>
 
 <nav id="mainNav">
@@ -1490,6 +2194,26 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 </nav>
 
 <div id="home" class="section active">
+  <div class="hero">
+    <a class="hero-badge" id="wa-hero-badge"
+       href="https://wa.me/337?text=Bonjour%20Galath%C3%A9e%20Club%20%F0%9F%A4%BF%20!"
+       target="_blank" rel="noopener"
+       style="text-decoration:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;">
+      🐙 Galathée Club Muret • FFESSM
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="opacity:0.85;flex-shrink:0;">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.118 1.529 5.845L.057 23.571l5.9-1.548A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.848 0-3.576-.492-5.072-1.35l-.363-.216-3.502.919.934-3.417-.236-.373A9.959 9.959 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+      </svg>
+    </a>
+    <h1>Révision Plongée N2</h1>
+    <p>Fiches synthétiques en bande dessinée pour mémoriser facilement toutes les notions clés du Niveau 2 FFESSM 2025-2026</p>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><span style="color:var(--green-light)">Vert = Sécurité / Bonne action</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div><span style="color:var(--orange-light)">Orange = Attention</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div><span style="color:#ffccc8">Rouge = Danger / Accident</span></div>
+  </div>
 
   <div class="cards-grid">
     <div class="bd-card" onclick="showSection('reglementation')">
