@@ -1354,60 +1354,6 @@ nav {
   align-items: center; justify-content: center;
   font-family: 'Nunito', sans-serif;
 }
-/* ====== SPLASH SCREEN ====== */
-#splash {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  background: linear-gradient(160deg, #0a1628 0%, #023e73 60%, #0a1628 100%);
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-}
-#splash.visible { display: flex; }
-.splash-logo {
-  font-size: 5rem;
-  animation: splash-bounce 1s ease infinite alternate;
-}
-@keyframes splash-bounce {
-  from { transform: translateY(0) rotate(-5deg); }
-  to   { transform: translateY(-12px) rotate(5deg); }
-}
-.splash-title {
-  font-family: 'Bangers', cursive;
-  font-size: 2.2rem;
-  color: #fff;
-  letter-spacing: 3px;
-  text-align: center;
-  line-height: 1.1;
-}
-.splash-subtitle {
-  font-family: 'Nunito', sans-serif;
-  font-size: 0.85rem;
-  color: rgba(0,180,216,0.8);
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  text-align: center;
-}
-.splash-bar-wrap {
-  width: 220px;
-  height: 6px;
-  background: rgba(255,255,255,0.12);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-top: 10px;
-}
-.splash-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #00b4d8, #0077b6);
-  border-radius: 3px;
-  transition: width 3s linear;
-}
-.splash-bar.go { width: 100%; }
 </style>
 <script>
 // ====== THÈME SOMBRE / CLAIR ======
@@ -1434,40 +1380,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var saved = localStorage.getItem('theme') || 'dark';
   applyTheme(saved);
 });
-
-// ====== SPLASH SCREEN ======
-(function() {
-  var isStandalone =
-    window.navigator.standalone === true ||
-    window.matchMedia('(display-mode: standalone)').matches ||
-    window.matchMedia('(display-mode: fullscreen)').matches;
-
-  if (!isStandalone) return;
-
-  var splash = document.getElementById('splash');
-  var bar    = document.getElementById('splash-bar');
-  if (!splash) return;
-
-  // Afficher le splash
-  splash.classList.add('visible');
-  document.body.style.overflow = 'hidden';
-
-  // Lancer la barre après un court délai (pour déclencher la transition CSS)
-  setTimeout(function() {
-    if (bar) bar.classList.add('go');
-  }, 50);
-
-  // Masquer après 3 secondes avec fondu
-  setTimeout(function() {
-    splash.style.transition = 'opacity 0.5s ease';
-    splash.style.opacity    = '0';
-    setTimeout(function() {
-      splash.classList.remove('visible');
-      splash.style.display = 'none';
-      document.body.style.overflow = '';
-    }, 500);
-  }, 3000);
-})();
 
 // ====== ACCORDÉON ======
 function toggleNav() {
@@ -2195,16 +2107,6 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 </script>
 </head>
 <body>
-
-<!-- ====== SPLASH SCREEN ====== -->
-<div id="splash">
-  <div class="splash-logo">🤿</div>
-  <div class="splash-title">Plongée N2<br>Galathée Club</div>
-  <div class="splash-subtitle">FFESSM • Muret</div>
-  <div class="splash-bar-wrap">
-    <div class="splash-bar" id="splash-bar"></div>
-  </div>
-</div>
 
 <!-- ====== TOAST MISE À JOUR ====== -->
 <div id="update-toast"></div>
