@@ -34,6 +34,102 @@
   --r: 12px;
 }
 
+/* ====== MODE CLAIR ====== */
+body.light-mode {
+  --deep: #f0f4f8;
+  --ocean: #dbeafe;
+  --blue: #1d6fa4;
+  --cyan: #0284c7;
+  --light: #0369a1;
+  --surface: #1e3a5f;
+  --white: #1a2b40;
+  --panel: rgba(0,0,0,0.05);
+  --panel-border: rgba(2,132,199,0.25);
+}
+body.light-mode {
+  background: #f0f4f8;
+  color: #1a2b40;
+}
+body.light-mode::before {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(219,234,254,0.8) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(186,230,253,0.5) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(203,213,225,0.4) 0%, transparent 50%),
+    linear-gradient(180deg, #f0f4f8 0%, #e2eaf4 100%);
+}
+body.light-mode nav {
+  background: rgba(240,244,248,0.95);
+  border-bottom-color: rgba(2,132,199,0.2);
+}
+body.light-mode .nav-logo { color: var(--cyan); }
+body.light-mode .nav-menu-btn {
+  background: rgba(2,132,199,0.1);
+  border-color: rgba(2,132,199,0.3);
+  color: var(--cyan);
+}
+body.light-mode .nav-btn {
+  background: rgba(0,0,0,0.04);
+  border-color: rgba(0,0,0,0.1);
+  color: #1a2b40;
+}
+body.light-mode .nav-btn.active,
+body.light-mode .nav-btn:hover {
+  background: rgba(2,132,199,0.15);
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+body.light-mode .nav-group-label { color: rgba(2,132,199,0.7); }
+body.light-mode .bd-card,
+body.light-mode .card-full,
+body.light-mode .quiz-card,
+body.light-mode .retenir-box {
+  background: rgba(255,255,255,0.8);
+  border-color: rgba(2,132,199,0.2);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+body.light-mode .bubble-info  { background: rgba(2,132,199,0.1);  color: #1a2b40; }
+body.light-mode .bubble-danger{ background: rgba(192,57,43,0.08);  color: #7b1a1a; }
+body.light-mode .bubble-ok    { background: rgba(45,158,71,0.08);  color: #1a4d2b; }
+body.light-mode .bubble-warn  { background: rgba(224,123,0,0.08);  color: #6b3d00; }
+body.light-mode .section-title { color: var(--cyan); }
+body.light-mode .info-table th { background: rgba(2,132,199,0.15); color: var(--cyan); }
+body.light-mode .info-table td { color: #1a2b40; border-color: rgba(0,0,0,0.08); }
+body.light-mode .quiz-opt { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.12); color: #1a2b40; }
+body.light-mode .btn-back { color: var(--cyan); border-color: var(--cyan); }
+body.light-mode #cal-box  { background: #fff; }
+body.light-mode #msg-popup > div,
+body.light-mode #cal-ev-popup > div { background: #fff; }
+body.light-mode .hero p { color: rgba(26,43,64,0.7); }
+body.light-mode .hero h1 { -webkit-text-fill-color: initial; color: #1a2b40; background: none; }
+body.light-mode p[style*="rgba(255,255,255"] { color: rgba(26,43,64,0.6) !important; }
+body.light-mode { --green-light: #1a6b35; --light: #0a4a7a; }
+body.light-mode .badge-danger { background: rgba(192,57,43,0.12); border-color: var(--red); color: #a01010; }
+body.light-mode .badge-20     { background: rgba(45,158,71,0.12);  border-color: var(--green); color: #1a5c2a; }
+body.light-mode .badge-40     { background: rgba(0,119,182,0.12);  border-color: var(--blue);  color: #0a3a6a; }
+
+/* Bouton switch thème */
+#theme-btn {
+  background: none;
+  border: 1.5px solid rgba(0,180,216,0.35);
+  border-radius: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--cyan);
+  transition: all 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+#theme-btn:hover { background: rgba(0,180,216,0.15); }
+body.light-mode #theme-btn { border-color: rgba(2,132,199,0.4); color: var(--cyan); }
+
+/* Transition douce */
+body, nav, .bd-card, .card-full, .quiz-card, .bubble-info,
+.bubble-danger, .bubble-ok, .bubble-warn, .nav-btn {
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
@@ -1258,8 +1354,121 @@ nav {
   align-items: center; justify-content: center;
   font-family: 'Nunito', sans-serif;
 }
+/* ====== SPLASH SCREEN ====== */
+#splash {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: linear-gradient(160deg, #0a1628 0%, #023e73 60%, #0a1628 100%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+#splash.visible { display: flex; }
+.splash-logo {
+  font-size: 5rem;
+  animation: splash-bounce 1s ease infinite alternate;
+}
+@keyframes splash-bounce {
+  from { transform: translateY(0) rotate(-5deg); }
+  to   { transform: translateY(-12px) rotate(5deg); }
+}
+.splash-title {
+  font-family: 'Bangers', cursive;
+  font-size: 2.2rem;
+  color: #fff;
+  letter-spacing: 3px;
+  text-align: center;
+  line-height: 1.1;
+}
+.splash-subtitle {
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(0,180,216,0.8);
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+}
+.splash-bar-wrap {
+  width: 220px;
+  height: 6px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.splash-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00b4d8, #0077b6);
+  border-radius: 3px;
+  transition: width 3s linear;
+}
+.splash-bar.go { width: 100%; }
 </style>
 <script>
+// ====== THÈME SOMBRE / CLAIR ======
+function applyTheme(mode) {
+  var btn = document.getElementById('theme-btn');
+  if (mode === 'light') {
+    if (document.body) document.body.classList.add('light-mode');
+    if (btn) btn.textContent = '☀️';
+  } else {
+    if (document.body) document.body.classList.remove('light-mode');
+    if (btn) btn.textContent = '🌙';
+  }
+}
+
+function toggleTheme() {
+  var isLight = document.body.classList.contains('light-mode');
+  var newMode = isLight ? 'dark' : 'light';
+  localStorage.setItem('theme', newMode);
+  applyTheme(newMode);
+}
+
+// Appliquer le thème sauvegardé — après chargement du DOM
+document.addEventListener('DOMContentLoaded', function() {
+  var saved = localStorage.getItem('theme') || 'dark';
+  applyTheme(saved);
+});
+
+// ====== SPLASH SCREEN ======
+(function() {
+  var isStandalone =
+    window.navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.matchMedia('(display-mode: fullscreen)').matches;
+
+  if (!isStandalone) return;
+
+  var splash = document.getElementById('splash');
+  var bar    = document.getElementById('splash-bar');
+  if (!splash) return;
+
+  // Afficher le splash
+  splash.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+
+  // Lancer la barre après un court délai (pour déclencher la transition CSS)
+  setTimeout(function() {
+    if (bar) bar.classList.add('go');
+  }, 50);
+
+  // Masquer après 3 secondes avec fondu
+  setTimeout(function() {
+    splash.style.transition = 'opacity 0.5s ease';
+    splash.style.opacity    = '0';
+    setTimeout(function() {
+      splash.classList.remove('visible');
+      splash.style.display = 'none';
+      document.body.style.overflow = '';
+    }, 500);
+  }, 3000);
+})();
+
 // ====== ACCORDÉON ======
 function toggleNav() {
   var body  = document.getElementById('navBody');
@@ -1276,7 +1485,7 @@ function toggleNav() {
 window.toggleNav = toggleNav;
 
 // ====== NAVIGATION ======
-window.showSection = function showSection(id) {
+function showSection(id) {
   document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
   var el = document.getElementById(id);
   if (el) el.classList.add('active');
@@ -1286,13 +1495,13 @@ window.showSection = function showSection(id) {
       b.classList.add('active');
     }
   });
-  // Fermer le menu
   var body  = document.getElementById('navBody');
   var arrow = document.getElementById('navArrow');
   if (body)  body.style.display = 'none';
   if (arrow) arrow.textContent = '▼';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+window.showSection = showSection;
 
 // ====== EXAM SWITCHER ======
 var currentExam = 1;
@@ -1934,6 +2143,7 @@ window.dismissUpdate = function() {};
 window.applyUpdate = function() { window.location.reload(); };
 
 // ====== EXPOSITION FONCTIONS GLOBALES ======
+window.toggleTheme    = toggleTheme;
 window.openCalendar   = openCalendar;
 window.closeCalendar  = closeCalendar;
 window.calYearNav     = calYearNav;
@@ -1985,6 +2195,16 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 </script>
 </head>
 <body>
+
+<!-- ====== SPLASH SCREEN ====== -->
+<div id="splash">
+  <div class="splash-logo">🤿</div>
+  <div class="splash-title">Plongée N2<br>Galathée Club</div>
+  <div class="splash-subtitle">FFESSM • Muret</div>
+  <div class="splash-bar-wrap">
+    <div class="splash-bar" id="splash-bar"></div>
+  </div>
+</div>
 
 <!-- ====== TOAST MISE À JOUR ====== -->
 <div id="update-toast"></div>
@@ -2204,6 +2424,7 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 <nav id="mainNav">
   <div class="nav-header" onclick="toggleNav()">
     <div class="nav-logo">🤿 Plongée N2</div>
+    <button id="theme-btn" onclick="event.stopPropagation();toggleTheme()" title="Mode sombre/clair">🌙</button>
     <button class="nav-menu-btn">
       <span class="nav-menu-bars">☰</span>
       <span class="nav-menu-txt">MENU</span>
@@ -2266,9 +2487,9 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
   </div>
 
   <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><span style="color:var(--green-light)">Vert = Sécurité / Bonne action</span></div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div><span style="color:var(--orange-light)">Orange = Attention</span></div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div><span style="color:#ffccc8">Rouge = Danger / Accident</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div><span class="tag-green">Vert = Sécurité / Bonne action</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div><span class="tag-orange">Orange = Attention</span></div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div><span class="tag-red">Rouge = Danger / Accident</span></div>
   </div>
 
   <div class="cards-grid">
@@ -2472,11 +2693,11 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <tr><th>Étape</th><th>Action</th></tr>
       <tr>
         <td class="tag-cyan">Étape 1</td>
-        <td>Cliquer sur le bouton <strong style="color:#ffb347;">🎬 Accéder aux vidéos</strong> ci-dessus</td>
+        <td>Cliquer sur le bouton 🎬 Accéder aux vidéos ci-dessus</td>
       </tr>
       <tr>
         <td class="tag-cyan">Étape 2</td>
-        <td>Saisir le mot de passe : <strong style="color:var(--cyan);font-family:'Space Mono',monospace;">Galathée2025</strong></td>
+        <td>Saisir le mot de passe : Galathée2025</td>
       </tr>
       <tr>
         <td class="tag-cyan">Étape 3</td>
@@ -2609,14 +2830,14 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
         <div class="pressure-bar-wrap">
           <div class="pressure-bar-fill" style="width:50%;background:linear-gradient(90deg,var(--green),#27ae60);">Autonomie</div>
         </div>
-        <div class="pressure-val" style="color:var(--green-light)">PA-20</div>
+        <div class="pressure-val" class="tag-green">PA-20</div>
       </div>
       <div class="pressure-row">
         <div class="pressure-label">0–40 m</div>
         <div class="pressure-bar-wrap">
           <div class="pressure-bar-fill" style="width:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));">Encadré GP</div>
         </div>
-        <div class="pressure-val" style="color:var(--light)">PE-40</div>
+        <div class="pressure-val" class="tag-cyan">PE-40</div>
       </div>
     </div>
   </div>
@@ -2769,12 +2990,12 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <tr>
         <td class="tag-red">Responsabilité Civile</td>
         <td>Préjudice causé à un tiers</td>
-        <td>Assurance RC (dommages et intérêts) — <strong>OBLIGATOIRE</strong></td>
+        <td>Assurance RC (dommages et intérêts) — OBLIGATOIRE</td>
       </tr>
       <tr>
         <td class="tag-cyan">Assurance Individuelle</td>
         <td>Dommages corporels sans tiers responsable</td>
-        <td>Facultatif en loisir, mais <strong>recommandée</strong> (assistance + rapatriement)</td>
+        <td>Facultatif en loisir, mais recommandée (assistance + rapatriement)</td>
       </tr>
     </table>
   </div>
@@ -2999,32 +3220,32 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
           <tr>
             <td class="tag-orange">Valsalva</td>
             <td>Nez pincé, bouche fermée, souffler dans le nez</td>
-            <td style="color:#ffccc8">⭐ (risque si remontée)</td>
+            <td class="tag-red">⭐ (risque si remontée)</td>
           </tr>
           <tr>
             <td class="tag-cyan">Déglutition</td>
             <td>Simple déglutition peut ouvrir les trompes</td>
-            <td style="color:var(--green-light)">⭐⭐⭐</td>
+            <td class="tag-green">⭐⭐⭐</td>
           </tr>
           <tr>
             <td class="tag-cyan">Frenzel</td>
             <td>Nez pincé, glotte fermée, langue sur le voile du palais, son « KE »</td>
-            <td style="color:var(--orange-light)">⭐⭐</td>
+            <td class="tag-orange">⭐⭐</td>
           </tr>
           <tr>
             <td class="tag-cyan">BTV</td>
             <td>Béance Tubulaire Volontaire — muscles ouverture trompe</td>
-            <td style="color:var(--green-light)">⭐⭐⭐</td>
+            <td class="tag-green">⭐⭐⭐</td>
           </tr>
           <tr>
             <td class="tag-cyan">Lowry</td>
             <td>Nez pincé, souffler doucement en déglutissant</td>
-            <td style="color:var(--green-light)">⭐⭐⭐</td>
+            <td class="tag-green">⭐⭐⭐</td>
           </tr>
           <tr>
             <td class="tag-green">Toynbee</td>
             <td>Nez pincé, bouche fermée, déglutir et aspirer (inverse Valsalva) — uniquement à la remontée si difficulté</td>
-            <td style="color:var(--orange-light)">⭐⭐</td>
+            <td class="tag-orange">⭐⭐</td>
           </tr>
         </table>
         <div class="bubble bubble-danger">Ne JAMAIS faire de Valsalva à la remontée → risque de barotraumatisme de l'oreille interne + surpression pulmonaire + ADD.</div>
@@ -3204,8 +3425,8 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <tr>
         <td class="tag-red">🫁 Poumons</td>
         <td>↑ Remontée</td>
-        <td><strong>Forcer l'expiration</strong> — Maintenir en surface — Prévenir le DP</td>
-        <td><strong>NE JAMAIS BLOQUER SA RESPIRATION</strong></td>
+        <td>Forcer l'expiration — Maintenir en surface — Prévenir le DP</td>
+        <td>NE JAMAIS BLOQUER SA RESPIRATION</td>
       </tr>
     </table>
   </div>
@@ -3906,15 +4127,36 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <div class="bubble bubble-formula">📐 Stock d'air = Volume bloc × Pression gonflage<br>Exemple : 12 L × 200 b = <strong>2 400 L</strong><br>Avec réserve 50 b : 12 × (200−50) = <strong>1 800 L</strong></div>
       <div class="bubble bubble-formula">⏱ Autonomie = Stock disponible ÷ Consommation<br>Exemple à 20 m (conso 3× plus) : 1800 ÷ 60 = <strong>30 min</strong></div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Facteur</span><span>Effet sur la conso</span></div>
-      <div class="info-row"><span>🏊 Effort intense</span><span style="color:var(--red-light)">×10 (essoufflement)</span></div>
-      <div class="info-row"><span>🏊 Effort moyen</span><span style="color:var(--orange-light)">×2 à ×3</span></div>
-      <div class="info-row"><span>🥶 Froid / stress</span><span style="color:var(--orange-light)">↑ significatif</span></div>
-      <div class="info-row"><span>📏 Profondeur 20 m</span><span style="color:var(--orange-light)">×3 vs surface</span></div>
-      <div class="info-row"><span>📏 Profondeur 40 m</span><span style="color:var(--red-light)">×5 vs surface</span></div>
-      <div class="info-row"><span>🧘 Expérimenté / calme</span><span style="color:var(--green-light)">↓ consommation</span></div>
-    </div>
+    <table class="info-table">
+      <tr>
+        <th>Facteur</th>
+        <th>Effet sur la conso</th>
+      </tr>
+      <tr>
+        <td>🏊 Effort intense</td>
+        <td class="tag-red">×10 (essoufflement)</td>
+      </tr>
+      <tr>
+        <td>🏊 Effort moyen</td>
+        <td class="tag-orange">×2 à ×3</td>
+      </tr>
+      <tr>
+        <td>🥶 Froid / stress</td>
+        <td class="tag-orange">↑ significatif</td>
+      </tr>
+      <tr>
+        <td>📏 Profondeur 20 m</td>
+        <td class="tag-orange">×3 vs surface</td>
+      </tr>
+      <tr>
+        <td>📏 Profondeur 40 m</td>
+        <td class="tag-red">×5 vs surface</td>
+      </tr>
+      <tr>
+        <td>🧘 Expérimenté / calme</td>
+        <td class="tag-green">↓ consommation</td>
+      </tr>
+    </table>
     <div class="retenir-box">
       <div class="retenir-title">⚠️ Recommandations clés</div>
       <div class="bubble bubble-warn" style="margin-bottom:8px;">Vérifier le stock avant plongée (&lt;180 b → regonfler). Informer la palanquée à la <strong>mi-pression (100 b)</strong> et à <strong>50 b</strong>.</div>
@@ -3935,22 +4177,58 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <div class="bubble bubble-info">Principe d'Archimède : <em>"Tout corps immergé reçoit une poussée verticale de bas en haut égale au poids du volume de liquide déplacé."</em></div>
       <div class="bubble bubble-formula">📐 Poussée Archimède = Volume immergé × Densité liquide<br>Eau douce (densité 1) : 80 L → <strong>80 kg</strong><br>Eau de mer (densité 1,02) : 80 L → <strong>81,6 kg</strong><br>→ Il faut <strong>+2 kg de lest</strong> en mer !</div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Situation</span><span>Flottabilité</span></div>
-      <div class="info-row"><span>Poids &gt; Poussée</span><span style="color:var(--red-light)">⬇️ Négative (coule)</span></div>
-      <div class="info-row"><span>Poids &lt; Poussée</span><span style="color:var(--orange-light)">⬆️ Positive (flotte)</span></div>
-      <div class="info-row"><span>Poids = Poussée</span><span style="color:var(--green-light)">⚖️ Neutre (équilibre)</span></div>
-    </div>
-    <div class="info-table" style="margin-top:12px;">
-      <div class="info-row info-header"><span>Facteur influençant la flottabilité</span><span>Sens</span></div>
-      <div class="info-row"><span>🤿 Combinaison néoprène</span><span style="color:var(--orange-light)">+ (flottant)</span></div>
-      <div class="info-row"><span>🎈 Gilet gonflé</span><span style="color:var(--orange-light)">+ (flottant)</span></div>
-      <div class="info-row"><span>🫁 Inspiration</span><span style="color:var(--orange-light)">+ (monte légèrement)</span></div>
-      <div class="info-row"><span>🫁 Expiration</span><span style="color:var(--blue)">− (descend légèrement)</span></div>
-      <div class="info-row"><span>🔩 Lest de plomb</span><span style="color:var(--red-light)">− (plombant)</span></div>
-      <div class="info-row"><span>🛢 Bouteille acier pleine</span><span style="color:var(--red-light)">− (lourd)</span></div>
-      <div class="info-row"><span>🛢 Bouteille vidée</span><span style="color:var(--orange-light)">−2 à 3 kg → + léger</span></div>
-    </div>
+    <table class="info-table">
+      <tr>
+        <th>Situation</th>
+        <th>Flottabilité</th>
+      </tr>
+      <tr>
+        <td>Poids &gt; Poussée</td>
+        <td class="tag-red">⬇️ Négative (coule)</td>
+      </tr>
+      <tr>
+        <td>Poids &lt; Poussée</td>
+        <td class="tag-orange">⬆️ Positive (flotte)</td>
+      </tr>
+      <tr>
+        <td>Poids = Poussée</td>
+        <td class="tag-green">⚖️ Neutre (équilibre)</td>
+      </tr>
+    </table>
+    <table class="info-table" style="margin-top:12px;">
+      <tr>
+        <th>Facteur influençant la flottabilité</th>
+        <th>Sens</th>
+      </tr>
+      <tr>
+        <td>🤿 Combinaison néoprène</td>
+        <td class="tag-orange">+ (flottant)</td>
+      </tr>
+      <tr>
+        <td>🎈 Gilet gonflé</td>
+        <td class="tag-orange">+ (flottant)</td>
+      </tr>
+      <tr>
+        <td>🫁 Inspiration</td>
+        <td class="tag-orange">+ (monte légèrement)</td>
+      </tr>
+      <tr>
+        <td>🫁 Expiration</td>
+        <td class="tag-cyan">− (descend légèrement)</td>
+      </tr>
+      <tr>
+        <td>🔩 Lest de plomb</td>
+        <td class="tag-red">− (plombant)</td>
+      </tr>
+      <tr>
+        <td>🛢 Bouteille acier pleine</td>
+        <td class="tag-red">− (lourd)</td>
+      </tr>
+      <tr>
+        <td>🛢 Bouteille vidée</td>
+        <td class="tag-orange">−2 à 3 kg → + léger</td>
+      </tr>
+    </table>
     <div class="retenir-box">
       <div class="retenir-title">🎯 À retenir — Flottabilité</div>
       <div class="bubble bubble-ok">Le <strong>poumon-ballast</strong> : inspirer = on monte légèrement, expirer = on descend. Technique de stabilisation fine.</div>
@@ -3998,12 +4276,24 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <div class="bubble bubble-danger">Symptômes : comportement incohérent, euphorie ou angoisse, perte de mémoire, perte de la notion du temps. Aggravée si on descend encore → risque de perte de connaissance.</div>
       <div class="bubble bubble-ok">Bonne nouvelle : les symptômes <strong>disparaissent à la remontée</strong> !</div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Facteurs favorisants</span><span>Moment</span></div>
-      <div class="info-row"><span>Fatigue, alcool, médicaments</span><span style="color:var(--orange-light)">Avant</span></div>
-      <div class="info-row"><span>Descente rapide, effort, stress</span><span style="color:var(--red-light)">Pendant</span></div>
-      <div class="info-row"><span>Froid, profondeur importante</span><span style="color:var(--red-light)">Pendant</span></div>
-    </div>
+    <table class="info-table">
+      <tr>
+        <th>Facteurs favorisants</th>
+        <th>Moment</th>
+      </tr>
+      <tr>
+        <td>Fatigue, alcool, médicaments</td>
+        <td class="tag-orange">Avant</td>
+      </tr>
+      <tr>
+        <td>Descente rapide, effort, stress</td>
+        <td class="tag-red">Pendant</td>
+      </tr>
+      <tr>
+        <td>Froid, profondeur importante</td>
+        <td class="tag-red">Pendant</td>
+      </tr>
+    </table>
     <div class="retenir-box">
       <div class="retenir-title">🎯 Conduite à tenir — Narcose</div>
       <div class="bubble bubble-warn">Si tu es narcosé : signe 🤪 "narcosé" à l'encadrant. Si tu suspectes un coéquipier : signe "lui" → "narcose".</div>
@@ -4024,14 +4314,31 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <div class="bubble bubble-warn"><strong>Saturation</strong> : L'azote s'accumule pendant la plongée. <strong>Désaturation</strong> : Il est éliminé à la remontée par la respiration.</div>
       <div class="bubble bubble-danger"><strong>Sur-saturation critique</strong> : Remontée trop rapide → L'azote forme des bulles dans les tissus et le sang → Accident de Désaturation (ADD) !</div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Symptômes ADD</span><span>Gravité</span></div>
-      <div class="info-row"><span>Fourmillements, plaques rouges</span><span style="color:var(--orange-light)">Modéré</span></div>
-      <div class="info-row"><span>Douleurs articulaires</span><span style="color:var(--orange-light)">Modéré</span></div>
-      <div class="info-row"><span>Vertiges, baisse d'audition</span><span style="color:var(--red-light)">Grave</span></div>
-      <div class="info-row"><span>Paralysie, confusion, coma</span><span style="color:var(--red-light)">Très grave</span></div>
-      <div class="info-row"><span>Apparition jusqu'à 24h après</span><span style="color:var(--orange-light)">⚠️ Attention</span></div>
-    </div>
+    <table class="info-table">
+      <tr>
+        <th>Symptômes ADD</th>
+        <th>Gravité</th>
+      </tr>
+      <tr>
+        <td>Fourmillements, plaques rouges</td>
+        <td class="tag-orange">Modéré</td>
+      </tr>
+      <tr>
+        <td>Douleurs articulaires</td>
+        <td class="tag-orange">Modéré</td>
+      </tr>
+      <tr>
+        <td>Vertiges, baisse d'audition</td>
+        <td class="tag-red">Grave</td>
+      </tr>
+      <tr>
+        <td>Paralysie, confusion, coma</td>
+        <td class="tag-red">Très grave</td>
+      </tr>
+      <tr>
+        <td colspan="2" class="tag-orange" style="font-weight:700;text-align:center;">⚠️ Apparition possible jusqu'à 24h après — Attention</td>
+      </tr>
+    </table>
     <div class="retenir-box">
       <div class="retenir-title">🎯 CAT & Prévention — ADD</div>
       <div class="bubble bubble-danger">Suspicion d'ADD → Signaler au DP immédiatement → Avis médical → Appeler le 15, 18 ou 112. Rapidité primordiale !</div>
@@ -4040,12 +4347,24 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <div class="bubble bubble-warn">Profils à risques : Yo-yo, profil inversé, profil successif inversé, &gt;2 plongées/jour.</div>
     </div>
 
-    <div class="info-table" style="margin-top:12px;">
-      <div class="info-row info-header"><span>Prévention ADD</span><span>Quand</span></div>
-      <div class="info-row"><span>Ne pas consommer d'alcool, bien dormir, s'hydrater</span><span>Avant</span></div>
-      <div class="info-row"><span>Éviter tout effort, respecter paliers et vitesse de remontée</span><span>Pendant</span></div>
-      <div class="info-row"><span>Signaler difficulté physique, s'hydrater, éviter portage lourd</span><span>Après</span></div>
-    </div>
+    <table class="info-table" style="margin-top:12px;">
+      <tr>
+        <th>Prévention ADD</th>
+        <th>Quand</th>
+      </tr>
+      <tr>
+        <td>Ne pas consommer d'alcool, bien dormir, s'hydrater</td>
+        <td class="tag-cyan">Avant</td>
+      </tr>
+      <tr>
+        <td>Éviter tout effort, respecter paliers et vitesse de remontée</td>
+        <td class="tag-orange">Pendant</td>
+      </tr>
+      <tr>
+        <td>Signaler difficulté physique, s'hydrater, éviter portage lourd</td>
+        <td class="tag-green">Après</td>
+      </tr>
+    </table>
 
     <div class="bubble bubble-info" style="margin-top:14px;">🫀 <strong>Foramen Ovale Perméable (FOP)</strong> : Communication entre cœur droit et gauche non refermée chez 25-30% de la population. Risque de passage de bulles silencieuses vers le circuit artériel → ADD. Dépistage possible par médecin.</div>
   </div>
@@ -4087,12 +4406,24 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <div class="bubble bubble-danger">Dans l'eau, le corps se refroidit <strong>25× plus vite</strong> que dans l'air. Refroidissement dès que l'eau est &lt;33°C.</div>
       <div class="bubble bubble-warn">Symptômes : conso d'air augmente, chair de poule, frissons, crampes → risque accru d'ADD !</div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Mécanisme de perte de chaleur</span><span>Effet</span></div>
-      <div class="info-row"><span>Conduction (corps réchauffe l'eau dans la combi)</span><span style="color:var(--orange-light)">Perte lente</span></div>
-      <div class="info-row"><span>Convection (eau qui circule emporte la chaleur)</span><span style="color:var(--red-light)">Perte rapide</span></div>
-      <div class="info-row"><span>Inspiration d'air froid du détendeur</span><span style="color:var(--orange-light)">Perte interne</span></div>
-    </div>
+    <table class="info-table">
+      <tr>
+        <th>Mécanisme de perte de chaleur</th>
+        <th>Effet</th>
+      </tr>
+      <tr>
+        <td>Conduction (corps réchauffe l'eau dans la combi)</td>
+        <td class="tag-orange">Perte lente</td>
+      </tr>
+      <tr>
+        <td>Convection (eau qui circule emporte la chaleur)</td>
+        <td class="tag-red">Perte rapide</td>
+      </tr>
+      <tr>
+        <td>Inspiration d'air froid du détendeur</td>
+        <td class="tag-orange">Perte interne</td>
+      </tr>
+    </table>
     <div class="retenir-box">
       <div class="retenir-title">🎯 CAT & Prévention — Froid</div>
       <div class="bubble bubble-ok">Prévention : combinaison adaptée (épaisseur, taille), cagoule, chaussons, gants. S'hydrater, ne pas plonger fatigué.</div>
@@ -4144,15 +4475,36 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
         <div class="bd-card-obj">Objectif : Naviguer les risques particuliers et sortir en sécurité</div>
       </div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Situation</span><span>Prévention clé</span></div>
-      <div class="info-row"><span>🪨 Grottes/Tunnels</span><span>Voir la sortie, rester groupé, ne pas s'engager si inconnu</span></div>
-      <div class="info-row"><span>⚓ Épaves/Filets</span><span>Gants + couteau, ne pas entrer si non autorisé, loin des filets</span></div>
-      <div class="info-row"><span>🌙 Nuit</span><span>Lampe obligatoire, limiter la zone, signes spéciaux (grands cercles)</span></div>
-      <div class="info-row"><span>🐠 Faune & Flore</span><span>Ne jamais toucher, déranger, nourrir, approcher</span></div>
-      <div class="info-row"><span>🌊 Vagues à la sortie</span><span>Ne pas se tenir au mouillage, palier au bout</span></div>
-      <div class="info-row"><span>⛵ Embarcation</span><span>360° avant surface, écouter les moteurs, jamais sous le bateau</span></div>
-    </div>
+    <table class="info-table">
+      <tr>
+        <th>Situation</th>
+        <th>Prévention clé</th>
+      </tr>
+      <tr>
+        <td>🪨 Grottes/Tunnels</td>
+        <td>Voir la sortie, rester groupé, ne pas s'engager si inconnu</td>
+      </tr>
+      <tr>
+        <td>⚓ Épaves/Filets</td>
+        <td>Gants + couteau, ne pas entrer si non autorisé, loin des filets</td>
+      </tr>
+      <tr>
+        <td>🌙 Nuit</td>
+        <td>Lampe obligatoire, limiter la zone, signes spéciaux (grands cercles)</td>
+      </tr>
+      <tr>
+        <td>🐠 Faune &amp; Flore</td>
+        <td>Ne jamais toucher, déranger, nourrir, approcher</td>
+      </tr>
+      <tr>
+        <td>🌊 Vagues à la sortie</td>
+        <td>Ne pas se tenir au mouillage, palier au bout</td>
+      </tr>
+      <tr>
+        <td>⛵ Embarcation</td>
+        <td>360° avant surface, écouter les moteurs, jamais sous le bateau</td>
+      </tr>
+    </table>
     <div class="retenir-box">
       <div class="retenir-title">🎯 À retenir — Risques milieu</div>
       <div class="bubble bubble-ok">Courant : le repérer avant, partir face au courant, ne pas lutter, se protéger derrière un obstacle.</div>
@@ -4196,14 +4548,32 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <div class="bubble bubble-info">Conçues par la <strong>Marine Nationale</strong>, publiées en 1990, adaptées FFESSM en 1998. Profil "carré" : profondeur constante sur toute la durée.</div>
       <div class="bubble bubble-warn">Déconseillées pour la plongée sportive avec effort physique important. Toujours prendre la valeur immédiatement <strong>supérieure</strong> à sa profondeur ou durée réelle.</div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Colonne table</span><span>Signification</span></div>
-      <div class="info-row"><span>Prof</span><span>Profondeur maximale atteinte</span></div>
-      <div class="info-row"><span>Durée</span><span>Durée totale de plongée</span></div>
-      <div class="info-row"><span>3 m, 6 m…</span><span>Profondeur et durée du palier</span></div>
-      <div class="info-row"><span>DTR</span><span>Durée Totale de Remontée (min)</span></div>
-      <div class="info-row"><span>GPS</span><span>Groupe de Plongées Successives (A à P)</span></div>
-    </div>
+    <table class="info-table">
+      <tr>
+        <th>Colonne table</th>
+        <th>Signification</th>
+      </tr>
+      <tr>
+        <td>Prof</td>
+        <td>Profondeur maximale atteinte</td>
+      </tr>
+      <tr>
+        <td>Durée</td>
+        <td>Durée totale de plongée</td>
+      </tr>
+      <tr>
+        <td>3 m, 6 m…</td>
+        <td>Profondeur et durée du palier</td>
+      </tr>
+      <tr>
+        <td>DTR</td>
+        <td class="tag-cyan">Durée Totale de Remontée (min)</td>
+      </tr>
+      <tr>
+        <td>GPS</td>
+        <td class="tag-orange">Groupe de Plongées Successives (A à P)</td>
+      </tr>
+    </table>
     <div class="retenir-box">
       <div class="retenir-title">📖 Types de plongées</div>
       <div class="bubble bubble-info"><strong>Plongée simple</strong> : Intervalle de surface &gt;12h → Calcul direct dans les tables.</div>
@@ -4211,12 +4581,24 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <div class="bubble bubble-warn"><strong>Plongée successive</strong> : Intervalle entre 15 min et 12h → Utiliser Tableau I (azote résiduel) + Tableau II (majoration de durée).</div>
     </div>
     <div class="bubble bubble-formula" style="margin-top:14px;">📐 Plongée successive : Temps fictif = Durée réelle + Majoration<br>Exemple : 40 min à 17 m, TAR=0,93 (→ 0,95), majoration=19 min<br>→ Temps fictif = 40 + 19 = <strong>59 min</strong></div>
-    <div class="info-table" style="margin-top:12px;">
-      <div class="info-row info-header"><span>Profils particuliers</span><span>Procédure</span></div>
-      <div class="info-row"><span>Remontée lente (&lt;15 m/min)</span><span>Ajouter temps de remontée lente au temps de plongée</span></div>
-      <div class="info-row"><span>Remontée rapide (&gt;17 m/min)</span><span>Réimmersion &lt;3 min → mi-profondeur → 5 min → ajouter au temps → palier min 2 min à 3 m</span></div>
-      <div class="info-row"><span>Palier interrompu</span><span>Réimmersion &lt;3 min → refaire entièrement le palier interrompu</span></div>
-    </div>
+    <table class="info-table" style="margin-top:12px;">
+      <tr>
+        <th>Profils particuliers</th>
+        <th>Procédure</th>
+      </tr>
+      <tr>
+        <td>Remontée lente (&lt;15 m/min)</td>
+        <td>Ajouter temps de remontée lente au temps de plongée</td>
+      </tr>
+      <tr>
+        <td>Remontée rapide (&gt;17 m/min)</td>
+        <td class="tag-red">Réimmersion &lt;3 min → mi-profondeur → 5 min → ajouter au temps → palier min 2 min à 3 m</td>
+      </tr>
+      <tr>
+        <td>Palier interrompu</td>
+        <td class="tag-red">Réimmersion &lt;3 min → refaire entièrement le palier interrompu</td>
+      </tr>
+    </table>
   </div>
 
   <div class="bd-card">
@@ -4230,15 +4612,36 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
     <div class="bd-scene">
       <div class="bubble bubble-ok">L'ordinateur s'adapte en temps réel au profil réel. Il découpe la plongée en tranches élémentaires → plus précis que les tables pour un profil multiprofondeur.</div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Information affichée</span><span>Utilité</span></div>
-      <div class="info-row"><span>Profondeur courante / maxi</span><span>Suivi du profil</span></div>
-      <div class="info-row"><span>Temps de plongée</span><span>Planification</span></div>
-      <div class="info-row"><span>Temps restant sans palier</span><span>Décision de remonter</span></div>
-      <div class="info-row"><span>Profondeur + durée des paliers</span><span>Décompression</span></div>
-      <div class="info-row"><span>DTR</span><span>Durée totale de remontée</span></div>
-      <div class="info-row"><span>Alarme vitesse de remontée</span><span>Sécurité (max ~9-11 m/min)</span></div>
-    </div>
+    <table class="info-table">
+      <tr>
+        <th>Information affichée</th>
+        <th>Utilité</th>
+      </tr>
+      <tr>
+        <td>Profondeur courante / maxi</td>
+        <td>Suivi du profil</td>
+      </tr>
+      <tr>
+        <td>Temps de plongée</td>
+        <td>Planification</td>
+      </tr>
+      <tr>
+        <td>Temps restant sans palier</td>
+        <td class="tag-orange">Décision de remonter</td>
+      </tr>
+      <tr>
+        <td>Profondeur + durée des paliers</td>
+        <td class="tag-cyan">Décompression</td>
+      </tr>
+      <tr>
+        <td>DTR</td>
+        <td class="tag-cyan">Durée totale de remontée</td>
+      </tr>
+      <tr>
+        <td>Alarme vitesse de remontée</td>
+        <td class="tag-red">Sécurité (max ~9-11 m/min)</td>
+      </tr>
+    </table>
     <div class="retenir-box">
       <div class="retenir-title">⚠️ Précautions avec l'ordinateur</div>
       <div class="bubble bubble-danger">Ne jamais prêter son ordinateur entre 2 plongées (il mémorise l'azote résiduel de ton histoire de plongée).</div>
@@ -4282,14 +4685,14 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
         <div class="bd-card-obj">Objectif : Choisir et entretenir l'équipement de base</div>
       </div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Équipement</span><span>Points clés</span></div>
-      <div class="info-row"><span>🥽 Masque</span><span>Vérifier jupe, champ de vision, volume. Démontable, taille adaptée.</span></div>
-      <div class="info-row"><span>🦈 Palmes chaussantes</span><span>+ Légères, + souples, meilleur palmage. Entretien : rinçage + rangement à plat.</span></div>
-      <div class="info-row"><span>🦈 Palmes réglables</span><span>+ Enfilage simple, accepte des chaussons. Entretien identique.</span></div>
-      <div class="info-row"><span>🌬 Tuba flexible</span><span>Pliable, prend moins de place.</span></div>
-      <div class="info-row"><span>🌬 Tuba rigide</span><span>S'accroche au masque, meilleure respiration.</span></div>
-    </div>
+    <table class="info-table">
+      <tr><th>Équipement</th><th>Points clés</th></tr>
+      <tr><td>🥽 Masque</td><td>Vérifier jupe, champ de vision, volume. Démontable, taille adaptée.</td></tr>
+      <tr><td>🦈 Palmes chaussantes</td><td>+ Légères, + souples, meilleur palmage. Entretien : rinçage + rangement à plat.</td></tr>
+      <tr><td>🦈 Palmes réglables</td><td>+ Enfilage simple, accepte des chaussons. Entretien identique.</td></tr>
+      <tr><td>🌬 Tuba flexible</td><td>Pliable, prend moins de place.</td></tr>
+      <tr><td>🌬 Tuba rigide</td><td>S'accroche au masque, meilleure respiration.</td></tr>
+    </table>
   </div>
 
   <div class="bd-card">
@@ -4304,12 +4707,12 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <div class="bubble bubble-info">Rôle : Stocker le gaz (Air, Nitrox, Trimix…). Volumes courants : <strong>12 L et 15 L</strong>. Matière : acier, aluminium ou carbone.</div>
       <div class="bubble bubble-formula">📐 Exemple : Bloc 10 L gonflé à 300 b = Bloc 15 L à 200 b<br>(10×300 = 15×200 = 3 000 L)</div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Contrôle</span><span>Fréquence</span></div>
-      <div class="info-row"><span>Inspection visuelle</span><span style="color:var(--orange-light)">Tous les 12 mois</span></div>
-      <div class="info-row"><span>Requalification (régime normal)</span><span style="color:var(--red-light)">Tous les 2 ans</span></div>
-      <div class="info-row"><span>Requalification (régime TIV)</span><span style="color:var(--orange-light)">Tous les 6 ans</span></div>
-    </div>
+    <table class="info-table">
+      <tr><th>Contrôle</th><th>Fréquence</th></tr>
+      <tr><td>Inspection visuelle</td><td class="tag-orange">Tous les 12 mois</td></tr>
+      <tr><td>Requalification (régime normal)</td><td class="tag-red">Tous les 2 ans</td></tr>
+      <tr><td>Requalification (régime TIV)</td><td class="tag-orange">Tous les 6 ans</td></tr>
+    </table>
     <div class="retenir-box">
       <div class="retenir-title">🔧 Entretien du bloc</div>
       <div class="bubble bubble-ok">Rincer à l'eau douce. Ne pas vider complètement. Stocker droit. Éviter chocs et soleil. Mettre un filet protecteur. Blocs DIN → bouchon de protection.</div>
@@ -4329,17 +4732,17 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <div class="bubble bubble-info">Rôle : Fournir l'air à la pression ambiante sur simple demande. Composé de <strong>2 étages</strong>.</div>
       <div class="bubble bubble-formula">📐 1er étage : HP bloc (200 b) → Pression Intermédiaire (PI = 8-10 b au-dessus de Pamb)<br>2ème étage : PI → Pression Ambiante (ce que tu respires)</div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Type 1er étage</span><span>Avantages</span></div>
-      <div class="info-row"><span>À piston non compensé</span><span>Simple, robuste, moins cher</span></div>
-      <div class="info-row"><span>À piston compensé</span><span>PI constante quel que soit le stock d'air → meilleur confort</span></div>
-      <div class="info-row"><span>À membrane</span><span>Mécanisme protégé, adapté aux eaux chargées</span></div>
-    </div>
-    <div class="info-table" style="margin-top:12px;">
-      <div class="info-row info-header"><span>Fixation 1er étage</span><span>Avantages / Inconvénients</span></div>
-      <div class="info-row"><span>Étrier (INT)</span><span>Le + répandu, peu fragile, max 230 b. Risque de fuite de joint.</span></div>
-      <div class="info-row"><span>DIN</span><span>Meilleure tenue du joint, jusqu'à 300 b. Moins répandu, plus long à monter.</span></div>
-    </div>
+    <table class="info-table">
+      <tr><th>Type 1er étage</th><th>Avantages</th></tr>
+      <tr><td>À piston non compensé</td><td>Simple, robuste, moins cher</td></tr>
+      <tr><td>À piston compensé</td><td>PI constante quel que soit le stock d'air → meilleur confort</td></tr>
+      <tr><td>À membrane</td><td>Mécanisme protégé, adapté aux eaux chargées</td></tr>
+    </table>
+    <table class="info-table" style="margin-top:12px;">
+      <tr><th>Fixation 1er étage</th><th>Avantages / Inconvénients</th></tr>
+      <tr><td>Étrier (INT)</td><td>Le + répandu, peu fragile, max 230 b. Risque de fuite de joint.</td></tr>
+      <tr><td>DIN</td><td>Meilleure tenue du joint, jusqu'à 300 b. Moins répandu, plus long à monter.</td></tr>
+    </table>
     <div class="retenir-box">
       <div class="retenir-title">🔧 Entretien & Pannes fréquentes</div>
       <div class="bubble bubble-ok">Après plongée : rincer à l'eau douce, ne pas mettre d'eau dans le 1er étage, remettre le bouchon. Révision <strong>tous les 2 ans</strong>.</div>
@@ -4356,14 +4759,14 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
         <div class="bd-card-obj">Objectif : Adapter sa protection thermique et sa flottabilité</div>
       </div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Type de combinaison</span><span>Usage</span></div>
-      <div class="info-row"><span>Shorty</span><span>Eau chaude, piscine — Faible protection thermique</span></div>
-      <div class="info-row"><span>Humide 5 mm</span><span>Eau tempérée — Polyvalente, entrées d'eau</span></div>
-      <div class="info-row"><span>Humide 7 mm</span><span>Eau fraîche — Plus protectrice, doit être bien adaptée</span></div>
-      <div class="info-row"><span>Semi-étanche</span><span>Eau froide — Peu d'entrées d'eau, bonne protection</span></div>
-      <div class="info-row"><span>Étanche</span><span>Eau très froide — Meilleure protection, prix élevé, apprentissage</span></div>
-    </div>
+    <table class="info-table">
+      <tr><th>Type de combinaison</th><th>Usage</th></tr>
+      <tr><td>Shorty</td><td class="tag-green">Eau chaude, piscine — Faible protection thermique</td></tr>
+      <tr><td>Humide 5 mm</td><td class="tag-orange">Eau tempérée — Polyvalente, entrées d'eau</td></tr>
+      <tr><td>Humide 7 mm</td><td class="tag-orange">Eau fraîche — Plus protectrice, doit être bien adaptée</td></tr>
+      <tr><td>Semi-étanche</td><td class="tag-cyan">Eau froide — Peu d'entrées d'eau, bonne protection</td></tr>
+      <tr><td>Étanche</td><td class="tag-cyan">Eau très froide — Meilleure protection, prix élevé, apprentissage</td></tr>
+    </table>
     <div class="bubble bubble-info" style="margin-top:12px;">🎈 <strong>Gilet stabilisateur (Stab/SGS)</strong> : Support du bloc, maintien en surface, gestion de l'équilibre en immersion, points d'accroche. Volume minimum : <strong>15 L</strong>. Entretien : rincer intérieur + extérieur, nettoyer les purges, stocker sur cintre.</div>
     <div class="retenir-box">
       <div class="retenir-title">🎯 À retenir — Matériel</div>
@@ -4466,13 +4869,25 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       <div class="bubble bubble-danger">Difficultés : Visibilité limitée, peu de repères visuels, estimation des distances difficile, évolution en 3D, courant et froid perturbent le jugement.</div>
       <div class="bubble bubble-ok">Compas : Disque mobile gradué 0° à 360°. Aller → noter le cap → Retour = cap + 180°.</div>
     </div>
-    <div class="info-table">
-      <div class="info-row info-header"><span>Étape</span><span>Actions clés</span></div>
-      <div class="info-row"><span>☀️ Avant la plongée</span><span>Écouter le briefing DP, observer le site (soleil, côte, vagues), prendre un cap au compas.</span></div>
-      <div class="info-row"><span>⬇️ À la descente</span><span>Observer la configuration du fond (banc de sable, roche, corps mort), mémoriser la profondeur sous le bateau, repérer le courant.</span></div>
-      <div class="info-row"><span>🏊 En exploration</span><span>Observer les fonds, mémoriser un rocher caractéristique, se retourner régulièrement, éviter les changements de direction fréquents.</span></div>
-      <div class="info-row"><span>🔧 Matériel</span><span>Compas de plongée, ordinateur avec compas intégré. Partir face au courant pour un retour sans effort.</span></div>
-    </div>
+    <table class="info-table">
+      <tr><th>Étape</th><th>Actions clés</th></tr>
+      <tr>
+        <td>☀️ Avant la plongée</td>
+        <td>Écouter le briefing DP, observer le site (soleil, côte, vagues), prendre un cap au compas.</td>
+      </tr>
+      <tr>
+        <td>⬇️ À la descente</td>
+        <td>Observer la configuration du fond (banc de sable, roche, corps mort), mémoriser la profondeur sous le bateau, repérer le courant.</td>
+      </tr>
+      <tr>
+        <td>🏊 En exploration</td>
+        <td>Observer les fonds, mémoriser un rocher caractéristique, se retourner régulièrement, éviter les changements de direction fréquents.</td>
+      </tr>
+      <tr>
+        <td>🔧 Matériel</td>
+        <td class="tag-cyan">Compas de plongée, ordinateur avec compas intégré. Partir face au courant pour un retour sans effort.</td>
+      </tr>
+    </table>
     <div class="retenir-box">
       <div class="retenir-title">🎯 Astuces d'orientation</div>
       <div class="bubble bubble-ok">Plus l'horizon est sombre → plus c'est profond. Aller cap X avec le soleil côté droit → retour cap X+180° avec le soleil côté gauche.</div>
