@@ -1354,35 +1354,19 @@ nav {
   align-items: center; justify-content: center;
   font-family: 'Nunito', sans-serif;
 }
-/* ====== FILTRES CALENDRIER ====== */
-.cal-filter-btn {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 14px;
-  padding: 4px 10px;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: rgba(255,255,255,0.55);
+/* ====== POINT ÉVÉNEMENT + LISTE MULTI ====== */
+.cal-ev-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  margin: 2px auto 0;
   cursor: pointer;
-  font-family: 'Nunito', sans-serif;
-  transition: all 0.2s;
 }
-.cal-filter-btn:hover { border-color: var(--cyan); color: var(--cyan); }
-.cal-filter-btn.active {
-  background: rgba(0,180,216,0.2);
-  border-color: var(--cyan);
-  color: var(--cyan);
-  font-weight: 900;
-}
-/* ====== POPUP LISTE ÉVÉNEMENTS ====== */
 #cal-list-popup {
   display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.7);
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.72);
   z-index: 9998;
-  align-items: center;
-  justify-content: center;
+  align-items: center; justify-content: center;
   padding: 20px;
 }
 .cal-list-box {
@@ -1390,43 +1374,30 @@ nav {
   border: 2px solid rgba(0,180,216,0.4);
   border-radius: 16px;
   padding: 20px;
-  max-width: 320px;
-  width: 100%;
+  max-width: 320px; width: 100%;
   position: relative;
 }
 .cal-list-title {
   font-family: 'Bangers', cursive;
-  font-size: 1.1rem;
-  color: var(--cyan);
-  letter-spacing: 1px;
-  margin-bottom: 12px;
+  font-size: 1.1rem; color: var(--cyan);
+  letter-spacing: 1px; margin-bottom: 12px;
 }
 .cal-list-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 8px;
+  cursor: pointer; margin-bottom: 6px;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.04);
   transition: all 0.2s;
 }
 .cal-list-item:hover { background: rgba(0,180,216,0.15); border-color: var(--cyan); }
-.cal-list-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.cal-list-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 .cal-list-name { font-size: 0.85rem; font-weight: 700; color: #fff; flex: 1; }
 .cal-list-heure { font-size: 0.72rem; color: var(--cyan); font-family: 'Space Mono', monospace; }
 .cal-list-close {
   position: absolute; top: 10px; right: 12px;
   background: none; border: none;
   color: rgba(255,255,255,0.4); font-size: 1.2rem; cursor: pointer;
-}
-/* Point sous le numéro du jour */
-.cal-ev-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  margin: 2px auto 0;
 }
 </style>
 <script>
@@ -1939,66 +1910,16 @@ function getEventClass(evenement) {
   return 'ev-default';
 }
 
-// ====== FILTRE CALENDRIER ======
-var calFilter = 'all';
-
-function setCalFilter(f) {
-  calFilter = f;
-  // Mettre à jour boutons
-  document.querySelectorAll('.cal-filter-btn').forEach(function(b) {
-    b.classList.toggle('active', b.getAttribute('data-filter') === f);
-  });
-  renderMonthView(calYear, calMonth);
-}
-window.setCalFilter = setCalFilter;
-
-function getEventsForDayFiltered(y, mo, d) {
-  var evs = getEventsForDay(y, mo, d);
-  if (calFilter === 'all') return evs;
-  return evs.filter(function(ev) { return getEventClass(ev.evenement) === calFilter; });
-}
-
-// ====== POPUP LISTE MULTI-ÉVÉNEMENTS ======
-function showListPopup(evs, dateStr) {
-  var popup  = document.getElementById('cal-list-popup');
-  var title  = document.getElementById('cal-list-title');
-  var items  = document.getElementById('cal-list-items');
-  if (!popup || !items) return;
-  if (title) title.textContent = '📅 ' + dateStr;
-  items.innerHTML = '';
-  var colorMap = {
-    'ev-plongee': '#90e0ef', 'ev-cours': '#a8e6b8',
-    'ev-sortie':  '#caf0f8', 'ev-reunion': '#d7bde2',
-    'ev-examen':  '#ffccc8', 'ev-default': '#ffb347'
-  };
-  evs.forEach(function(ev) {
-    var cls   = getEventClass(ev.evenement);
-    var color = colorMap[cls] || '#ffb347';
-    var row   = document.createElement('div');
-    row.className = 'cal-list-item';
-    row.innerHTML =
-      '<div class="cal-list-dot" style="background:' + color + ';"></div>' +
-      '<div class="cal-list-name">' + (ev.evenement || '—') + '</div>' +
-      '<div class="cal-list-heure">' + (ev.heure || '') + '</div>';
-    row.onclick = (function(e) {
-      return function() { closeListPopup(); showEvPopup(e); };
-    })(ev);
-    items.appendChild(row);
-  });
-  popup.style.display = 'flex';
-}
-
-function closeListPopup() {
-  var p = document.getElementById('cal-list-popup');
-  if (p) p.style.display = 'none';
-}
-window.closeListPopup = closeListPopup;
-
 function renderMonthView(y, m) {
   var grid = document.getElementById('cal-mv-grid');
   if (!grid) return;
   grid.innerHTML = '';
   var today = new Date();
+  var colorMap = {
+    'ev-plongee': '#90e0ef', 'ev-cours': '#a8e6b8',
+    'ev-sortie':  '#caf0f8', 'ev-reunion': '#d7bde2',
+    'ev-examen':  '#ffccc8', 'ev-default': '#ffb347'
+  };
 
   JOURS.forEach(function(j) {
     var h = document.createElement('div');
@@ -2009,11 +1930,6 @@ function renderMonthView(y, m) {
 
   var first = firstDayOfMonth(y, m);
   var days  = new Date(y, m+1, 0).getDate();
-  var colorMap = {
-    'ev-plongee': '#90e0ef', 'ev-cours': '#a8e6b8',
-    'ev-sortie':  '#caf0f8', 'ev-reunion': '#d7bde2',
-    'ev-examen':  '#ffccc8', 'ev-default': '#ffb347'
-  };
 
   for (var i = 0; i < first; i++) grid.appendChild(document.createElement('div'));
 
@@ -2029,7 +1945,7 @@ function renderMonthView(y, m) {
       num.textContent = day;
       cell.appendChild(num);
 
-      var evs = getEventsForDayFiltered(y, m, day);
+      var evs = getEventsForDay(y, m, day);
       if (evs.length > 0) {
         var cls   = getEventClass(evs[0].evenement);
         var color = colorMap[cls] || '#ffb347';
@@ -2047,25 +1963,62 @@ function renderMonthView(y, m) {
         dot.style.background = color;
         cell.appendChild(dot);
 
-        // Clic : 1 événement → popup direct | plusieurs → liste
-        num.onclick = (function(evList, dt) {
+        // Gestion du clic
+        var clickFn = (function(evList, dayDate) {
           return function(e) {
             e.stopPropagation();
             if (evList.length === 1) {
               showEvPopup(evList[0]);
             } else {
-              var dateStr = dt.toLocaleDateString('fr-FR', {day:'numeric', month:'long'});
-              showListPopup(evList, dateStr);
+              var ds = dayDate.toLocaleDateString('fr-FR', {day:'numeric', month:'long'});
+              showListPopup(evList, ds);
             }
           };
         })(evs, new Date(y, m, day));
 
-        dot.onclick = num.onclick;
+        num.onclick = clickFn;
+        dot.onclick = clickFn;
       }
       grid.appendChild(cell);
     })(d);
   }
 }
+
+// ====== POPUP LISTE MULTI-ÉVÉNEMENTS ======
+function showListPopup(evs, dateStr) {
+  var popup = document.getElementById('cal-list-popup');
+  var title = document.getElementById('cal-list-title');
+  var items = document.getElementById('cal-list-items');
+  if (!popup || !items) return;
+  if (title) title.textContent = '📅 ' + dateStr;
+  items.innerHTML = '';
+  var colorMap = {
+    'ev-plongee': '#90e0ef', 'ev-cours': '#a8e6b8',
+    'ev-sortie':  '#caf0f8', 'ev-reunion': '#d7bde2',
+    'ev-examen':  '#ffccc8', 'ev-default': '#ffb347'
+  };
+  evs.forEach(function(ev) {
+    var color = colorMap[getEventClass(ev.evenement)] || '#ffb347';
+    var row = document.createElement('div');
+    row.className = 'cal-list-item';
+    row.innerHTML =
+      '<div class="cal-list-dot" style="background:' + color + '"></div>' +
+      '<div class="cal-list-name">' + (ev.evenement || '—') + '</div>' +
+      '<div class="cal-list-heure">' + (ev.heure || '') + '</div>';
+    row.onclick = (function(e) {
+      return function() { closeListPopup(); showEvPopup(e); };
+    })(ev);
+    items.appendChild(row);
+  });
+  popup.style.display = 'flex';
+}
+
+function closeListPopup() {
+  var p = document.getElementById('cal-list-popup');
+  if (p) p.style.display = 'none';
+}
+window.closeListPopup = closeListPopup;
+window.showListPopup  = showListPopup;
 
 function showEvPopup(ev) {
   var dt = parseDate(ev.date);
@@ -2111,15 +2064,14 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ====== MESSAGE ADMIN (message.txt) ======
-var MESSAGE_URL  = 'https://raw.githubusercontent.com/amerbelhadj/Formation_PLONGEE_NIVEAU_2_GALATHEE/main/message.txt';
-var msgsList     = [];   // tableau des messages
-var msgIndex     = 0;    // message affiché
+var MESSAGE_URL = 'https://raw.githubusercontent.com/amerbelhadj/Formation_PLONGEE_NIVEAU_2_GALATHEE/main/message.txt';
+var msgsList = [];
+var msgIndex = 0;
 
 function checkMessage() {
   fetch(MESSAGE_URL + '?t=' + Date.now(), { cache: 'no-store' })
     .then(function(r) { return r.text(); })
     .then(function(txt) {
-      // Séparer par lignes vides
       var msgs = txt.split(/\n\s*\n/).map(function(s){ return s.trim(); }).filter(Boolean);
       msgsList = msgs;
       var msgBadge = document.getElementById('msg-badge');
@@ -2150,14 +2102,10 @@ function renderMsgPopup() {
   var next    = document.getElementById('msg-next-btn');
   if (text)    text.textContent = msgsList[msgIndex] || '';
   if (counter) {
-    if (msgsList.length > 1) {
-      counter.textContent = (msgIndex + 1) + ' / ' + msgsList.length;
-      counter.style.display = 'block';
-    } else {
-      counter.style.display = 'none';
-    }
+    counter.textContent  = (msgIndex + 1) + ' / ' + msgsList.length;
+    counter.style.display = msgsList.length > 1 ? 'block' : 'none';
   }
-  if (prev) prev.style.display = (msgIndex > 0 && msgsList.length > 1) ? 'inline-block' : 'none';
+  if (prev) prev.style.display = (msgIndex > 0) ? 'inline-block' : 'none';
   if (next) next.style.display = (msgIndex < msgsList.length - 1) ? 'inline-block' : 'none';
 }
 
@@ -2172,7 +2120,6 @@ function closeMsgPopup() {
   if (popup) popup.style.display = 'none';
 }
 
-// Vérifier au chargement puis toutes les 60 secondes
 document.addEventListener('DOMContentLoaded', function() {
   checkMessage();
   setInterval(checkMessage, 60000);
@@ -2223,11 +2170,6 @@ window.applyUpdate = function() { window.location.reload(); };
 
 // ====== EXPOSITION FONCTIONS GLOBALES ======
 window.toggleTheme    = toggleTheme;
-window.showMsgPopup   = showMsgPopup;
-window.closeMsgPopup  = closeMsgPopup;
-window.closeListPopup = closeListPopup;
-window.setCalFilter   = setCalFilter;
-window.msgNav         = msgNav;
 window.openCalendar   = openCalendar;
 window.closeCalendar  = closeCalendar;
 window.calYearNav     = calYearNav;
@@ -2309,25 +2251,31 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
                cursor:pointer;line-height:1;flex-shrink:0;">✕</button>
     </div>
 
-    <!-- Légende + Filtres -->
-    <div style="margin-bottom:10px;">
-      <!-- Légende 
-      <div style="display:flex;flex-wrap:wrap;gap:6px;padding:4px 0 8px;">
-      <div style="display:flex;align-items:center;gap:4px;"><div style="width:8px;height:8px;border-radius:50%;background:#90e0ef;"></div><span style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.5);">Plongée</span></div>
-        <!--  <div style="display:flex;align-items:center;gap:4px;"><div style="width:8px;height:8px;border-radius:50%;background:#a8e6b8;"></div><span style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.5);">Cours</span></div>
-        <div style="display:flex;align-items:center;gap:4px;"><div style="width:8px;height:8px;border-radius:50%;background:#caf0f8;"></div><span style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.5);">Sortie</span></div>
-        <div style="display:flex;align-items:center;gap:4px;"><div style="width:8px;height:8px;border-radius:50%;background:#d7bde2;"></div><span style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.5);">Réunion</span></div>
-        <div style="display:flex;align-items:center;gap:4px;"><div style="width:8px;height:8px;border-radius:50%;background:#ffccc8;"></div><span style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.5);">Examen</span></div>
-        <div style="display:flex;align-items:center;gap:4px;"><div style="width:8px;height:8px;border-radius:50%;background:#ffb347;"></div><span style="font-size:0.58rem;font-weight:700;color:rgba(255,255,255,0.5);">Autre</span></div>
-		</div>-->
-      <!-- Filtres -->
-      <div id="cal-filters" style="display:flex;flex-wrap:wrap;gap:5px;">
-        <button class="cal-filter-btn active" data-filter="all"    onclick="setCalFilter('all')">Tous</button>
-        <button class="cal-filter-btn"        data-filter="ev-plongee" onclick="setCalFilter('ev-plongee')">🔵 Plongée</button>
-        <button class="cal-filter-btn"        data-filter="ev-cours"   onclick="setCalFilter('ev-cours')">🟢 Cours</button>
-        <button class="cal-filter-btn"        data-filter="ev-sortie"  onclick="setCalFilter('ev-sortie')">🩵 Sortie</button>
-        <button class="cal-filter-btn"        data-filter="ev-reunion" onclick="setCalFilter('ev-reunion')">🟣 Réunion</button>
-        <button class="cal-filter-btn"        data-filter="ev-examen"  onclick="setCalFilter('ev-examen')">🔴 Examen</button>
+    <!-- Légende des types d'événements -->
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;padding:8px 4px;">
+      <div style="display:flex;align-items:center;gap:4px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#90e0ef;flex-shrink:0;"></div>
+        <span style="font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.55);">Plongée</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#a8e6b8;flex-shrink:0;"></div>
+        <span style="font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.55);">Cours</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#caf0f8;flex-shrink:0;"></div>
+        <span style="font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.55);">Sortie</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#d7bde2;flex-shrink:0;"></div>
+        <span style="font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.55);">Réunion</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#ffccc8;flex-shrink:0;"></div>
+        <span style="font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.55);">Examen</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#ffb347;flex-shrink:0;"></div>
+        <span style="font-size:0.6rem;font-weight:700;color:rgba(255,255,255,0.55);">Autre</span>
       </div>
     </div>
 
@@ -2336,15 +2284,6 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;">
     </div>
 
-  </div>
-</div>
-
-<!-- ====== POPUP LISTE ÉVÉNEMENTS ====== -->
-<div id="cal-list-popup" onclick="if(event.target===this)closeListPopup()">
-  <div class="cal-list-box">
-    <button class="cal-list-close" onclick="closeListPopup()">✕</button>
-    <div class="cal-list-title" id="cal-list-title">Événements du jour</div>
-    <div id="cal-list-items"></div>
   </div>
 </div>
 
@@ -2413,17 +2352,24 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 <div id="msg-popup" onclick="closeMsgPopup()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9998;align-items:center;justify-content:center;padding:20px;">
   <div onclick="event.stopPropagation()" style="background:linear-gradient(135deg,#023e73,#0077b6);border:2px solid #00b4d8;border-radius:16px;padding:24px;max-width:340px;width:100%;position:relative;box-shadow:0 8px 32px rgba(0,0,0,0.5);">
     <button onclick="closeMsgPopup()" style="position:absolute;top:10px;right:12px;background:none;border:none;color:rgba(255,255,255,0.6);font-size:1.2rem;cursor:pointer;">✕</button>
-    <div style="font-family:'Bangers',cursive;font-size:1.2rem;color:#00b4d8;letter-spacing:1px;margin-bottom:12px;">📢 Message du club</div>
-    <!-- Compteur -->
-    <div id="msg-counter" style="display:none;font-size:0.7rem;color:rgba(255,255,255,0.45);font-weight:700;text-align:right;margin-bottom:6px;"></div>
+    <div style="font-family:'Bangers',cursive;font-size:1.2rem;color:#00b4d8;letter-spacing:1px;margin-bottom:8px;">📢 Message du club</div>
+    <div id="msg-counter" style="display:none;font-size:0.7rem;color:rgba(255,255,255,0.45);font-weight:700;text-align:right;margin-bottom:8px;"></div>
     <div id="msg-popup-text" style="font-size:0.88rem;color:#fff;line-height:1.6;font-weight:600;"></div>
-    <!-- Navigation -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:8px;">
-      <button id="msg-prev-btn" onclick="msgNav(-1)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:8px;padding:7px 14px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;display:none;">‹ Préc.</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;gap:6px;">
+      <button id="msg-prev-btn" onclick="msgNav(-1)" style="display:none;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;border-radius:8px;padding:7px 14px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">‹ Préc.</button>
       <div style="flex:1;"></div>
-      <button id="msg-next-btn" onclick="msgNav(1)" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:8px;padding:7px 14px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;display:none;">Suiv. ›</button>
+      <button id="msg-next-btn" onclick="msgNav(1)" style="display:none;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;border-radius:8px;padding:7px 14px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;">Suiv. ›</button>
       <button onclick="closeMsgPopup()" style="background:#00b4d8;color:#0a1628;border:none;border-radius:8px;padding:8px 20px;font-size:0.82rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;">OK</button>
     </div>
+  </div>
+</div>
+
+<!-- ====== POPUP LISTE ÉVÉNEMENTS ====== -->
+<div id="cal-list-popup" onclick="if(event.target===this)closeListPopup()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:9998;align-items:center;justify-content:center;padding:20px;">
+  <div class="cal-list-box">
+    <button class="cal-list-close" onclick="closeListPopup()">✕</button>
+    <div class="cal-list-title" id="cal-list-title">Événements du jour</div>
+    <div id="cal-list-items"></div>
   </div>
 </div>
 
