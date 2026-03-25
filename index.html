@@ -96,7 +96,7 @@ body.light-mode .info-table th { background: rgba(2,132,199,0.15); color: var(--
 body.light-mode .info-table td { color: #1a2b40; border-color: rgba(0,0,0,0.08); }
 body.light-mode .quiz-opt { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.12); color: #1a2b40; }
 body.light-mode .btn-back { color: var(--cyan); border-color: var(--cyan); }
-body.light-mode #cal-box  { background: #fff; }
+body.light-mode #cal-box  { background: #e8f4fd; }
 body.light-mode #msg-popup > div,
 body.light-mode #cal-ev-popup > div { background: #fff; }
 body.light-mode .cal-mini-day { color: rgba(30,50,80,0.7); }
@@ -1259,6 +1259,8 @@ nav {
   color: rgba(255,255,255,0.4);
   margin-bottom: 2px;
 }
+body.light-mode .cal-mv-num { color: rgba(20,40,70,0.6); }
+body.light-mode .cal-mv-hdr { color: rgba(20,40,70,0.6); }
 .cal-mv-num.has-ev-num {
   font-weight: 900 !important;
   font-size: 0.8rem !important;
@@ -2258,8 +2260,8 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 <div id="cal-overlay" onclick="if(event.target===this)closeCalendar()"
   style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9000;
          align-items:flex-start;justify-content:center;padding:10px;overflow-y:auto;">
-  <div id="cal-box"
-    style="background:#0d1f3c;border:2px solid rgba(0,180,216,0.35);border-radius:20px;
+<div id="cal-box"
+    style="border:2px solid rgba(0,180,216,0.35);border-radius:20px;
            padding:18px 14px;width:100%;max-width:500px;margin:0 auto;position:relative;">
 
     <!-- Barre navigation mois -->
