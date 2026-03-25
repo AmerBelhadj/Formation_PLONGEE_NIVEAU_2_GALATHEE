@@ -99,6 +99,17 @@ body.light-mode .btn-back { color: var(--cyan); border-color: var(--cyan); }
 body.light-mode #cal-box  { background: #fff; }
 body.light-mode #msg-popup > div,
 body.light-mode #cal-ev-popup > div { background: #fff; }
+body.light-mode .cal-mini-day { color: rgba(30,50,80,0.7); }
+body.light-mode .cal-mini-hdr { color: rgba(30,50,80,0.45); }
+body.light-mode .cal-mv-hdr   { color: rgba(30,50,80,0.5); }
+body.light-mode .cal-mv-num   { color: rgba(30,50,80,0.5); }
+body.light-mode .cal-mv-cell  { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.08); }
+body.light-mode .cal-month-title { color: #0a3a6a; }
+body.light-mode .cal-list-name   { color: #1a2b40; }
+body.light-mode .cal-list-box    { background: #f0f6ff; border-color: rgba(2,132,199,0.35); }
+body.light-mode .cal-list-item   { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.1); }
+body.light-mode .cal-list-item:hover { background: rgba(2,132,199,0.12); }
+body.light-mode .cal-list-close  { color: rgba(30,50,80,0.5); }
 body.light-mode .hero p { color: rgba(26,43,64,0.7); }
 body.light-mode .hero h1 { -webkit-text-fill-color: initial; color: #1a2b40; background: none; }
 body.light-mode p[style*="rgba(255,255,255"] { color: rgba(26,43,64,0.6) !important; }
@@ -1688,7 +1699,9 @@ window.showSection = function(id) {
 
 // ====== CALENDRIER ======
 var CAL_CSV_URL  = 'https://raw.githubusercontent.com/amerbelhadj/Formation_PLONGEE_NIVEAU_2_GALATHEE/main/Calendrier.csv';
-var calEvents    = [];
+var calEvents  = [];
+var calEvList  = [];   // liste des événements du jour cliqué
+var calEvIndex = 0;    // index de l'événement affiché
 var calYear      = new Date().getFullYear();
 var calMonth     = new Date().getMonth();
 var MOIS         = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
@@ -1757,10 +1770,8 @@ function loadCalendar() {
       return;
     }
     if (btn) btn.style.display = 'flex';
-    var today = new Date(); today.setHours(0,0,0,0);
-    var upcoming = evs.filter(function(ev){ var d=parseDate(ev.date); return d && d>=today; }).length;
-    var nb = upcoming > 0 ? upcoming : evs.length;
-    if (badge) { badge.textContent = nb > 9 ? '9+' : nb; badge.style.display = 'flex'; }
+	var nb = evs.length;
+	if (badge) { badge.textContent = nb > 9 ? '9+' : nb; badge.style.display = 'flex'; }
     var ov = document.getElementById('cal-overlay');
     if (ov && ov.style.display === 'flex') {
       renderMonthView(calYear, calMonth);
@@ -1883,10 +1894,9 @@ function renderYearView() {
           if (evs.length) {
             cell.classList.add('has-ev');
             cell.onclick = function(e) {
-              e.stopPropagation();
-              if (evs.length === 1) showEvPopup(evs[0]);
-              else showMonthView(calYear, month);
-            };
+			e.stopPropagation();
+			showEvPopup(evs[0], evs, 0);
+			};
           }
           if (today.getFullYear()===calYear && today.getMonth()===month && today.getDate()===day)
             cell.classList.add('today-cell');
@@ -1964,18 +1974,12 @@ function renderMonthView(y, m) {
         cell.appendChild(dot);
 
         // Gestion du clic
-        var clickFn = (function(evList, dayDate) {
-          return function(e) {
-            e.stopPropagation();
-            if (evList.length === 1) {
-              showEvPopup(evList[0]);
-            } else {
-              var ds = dayDate.toLocaleDateString('fr-FR', {day:'numeric', month:'long'});
-              showListPopup(evList, ds);
-            }
-          };
-        })(evs, new Date(y, m, day));
-
+		var clickFn = (function(evList) {
+		return function(e) {
+		e.stopPropagation();
+		showEvPopup(evList[0], evList, 0);
+		};
+		})(evs);
         num.onclick = clickFn;
         dot.onclick = clickFn;
       }
@@ -2020,26 +2024,28 @@ function closeListPopup() {
 window.closeListPopup = closeListPopup;
 window.showListPopup  = showListPopup;
 
-function showEvPopup(ev) {
+function showEvPopup(ev, evList, idx) {
+  calEvList  = evList || [ev];
+  calEvIndex = (idx !== undefined) ? idx : 0;
+  _renderEvPopup();
+}
+
+function _renderEvPopup() {
+  var ev = calEvList[calEvIndex];
   var dt = parseDate(ev.date);
   var dateStr = dt
     ? dt.toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long', year:'numeric'})
     : ev.date;
   dateStr = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
-  document.getElementById('cal-ev-date').textContent    = '📅 ' + dateStr;
-  document.getElementById('cal-ev-heure').textContent   = ev.heure     || '—';
-  document.getElementById('cal-ev-event').textContent   = ev.evenement || '—';
-  document.getElementById('cal-ev-lieu').textContent    = ev.lieu      || '—';
-  document.getElementById('cal-ev-prereq').textContent  = ev.prerequis || 'Aucun';
+  document.getElementById('cal-ev-date').textContent   = '📅 ' + dateStr;
+  document.getElementById('cal-ev-heure').textContent  = ev.heure     || '—';
+  document.getElementById('cal-ev-event').textContent  = ev.evenement || '—';
+  document.getElementById('cal-ev-lieu').textContent   = ev.lieu      || '—';
+  document.getElementById('cal-ev-prereq').textContent = ev.prerequis || 'Aucun';
 
-  // Couleur de la bordure selon le type
   var colorMap = {
-    'ev-plongee': '#0077b6',
-    'ev-cours':   '#2d9e47',
-    'ev-sortie':  '#00b4d8',
-    'ev-reunion': '#9b59b6',
-    'ev-examen':  '#c0392b',
-    'ev-default': '#e07b00'
+    'ev-plongee':'#0077b6','ev-cours':'#2d9e47','ev-sortie':'#00b4d8',
+    'ev-reunion':'#9b59b6','ev-examen':'#c0392b','ev-default':'#e07b00'
   };
   var cls   = getEventClass(ev.evenement);
   var color = colorMap[cls] || '#e07b00';
@@ -2048,9 +2054,30 @@ function showEvPopup(ev) {
   var dateLine = document.getElementById('cal-ev-date');
   if (dateLine) dateLine.style.color = color;
 
+  // Gestion navigation
+  var prev = document.getElementById('cal-ev-prev');
+  var next = document.getElementById('cal-ev-next');
+  var ctr  = document.getElementById('cal-ev-counter');
+  var total = calEvList.length;
+  if (total > 1) {
+    if (ctr)  { ctr.style.display = 'block'; ctr.textContent = (calEvIndex+1) + ' / ' + total; }
+    if (prev) { prev.style.display = 'inline-block'; prev.disabled = calEvIndex === 0; }
+    if (next) { next.style.display = 'inline-block'; next.disabled = calEvIndex === total - 1; }
+  } else {
+    if (ctr)  ctr.style.display  = 'none';
+    if (prev) prev.style.display = 'none';
+    if (next) next.style.display = 'none';
+  }
+
   var popup = document.getElementById('cal-ev-popup');
   if (popup) popup.style.display = 'flex';
 }
+
+function calEvNav(dir) {
+  calEvIndex = Math.max(0, Math.min(calEvList.length - 1, calEvIndex + dir));
+  _renderEvPopup();
+}
+window.calEvNav = calEvNav;
 
 function closeEvPopup() {
   var p = document.getElementById('cal-ev-popup');
@@ -2341,10 +2368,23 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
       </div>
     </div>
 
-    <button onclick="closeEvPopup()"
-      style="width:100%;margin-top:14px;background:linear-gradient(135deg,#7a3800,#e07b00);
-             border:none;border-radius:10px;padding:11px;font-family:'Bangers',cursive;
-             font-size:1.1rem;letter-spacing:1px;color:#fff;cursor:pointer;">OK</button>
+<div id="cal-ev-counter"
+      style="text-align:center;font-size:0.7rem;color:rgba(255,255,255,0.45);
+             font-weight:700;margin-top:10px;display:none;"></div>
+    <div style="display:flex;gap:8px;margin-top:10px;">
+      <button id="cal-ev-prev" onclick="calEvNav(-1)"
+        style="display:none;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);
+               color:#fff;border-radius:8px;padding:9px 14px;font-size:0.85rem;font-weight:700;
+               cursor:pointer;font-family:'Nunito',sans-serif;">‹ Préc.</button>
+      <button onclick="closeEvPopup()"
+        style="flex:1;background:linear-gradient(135deg,#7a3800,#e07b00);border:none;
+               border-radius:10px;padding:11px;font-family:'Bangers',cursive;
+               font-size:1.1rem;letter-spacing:1px;color:#fff;cursor:pointer;">OK</button>
+      <button id="cal-ev-next" onclick="calEvNav(1)"
+        style="display:none;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);
+               color:#fff;border-radius:8px;padding:9px 14px;font-size:0.85rem;font-weight:700;
+               cursor:pointer;font-family:'Nunito',sans-serif;">Suiv. ›</button>
+    </div>
   </div>
 </div>
 
