@@ -970,30 +970,42 @@ nav {
 #ios-install-banner {
   display: none;
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99999;
   background: linear-gradient(135deg, #023e73, #0077b6);
-  border-top: 2px solid #00b4d8;
-  padding: 14px 16px 20px;
-  box-shadow: 0 -4px 24px rgba(0,0,0,0.5);
-  animation: slideUp 0.4s ease;
+  border: 2px solid #00b4d8;
+  border-radius: 18px;
+  padding: 16px 18px 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+  width: calc(100% - 40px);
+  max-width: 360px;
+  animation: iosPopIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
 }
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
+@keyframes iosPopIn {
+  from { opacity: 0; transform: translateX(-50%) scale(0.85); }
+  to   { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+#ios-install-banner.ios-hiding {
+  animation: iosPopOut 0.4s ease forwards;
+}
+@keyframes iosPopOut {
+  from { opacity: 1; transform: translateX(-50%) scale(1); }
+  to   { opacity: 0; transform: translateX(-50%) scale(0.85); }
 }
 #ios-install-banner .ios-banner-close {
   position: absolute;
   top: 10px;
   right: 14px;
-  background: none;
+  background: rgba(255,255,255,0.15);
   border: none;
-  color: rgba(255,255,255,0.6);
-  font-size: 1.2rem;
+  border-radius: 50%;
+  width: 24px; height: 24px;
+  color: #fff;
+  font-size: 0.8rem;
   cursor: pointer;
-  padding: 4px;
+  display: flex; align-items: center; justify-content: center;
   line-height: 1;
 }
 #ios-install-banner .ios-banner-title {
@@ -1001,16 +1013,16 @@ nav {
   font-size: 1.1rem;
   color: #fff;
   letter-spacing: 1px;
-  margin-bottom: 6px;
-  padding-right: 24px;
+  margin-bottom: 8px;
+  padding-right: 28px;
 }
 #ios-install-banner .ios-banner-steps {
   font-size: 0.78rem;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255,255,255,0.9);
   line-height: 1.8;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
 }
 #ios-install-banner .ios-step {
   display: flex;
@@ -1018,21 +1030,27 @@ nav {
   gap: 8px;
 }
 #ios-install-banner .ios-step-icon {
-  font-size: 1.1rem;
+  font-size: 1rem;
   flex-shrink: 0;
 }
-#ios-install-banner .ios-arrow {
-  position: absolute;
-  bottom: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1.4rem;
-  color: #00b4d8;
-  animation: bounce 1.2s infinite;
+#ios-install-banner .ios-progress {
+  height: 3px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+  margin-top: 12px;
+  overflow: hidden;
 }
-@keyframes bounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%       { transform: translateX(-50%) translateY(4px); }
+#ios-install-banner .ios-progress-bar {
+  height: 100%;
+  width: 100%;
+  background: #00b4d8;
+  border-radius: 2px;
+  transform-origin: left;
+  animation: iosProgress 3s linear forwards;
+}
+@keyframes iosProgress {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
 }
 /* ====== TOAST MISE À JOUR ====== */
 #update-toast {
@@ -1581,27 +1599,34 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ====== BANNIÈRE iOS ======
+var _iosBannerTimer = null;
+
+window.dismissIOSBanner = function() {
+  var banner = document.getElementById('ios-install-banner');
+  if (!banner) return;
+  if (_iosBannerTimer) { clearTimeout(_iosBannerTimer); _iosBannerTimer = null; }
+  banner.classList.add('ios-hiding');
+  setTimeout(function() { banner.style.display = 'none'; banner.classList.remove('ios-hiding'); }, 400);
+  localStorage.setItem('ios-banner-dismissed', '1');
+};
+
 (function() {
   var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   var isInStandalone = window.navigator.standalone === true;
   var dismissed = localStorage.getItem('ios-banner-dismissed');
-  // Afficher uniquement sur iOS, pas encore installé, et jamais fermé
   if (isIOS && !isInStandalone && !dismissed) {
     document.addEventListener('DOMContentLoaded', function() {
       var banner = document.getElementById('ios-install-banner');
       if (banner) {
-        setTimeout(function() { banner.style.display = 'block'; }, 1500);
+        setTimeout(function() {
+          banner.style.display = 'block';
+          // Fermeture automatique après 3 secondes
+          _iosBannerTimer = setTimeout(function() { window.dismissIOSBanner(); }, 3000);
+        }, 1500);
       }
     });
   }
 })();
-
-window.dismissIOSBanner = function() {
-  var banner = document.getElementById('ios-install-banner');
-  if (banner) banner.style.display = 'none';
-  // localStorage = permanent, ne réapparaît plus jamais
-  localStorage.setItem('ios-banner-dismissed', '1');
-};
 
 // ====== GALERIE PDFs GITHUB ======
 var GITHUB_USER   = 'amerbelhadj';
@@ -2474,22 +2499,22 @@ if ('serviceWorker' in navigator && location.hostname !== 'www.claudeusercontent
 <!-- ====== BANNIÈRE INSTALLATION iOS ====== -->
 <div id="ios-install-banner">
   <button class="ios-banner-close" onclick="dismissIOSBanner()">✕</button>
-  <div class="ios-banner-title">📲 Comment Installer l'application sur IOS:</div>
+  <div class="ios-banner-title">📲 Comment installer l'app sur iOS</div>
   <div class="ios-banner-steps">
     <div class="ios-step">
       <span class="ios-step-icon">1️⃣</span>
-      <span>Appuyez sur <strong>le bouton Partager</strong> <span style="font-size:1rem;">⬆️</span> en bas de Safari</span>
+      <span>Appuyez sur <strong>Partager</strong> <span style="font-size:1rem;">⬆️</span> en bas de Safari</span>
     </div>
     <div class="ios-step">
       <span class="ios-step-icon">2️⃣</span>
-      <span>Faites défiler et appuyez sur <strong>« Sur l'écran d'accueil »</strong> <span style="font-size:0.9rem;">➕</span></span>
+      <span>Appuyez sur <strong>« Sur l'écran d'accueil »</strong> ➕</span>
     </div>
     <div class="ios-step">
       <span class="ios-step-icon">3️⃣</span>
       <span>Appuyez sur <strong>« Ajouter »</strong> en haut à droite</span>
     </div>
   </div>
-  
+  <div class="ios-progress"><div class="ios-progress-bar"></div></div>
 </div>
 
 <nav id="mainNav">
